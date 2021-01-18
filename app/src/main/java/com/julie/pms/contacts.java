@@ -36,127 +36,141 @@ public class contacts {
     Scanner sc = new Scanner(System.in);
 
     while (true) {
-      System.out.println("명령> (/family/add // /family/list // /school/add // /school/list /company/add // /company/list )");
-      String input = sc.nextLine();
+      System.out.println("1. 연락처 추가 2. 연락처 목록 3. 나가기");
+      System.out.print("> ");
+      String main = sc.nextLine();
+      if (main.equals("1. 연락처 추가") || main.equals("1") || main.equals("연락처 추가") || main.equals("1. 추가") || main.equals("추가")) {
+        System.out.println("1. 가족 2. 친구 3. 회사");
+        System.out.print("> ");
 
-      if (input.equals("/family/add")) {
-        System.out.println("[가족 등록]");
+        String acategory = sc.nextLine();
 
-        for (int i = 0; i < SIZE; i++) {
-          System.out.print("이름? ");
-          fname[i] = sc.nextLine();
+        if (acategory.equals("1. 가족") || acategory.equals("1") || acategory.equals("가족")) {
+          System.out.println("[가족 등록]");
 
-          System.out.print("전화번호? ");
-          fnum[i] = sc.nextLine();
+          for (int i = 0; i < SIZE; i++) {
+            System.out.print("이름? ");
+            fname[i] = sc.nextLine();
 
-          System.out.print("이메일? ");
-          fmail[i] = sc.nextLine();
+            System.out.print("전화번호? ");
+            fnum[i] = sc.nextLine();
 
-          System.out.print("주소? ");
-          faddress[i] = sc.nextLine();
+            System.out.print("이메일? ");
+            fmail[i] = sc.nextLine();
 
-          System.out.print("생일? ");
-          fbirth[i] = Date.valueOf(sc.nextLine());
+            System.out.print("주소? ");
+            faddress[i] = sc.nextLine();
 
-          fcount++;
-          System.out.println();
-          System.out.print("계속 입력하시겠습니까?(y/N) ");
-          String fstr = sc.nextLine();
-          if (!fstr.equalsIgnoreCase("y")) {
-            break;
+            System.out.print("생일? ");
+            fbirth[i] = Date.valueOf(sc.nextLine());
+
+            fcount++;
+            System.out.println();
+            System.out.print("계속 입력하시겠습니까?(y/N) ");
+            String fstr = sc.nextLine();
+            if (!fstr.equalsIgnoreCase("y")) {
+              break;
+            }
+            System.out.println();
           }
-          System.out.println();
-        }
-      } else if (input.equals("/family/list")) {
-        System.out.println("--------------------------------");
-        System.out.println("[가족 목록]");
+        } else if (acategory.equals("2. 친구") || acategory.equals("2") || acategory.equals("친구")) {
+          System.out.println("[친구 등록]");
 
-        for (int i = 0; i < fcount; i++) {
-          System.out.printf("%s, %s, %s, %s\n",
-              fname[i], fnum[i], fmail[i], faddress[i]);
-        }
+          for (int i = 0; i < SIZE; i++) {
+            System.out.print("이름? ");
+            sname[i] = sc.nextLine();
 
-      }else if (input.equals("/school/add")) {
-        System.out.println("[친구 등록]");
+            System.out.print("전화번호? ");
+            snum[i] = sc.nextLine();
 
-        for (int i = 0; i < SIZE; i++) {
-          System.out.print("이름? ");
-          sname[i] = sc.nextLine();
+            System.out.print("이메일? ");
+            smail[i] = sc.nextLine();
 
-          System.out.print("전화번호? ");
-          snum[i] = sc.nextLine();
+            System.out.print("소속 그룹? (학교/전공/학번) ");
+            sschool[i] = sc.nextLine();
 
-          System.out.print("이메일? ");
-          smail[i] = sc.nextLine();
+            System.out.print("주소? ");
+            saddress[i] = sc.nextLine();
 
-          System.out.print("소속 그룹? (학교/전공/학번) ");
-          sschool[i] = sc.nextLine();
+            scount++;
+            System.out.println();
 
-          System.out.print("주소? ");
-          saddress[i] = sc.nextLine();
+            System.out.print("계속 입력하시겠습니까?(y/N) ");
+            String sstr = sc.nextLine();
+            if (!sstr.equalsIgnoreCase("y")) {
+              break;
+            }
+            System.out.println();
 
-          scount++;
-          System.out.println();
-
-          System.out.print("계속 입력하시겠습니까?(y/N) ");
-          String sstr = sc.nextLine();
-          if (!sstr.equalsIgnoreCase("y")) {
-            break;
           }
-          System.out.println();
 
-        }
+        } else if (acategory.equals("3. 회사") || acategory.equals("3") || acategory.equals("회사")) {
+          System.out.println("[회사 등록]");
+          for (int i = 0; i < SIZE; i++) {
 
-      } else if (input.equals("/school/list")) {
-        System.out.println("--------------------------------");
-        System.out.println("[친구 목록]");
+            System.out.print("이름? ");
+            cname[i] = sc.nextLine();
 
-        for (int i = 0; i < scount; i++) {
-          System.out.printf("%s, %s, %s, %s, %s\n", 
-              sname[i], snum[i], smail[i], sschool[i], saddress[i]);
-        }
+            System.out.print("전화번호? ");
+            cnum[i] = sc.nextLine();
 
-      } else if (input.equals("/company/add")) {
-        System.out.println("[회사 등록]");
-        for (int i = 0; i < SIZE; i++) {
+            System.out.print("이메일? ");
+            cmail[i] = sc.nextLine();
 
-          System.out.print("이름? ");
-          cname[i] = sc.nextLine();
+            System.out.print("직장? (직위/부서/회사) ");
+            cwork[i] = sc.nextLine();
 
-          System.out.print("전화번호? ");
-          cnum[i] = sc.nextLine();
+            System.out.print("주소? ");
+            caddress[i] = sc.nextLine();
 
-          System.out.print("이메일? ");
-          cmail[i] = sc.nextLine();
+            ccount++;
+            System.out.println(); 
 
-          System.out.print("직장? (직위/부서/회사) ");
-          cwork[i] = sc.nextLine();
-
-          System.out.print("주소? ");
-          caddress[i] = sc.nextLine();
-
-          ccount++;
-          System.out.println(); 
-
-          System.out.print("계속 입력하시겠습니까?(y/N) ");
-          String cstr = sc.nextLine();
-          if (!cstr.equalsIgnoreCase("y")) {
-            break;
+            System.out.print("계속 입력하시겠습니까?(y/N) ");
+            String cstr = sc.nextLine();
+            if (!cstr.equalsIgnoreCase("y")) {
+              break;
+            }
+            System.out.println(); 
           }
-          System.out.println(); 
+
         }
 
-      } else if (input.equals("/company/list")) {
-        System.out.println("--------------------------------");
-        System.out.println("[회사 목록]");
+      } else if (main.equals("2. 연락처 목록") || main.equals("2") || main.equals("연락처 목록") || main.equals("1. 목록") || main.equals("목록")) {
+        System.out.println("1. 가족 2. 친구 3. 회사");
+        System.out.print("> ");
 
-        for (int i = 0; i < ccount; i++) {
+        String lcategory = sc.nextLine();
+        if (lcategory.equals("1. 가족") || lcategory.equals("1") || lcategory.equals("가족")) {
+          System.out.println("--------------------------------");
+          System.out.println("[가족 목록]");
 
-          System.out.printf("%s, %s, %s, %s, %s\n",
-              cname[i], cnum[i], cmail[i], cwork[i], caddress[i]);
+          for (int i = 0; i < fcount; i++) {
+            System.out.printf("%s, %s, %s, %s\n",
+                fname[i], fnum[i], fmail[i], faddress[i]);
+          }
+
+        } else if(lcategory.equals("2. 친구") || lcategory.equals("2") || lcategory.equals("친구")) {
+          System.out.println("--------------------------------");
+          System.out.println("[친구 목록]");
+
+          for (int i = 0; i < scount; i++) {
+            System.out.printf("%s, %s, %s, %s, %s\n", 
+                sname[i], snum[i], smail[i], sschool[i], saddress[i]);
+          }        
+
+        } else if(lcategory.equals("3. 회사") || lcategory.equals("3") || lcategory.equals("회사")) {
+          System.out.println("--------------------------------");
+          System.out.println("[회사 목록]");
+
+          for (int i = 0; i < ccount; i++) {
+
+            System.out.printf("%s, %s, %s, %s, %s\n",
+                cname[i], cnum[i], cmail[i], cwork[i], caddress[i]);
+          }        
         }
 
-      } else if (input.equalsIgnoreCase("exit") || input.equalsIgnoreCase("quit")) {
+      } else if (main.equals("3. 나가기") || main.equals("3") || main.equals("나가기")) {
         System.out.println("안녕!");
         break;
       } else {
