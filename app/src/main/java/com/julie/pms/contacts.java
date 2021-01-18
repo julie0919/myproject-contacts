@@ -69,7 +69,7 @@ public class contacts {
         System.out.println("--------------------------------");
         System.out.println("[가족 목록]");
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < fcount; i++) {
           System.out.printf("%s, %s, %s, %s\n",
               fname[i], fnum[i], fmail[i], faddress[i]);
         }
@@ -87,7 +87,7 @@ public class contacts {
           System.out.print("이메일? ");
           smail[i] = sc.nextLine();
 
-          System.out.print("소속 그룹? ");
+          System.out.print("소속 그룹? (학교/전공/학번) ");
           sschool[i] = sc.nextLine();
 
           System.out.print("주소? ");
@@ -109,7 +109,7 @@ public class contacts {
         System.out.println("--------------------------------");
         System.out.println("[친구 목록]");
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < scount; i++) {
           System.out.printf("%s, %s, %s, %s, %s\n", 
               sname[i], snum[i], smail[i], sschool[i], saddress[i]);
         }
@@ -127,7 +127,7 @@ public class contacts {
           System.out.print("이메일? ");
           cmail[i] = sc.nextLine();
 
-          System.out.print("직장? ");
+          System.out.print("직장? (직위/부서/회사) ");
           cwork[i] = sc.nextLine();
 
           System.out.print("주소? ");
@@ -148,7 +148,7 @@ public class contacts {
         System.out.println("--------------------------------");
         System.out.println("[회사 목록]");
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < ccount; i++) {
 
           System.out.printf("%s, %s, %s, %s, %s\n",
               cname[i], cnum[i], cmail[i], cwork[i], caddress[i]);
