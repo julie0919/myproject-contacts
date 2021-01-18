@@ -31,10 +31,12 @@ public class contacts {
 
     int ccount = 0;
 
+    System.out.println("[연락처 관리 프로그램]");
+
     Scanner sc = new Scanner(System.in);
 
     while (true) {
-      System.out.print("명령> ");
+      System.out.println("명령> (/family/add // /family/list // /school/add // /school/list /company/add // /company/list )");
       String input = sc.nextLine();
 
       if (input.equals("/family/add")) {
