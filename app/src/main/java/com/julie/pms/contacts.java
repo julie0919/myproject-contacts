@@ -21,7 +21,7 @@ public class contacts {
           CompanyHandler.add();
         }
 
-      } else if (main.equals("2. 연락처 목록") || main.equals("2") || main.equals("연락처 목록") || main.equals("1. 목록") || main.equals("목록")) {
+      } else if (main.equals("2. 연락처 목록") || main.equals("2") || main.equals("연락처 목록") || main.equals("2. 목록") || main.equals("목록")) {
 
         String lcategory = Prompt.string("1. 가족 2. 친구 3. 회사\n> ");
 
