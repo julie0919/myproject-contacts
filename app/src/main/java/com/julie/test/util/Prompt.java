@@ -7,7 +7,7 @@ public class Prompt {
   static Scanner sc = new Scanner(System.in);
 
   public static String printString (String title) {
-    System.out.println(title);
+    System.out.print(title);
     return sc.nextLine();
   }
 

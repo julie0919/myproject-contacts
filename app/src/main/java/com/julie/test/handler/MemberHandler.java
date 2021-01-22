@@ -39,4 +39,13 @@ public class MemberHandler {
     }
     System.out.println();
   }
+
+  public static boolean exist(String name) {
+    for(int i = 0; i < count; i++) {
+      if(name.equals(members[i].name)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
