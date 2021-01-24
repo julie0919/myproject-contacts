@@ -7,10 +7,10 @@ import com.julie.test.util.Prompt;
 public class BoardHandler {
 
   static final int SIZE = 100;
-  static Board[] boards = new Board[SIZE];
-  static int count = 0;
+  Board[] boards = new Board[SIZE];
+  int count = 0;
 
-  public static void add() {
+  public void add() {
 
     Board b = new Board();
 
@@ -21,16 +21,16 @@ public class BoardHandler {
     b.writer = Prompt.printString("작성자> ");
     b.registeredDate = new Date(System.currentTimeMillis());
     b.viewCount = Prompt.printInt("조회수> "); 
-    boards[count++] = b;
+    this.boards[this.count++] = b;
 
     System.out.println("게시글 등록을 완료했습니다.");
   }
 
-  public static void list() {
+  public void list() {
     System.out.println("[게시글 목록]");
 
-    for (int i = 0; i < count; i++) {
-      Board b = boards[i];
+    for (int i = 0; i < this.count; i++) {
+      Board b = this.boards[i];
       System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", b.id, b.title, b.content, b.writer, b.registeredDate, b.viewCount);
     }
   }

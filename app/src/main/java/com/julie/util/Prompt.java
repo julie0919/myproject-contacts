@@ -15,7 +15,8 @@ public class Prompt {
 
   // 날짜 출력 메소드
   public static Date date(String title) {
-    return Date.valueOf(string(title));
+    System.out.print(title);
+    return Date.valueOf(sc.nextLine());
   }
 
   // close 메소드
@@ -23,3 +24,5 @@ public class Prompt {
     sc.close();
   }
 }
+
+

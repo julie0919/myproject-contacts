@@ -8,25 +8,31 @@ import com.julie.test.util.Prompt;
 
 public class App {
   public static void main(String[] args) {
+
+    BoardHandler boardStorage = new BoardHandler();
+    MemberHandler memberStorage = new MemberHandler();
+    ProjectHandler projectStorage = new ProjectHandler();
+    TaskHandler taskStorage = new TaskHandler();
+
     while (true) {
       String command = Prompt.printString("명령> ");
 
       if (command.equals("/member/add")) {
-        MemberHandler.add();
+        memberStorage.add();
       } else if (command.equals("/member/list")) {
-        MemberHandler.list();
+        memberStorage.list();
       } else if (command.equals("/project/add")) {
-        ProjectHandler.add();
+        projectStorage.add(memberStorage);
       }else if (command.equals("/project/list")) {
-        ProjectHandler.list();
+        projectStorage.list();
       }else if (command.equals("/task/add")) {
-        TaskHandler.add();
+        taskStorage.add(memberStorage);
       }else if (command.equals("/task/list")) {
-        TaskHandler.list();
+        taskStorage.list();
       }else if (command.equals("/board/add")) {
-        BoardHandler.add();
+        boardStorage.add();
       }else if (command.equals("/board/list")) {
-        BoardHandler.list();
+        boardStorage.list();
       }else if (command.equalsIgnoreCase("exit")) {
         System.out.println("안녕!");
         break;

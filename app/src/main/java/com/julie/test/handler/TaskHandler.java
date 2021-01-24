@@ -6,10 +6,10 @@ import com.julie.test.util.Prompt;
 public class TaskHandler {
 
   static final int SIZE = 4;
-  static Task[] tasks = new Task[SIZE];
-  static int count = 0;
+  Task[] tasks = new Task[SIZE];
+  int count = 0;
 
-  public static void add () {
+  public void add (MemberHandler memberList) {
     System.out.println("[작업 등록]");
 
     Task t = new Task();
@@ -23,22 +23,22 @@ public class TaskHandler {
       if (name.length() == 0) {
         System.out.println("작업 등록을 취소합니다.");
         return;
-      } else if (MemberHandler.exist(name)) {
+      } else if (memberList.exist(name)) {
         t.leader = name;
         break;
       }
       System.out.println("등록되지 않은 회원입니다.");
     }
 
-    tasks[count++] = t;
+    this.tasks[this.count++] = t;
     System.out.println();
   }
 
-  public static void list() {
+  public void list() {
     System.out.println("-------------------------------");
     System.out.println("[작업 목록]");
-    for (int i = 0; i < count; i++) {
-      Task t = tasks[i];
+    for (int i = 0; i < this.count; i++) {
+      Task t = this.tasks[i];
       String status = t.progress == 1 ? "신규" : t.progress == 2 ? "진행중" : "완료";
       System.out.printf("번호: %d, 작업명: %s, 마감일: %s, 진행상태: %s, 담당자: %s\n", 
           t.id, t.name, t.endDate, status, t.leader);      

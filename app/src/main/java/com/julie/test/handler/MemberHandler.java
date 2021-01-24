@@ -6,10 +6,10 @@ import com.julie.test.util.Prompt;
 public class MemberHandler {
 
   static final int SIZE = 4;
-  static Member[] members = new Member[SIZE];
-  static int count = 0;
+  Member[] members = new Member[SIZE];
+  int count = 0;
 
-  public static void add () {
+  public void add () {
     System.out.println("[멤버 등록]");
 
     Member m = new Member();
@@ -19,24 +19,24 @@ public class MemberHandler {
     m.pw = Prompt.printString("비밀번호> ");
     m.tel = Prompt.printString("전화> ");
 
-    members[count++] = m;
+    this.members[this.count++] = m;
     System.out.println();
   }
 
-  public static void list() {
+  public void list() {
     System.out.println("-------------------------------");
     System.out.println("[멤버 목록]");
-    for (int i = 0; i < count; i++) {
-      Member m = members[i];
+    for (int i = 0; i < this.count; i++) {
+      Member m = this.members[i];
       System.out.printf("번호: %d, 이름: %s, 이메일: %s, 비밀번호: %s, 전화: %s\n", 
           m.id, m.name, m.mail, m.pw, m.tel);      
     }
     System.out.println();
   }
 
-  public static boolean exist(String name) {
-    for(int i = 0; i < count; i++) {
-      if(name.equals(members[i].name)) {
+  public boolean exist(String name) {
+    for(int i = 0; i < this.count; i++) {
+      if(name.equals(this.members[i].name)) {
         return true;
       }
     }

@@ -10,6 +10,10 @@ public class contacts {
 
   public static void main(String[] args) {
 
+    FamilyHandler familyStorage = new FamilyHandler();
+    SchoolHandler schoolStorage = new SchoolHandler();
+    CompanyHandler companyStorage = new CompanyHandler();
+
     System.out.println("[연락처 관리 프로그램]");
 
     while (true) {
@@ -19,11 +23,11 @@ public class contacts {
         String acategory = Prompt.string("1. 가족 2. 친구 3. 회사\n> ");
 
         if (acategory.equals("1. 가족") || acategory.equals("1") || acategory.equals("가족")) {
-          FamilyHandler.add();
+          familyStorage.add();
         } else if (acategory.equals("2. 친구") || acategory.equals("2") || acategory.equals("친구")) {
-          SchoolHandler.add();
+          schoolStorage.add();
         } else if (acategory.equals("3. 회사") || acategory.equals("3") || acategory.equals("회사")) {
-          CompanyHandler.add();
+          companyStorage.add();
         }
 
       } else if (main.equals("2. 연락처 목록") || main.equals("2") || main.equals("연락처 목록") || main.equals("2. 목록") || main.equals("목록")) {
@@ -31,11 +35,11 @@ public class contacts {
         String lcategory = Prompt.string("1. 가족 2. 친구 3. 회사\n> ");
 
         if (lcategory.equals("1. 가족") || lcategory.equals("1") || lcategory.equals("가족")) {
-          FamilyHandler.list();
+          familyStorage.list();
         } else if(lcategory.equals("2. 친구") || lcategory.equals("2") || lcategory.equals("친구")) {
-          SchoolHandler.list();
+          schoolStorage.list();
         } else if(lcategory.equals("3. 회사") || lcategory.equals("3") || lcategory.equals("회사")) {
-          CompanyHandler.list();
+          companyStorage.list();
         }   
 
       } else if (main.equals("3. 나가기") || main.equals("3") || main.equals("나가기")) {

@@ -6,10 +6,10 @@ import com.julie.test.util.Prompt;
 public class ProjectHandler {
 
   static final int SIZE = 4;
-  static Project[] projects = new Project[SIZE];
-  static int count = 0;
+  Project[] projects = new Project[SIZE];
+  int count = 0;
 
-  public static void add () {
+  public void add (MemberHandler memberList) {
     System.out.println("[프로젝트 등록]");
 
     Project p = new Project();
@@ -20,7 +20,7 @@ public class ProjectHandler {
     p.endDate = Prompt.printDate("종료일> ");
     while (true) {
       String name = Prompt.printString("조장 (취소: 빈 문자열)> ");
-      if (MemberHandler.exist(name)) {
+      if (memberList.exist(name)) {
         p.leader = name;
         break;
       } else if (name.length() == 0) {
@@ -34,8 +34,8 @@ public class ProjectHandler {
       String name = Prompt.printString("팀원 (완료: 빈 문자열)> ");
       if (name.length() == 0) {
         System.out.println("팀원등록을 완료했습니다.");
-        break; // 메소드를 나간다
-      } else if (MemberHandler.exist(name)) {
+        break; 
+      } else if (memberList.exist(name)) {
         if (!p.team.isEmpty()) {
           p.team += ",";
         }
@@ -45,15 +45,15 @@ public class ProjectHandler {
       }
     }
 
-    projects[count++] = p;
+    this.projects[this.count++] = p;
     System.out.println();
   }
 
-  public static void list() {
+  public void list() {
     System.out.println("-------------------------------");
     System.out.println("[프로젝트 목록]");
-    for (int i = 0; i < count; i++) {
-      Project p = projects[i];
+    for (int i = 0; i < this.count; i++) {
+      Project p = this.projects[i];
       System.out.printf("번호: %d, 프로젝트명: %s, 내용: %s, 시작일: %s, 종료일: %s, 조장: %s, 팀원: [%s]\n", 
           p.id, p.name, p.content, p.startDate, p.endDate, p.leader, p.team);      
     }
