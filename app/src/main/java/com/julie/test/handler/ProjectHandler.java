@@ -1,18 +1,9 @@
 package com.julie.test.handler;
 
-import java.sql.Date;
+import com.julie.test.domain.Project;
 import com.julie.test.util.Prompt;
 
 public class ProjectHandler {
-  static class Project {
-    int id;
-    String name;
-    String content;
-    Date startDate;
-    Date endDate;
-    String leader;
-    String team;
-  }
 
   static final int SIZE = 4;
   static Project[] projects = new Project[SIZE];

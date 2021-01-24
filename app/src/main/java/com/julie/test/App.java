@@ -1,5 +1,6 @@
 package com.julie.test;
 
+import com.julie.test.handler.BoardHandler;
 import com.julie.test.handler.MemberHandler;
 import com.julie.test.handler.ProjectHandler;
 import com.julie.test.handler.TaskHandler;
@@ -22,6 +23,10 @@ public class App {
         TaskHandler.add();
       }else if (command.equals("/task/list")) {
         TaskHandler.list();
+      }else if (command.equals("/board/add")) {
+        BoardHandler.add();
+      }else if (command.equals("/board/list")) {
+        BoardHandler.list();
       }else if (command.equalsIgnoreCase("exit")) {
         System.out.println("안녕!");
         break;

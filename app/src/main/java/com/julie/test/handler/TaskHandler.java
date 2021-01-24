@@ -1,16 +1,9 @@
 package com.julie.test.handler;
 
-import java.sql.Date;
+import com.julie.test.domain.Task;
 import com.julie.test.util.Prompt;
 
 public class TaskHandler {
-  static class Task {
-    int id;
-    String name;
-    Date endDate;
-    int progress;
-    String leader;
-  }
 
   static final int SIZE = 4;
   static Task[] tasks = new Task[SIZE];

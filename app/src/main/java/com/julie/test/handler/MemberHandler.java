@@ -1,15 +1,9 @@
 package com.julie.test.handler;
 
+import com.julie.test.domain.Member;
 import com.julie.test.util.Prompt;
 
 public class MemberHandler {
-  static class Member {
-    int id;
-    String name;
-    String mail;
-    String pw;
-    String tel;
-  }
 
   static final int SIZE = 4;
   static Member[] members = new Member[SIZE];
