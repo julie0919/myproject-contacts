@@ -20,7 +20,7 @@ public class Contacts {
       String main = Prompt.string("1. 연락처 추가 2. 연락처 목록 3. 나가기\n> ");
       if (main.equals("1. 연락처 추가") || main.equals("1") || main.equals("연락처 추가") || main.equals("1. 추가") || main.equals("추가")) {
 
-        String acategory = Prompt.string("1. 가족 2. 친구 3. 회사\n> ");
+        String acategory = Prompt.string("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
 
         if (acategory.equals("1. 가족") || acategory.equals("1") || acategory.equals("가족")) {
           familyStorage.add();
@@ -28,11 +28,12 @@ public class Contacts {
           schoolStorage.add();
         } else if (acategory.equals("3. 회사") || acategory.equals("3") || acategory.equals("회사")) {
           companyStorage.add();
+        } else if (acategory.equals("4. 뒤로가기") || acategory.equals("4") || acategory.equals("뒤로가기")) {
         }
 
       } else if (main.equals("2. 연락처 목록") || main.equals("2") || main.equals("연락처 목록") || main.equals("2. 목록") || main.equals("목록")) {
 
-        String lcategory = Prompt.string("1. 가족 2. 친구 3. 회사\n> ");
+        String lcategory = Prompt.string("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
 
         if (lcategory.equals("1. 가족") || lcategory.equals("1") || lcategory.equals("가족")) {
           familyStorage.list();
@@ -40,7 +41,8 @@ public class Contacts {
           schoolStorage.list();
         } else if(lcategory.equals("3. 회사") || lcategory.equals("3") || lcategory.equals("회사")) {
           companyStorage.list();
-        }   
+        } else if (lcategory.equals("4. 뒤로가기") || lcategory.equals("4") || lcategory.equals("뒤로가기")) {
+        }  
 
       } else if (main.equals("3. 나가기") || main.equals("3") || main.equals("나가기")) {
         System.out.println("안녕!");
