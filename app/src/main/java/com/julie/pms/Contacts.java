@@ -5,7 +5,7 @@ import com.julie.handler.FamilyHandler;
 import com.julie.handler.SchoolHandler;
 import com.julie.util.Prompt;
 
-public class contacts {
+public class Contacts {
 
 
   public static void main(String[] args) {
