@@ -11,8 +11,8 @@ public class App {
 
     BoardHandler boardStorage = new BoardHandler();
     MemberHandler memberStorage = new MemberHandler();
-    ProjectHandler projectStorage = new ProjectHandler();
-    TaskHandler taskStorage = new TaskHandler();
+    ProjectHandler projectStorage = new ProjectHandler(memberStorage);
+    TaskHandler taskStorage = new TaskHandler(memberStorage);
 
     while (true) {
       String command = Prompt.printString("명령> ");
@@ -22,11 +22,11 @@ public class App {
       } else if (command.equals("/member/list")) {
         memberStorage.list();
       } else if (command.equals("/project/add")) {
-        projectStorage.add(memberStorage);
+        projectStorage.add();
       }else if (command.equals("/project/list")) {
         projectStorage.list();
       }else if (command.equals("/task/add")) {
-        taskStorage.add(memberStorage);
+        taskStorage.add();
       }else if (command.equals("/task/list")) {
         taskStorage.list();
       }else if (command.equals("/board/add")) {

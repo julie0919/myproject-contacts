@@ -9,7 +9,12 @@ public class TaskHandler {
   Task[] tasks = new Task[SIZE];
   int count = 0;
 
-  public void add (MemberHandler memberList) {
+  public MemberHandler memberStorage;
+  public TaskHandler(MemberHandler memberHandler) {
+    this.memberStorage = memberHandler;
+  }
+
+  public void add () {
     System.out.println("[작업 등록]");
 
     Task t = new Task();
@@ -23,7 +28,7 @@ public class TaskHandler {
       if (name.length() == 0) {
         System.out.println("작업 등록을 취소합니다.");
         return;
-      } else if (memberList.exist(name)) {
+      } else if (this.memberStorage.exist(name)) {
         t.leader = name;
         break;
       }

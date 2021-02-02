@@ -9,7 +9,12 @@ public class ProjectHandler {
   Project[] projects = new Project[SIZE];
   int count = 0;
 
-  public void add (MemberHandler memberList) {
+  public MemberHandler memberStorage;
+  public ProjectHandler(MemberHandler memberHandler) {
+    this.memberStorage = memberHandler;
+  }
+
+  public void add () {
     System.out.println("[프로젝트 등록]");
 
     Project p = new Project();
@@ -20,7 +25,7 @@ public class ProjectHandler {
     p.endDate = Prompt.printDate("종료일> ");
     while (true) {
       String name = Prompt.printString("조장 (취소: 빈 문자열)> ");
-      if (memberList.exist(name)) {
+      if (this.memberStorage.exist(name)) {
         p.leader = name;
         break;
       } else if (name.length() == 0) {
@@ -35,7 +40,7 @@ public class ProjectHandler {
       if (name.length() == 0) {
         System.out.println("팀원등록을 완료했습니다.");
         break; 
-      } else if (memberList.exist(name)) {
+      } else if (memberStorage.exist(name)) {
         if (!p.team.isEmpty()) {
           p.team += ",";
         }
