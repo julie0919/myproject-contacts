@@ -6,19 +6,18 @@ import com.julie.test.util.Prompt;
 
 public class BoardHandler {
 
-  BoardList boardList = new BoardList();
+  private BoardList boardList = new BoardList();
 
   public void add() {
-
     System.out.println("[새 게시글]");
 
     Board b = new Board();
 
-    b.id = Prompt.printInt("번호> ");
-    b.title = Prompt.printString("제목> ");
-    b.content = Prompt.printString("내용> ");
-    b.writer = Prompt.printString("작성자> ");
-    b.registeredDate = new Date(System.currentTimeMillis());
+    b.setId(Prompt.printInt("번호> "));
+    b.setTitle(Prompt.printString("제목> "));
+    b.setContent(Prompt.printString("내용> "));
+    b.setWriter(Prompt.printString("작성자> "));
+    b.setRegisteredDate(new Date(System.currentTimeMillis()));
 
     boardList.add(b);
 
@@ -31,7 +30,8 @@ public class BoardHandler {
     Board[] boards = boardList.toArray();
 
     for (Board b : boards){
-      System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", b.id, b.title, b.content, b.writer, b.registeredDate, b.viewCount);
+      System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", 
+          b.getId(), b.getTitle(), b.getContent(), b.getWriter(), b.getRegisteredDate(), b.getViewCount());
     }
   }
 
@@ -46,12 +46,12 @@ public class BoardHandler {
       System.out.println("해당 번호의 게시글이 없습니다.");
       return;
     }  
-    board.viewCount++;
-    System.out.printf("제목: %s\n", board.title);
-    System.out.printf("내용: %s\n", board.content);
-    System.out.printf("작성자: %s\n", board.writer);
-    System.out.printf("등록일: %s\n", board.registeredDate);
-    System.out.printf("조회수: %s\n", board.viewCount);
+    board.setViewCount(board.getViewCount() + 1);
+    System.out.printf("제목: %s\n", board.getTitle());
+    System.out.printf("내용: %s\n", board.getContent());
+    System.out.printf("작성자: %s\n", board.getWriter());
+    System.out.printf("등록일: %s\n", board.getRegisteredDate());
+    System.out.printf("조회수: %s\n", board.getViewCount());
   }
 
 
@@ -66,14 +66,14 @@ public class BoardHandler {
       System.out.println("해당 번호의 게시글이 없습니다.");   
       return;
     }  
-    String title = Prompt.printString(String.format("제목 (%s)> \n", board.title));
-    String content = Prompt.printString(String.format("내용 (%s)> \n", board.content));
+    String title = Prompt.printString(String.format("제목 (%s)> \n", board.getTitle()));
+    String content = Prompt.printString(String.format("내용 (%s)> \n", board.getContent()));
 
     String input = Prompt.printString("위의 내용으로 수정하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      board.title = title;
-      board.content = content;
+      board.setTitle(title);
+      board.setContent(content);
       System.out.println("게시글을 수정하였습니다.");
     } else {
       System.out.println("게시글 수정을 취소하였습니다.");

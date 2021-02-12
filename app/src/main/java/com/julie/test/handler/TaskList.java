@@ -3,11 +3,11 @@ package com.julie.test.handler;
 import com.julie.test.domain.Task;
 
 public class TaskList {
-  Node first;
-  Node last;
-  int count = 0;
+  private Node first;
+  private Node last;
+  private int count = 0;
 
-  void add(Task t) {
+  public void add(Task t) {
     Node node = new Node(t);
 
     if (last == null) {
@@ -22,7 +22,7 @@ public class TaskList {
     this.count++;
   }
 
-  Task[] toArray() {
+  public Task[] toArray() {
     Task[] arr = new Task[count];
     Node cursor = this.first;
     int i = 0;
@@ -34,11 +34,11 @@ public class TaskList {
     return arr;
   }
 
-  Task get(int taskId) {
+  public Task get(int taskId) {
     Node cursor = first;
     while (cursor != null) {
       Task t = cursor.task;
-      if (t.id == taskId) {
+      if (t.getId() == taskId) {
         return t;
       }
       cursor = cursor.next;
@@ -46,10 +46,10 @@ public class TaskList {
     return null;
   }
 
-  void delete(int taskId) {
+  public void delete(int taskId) {
     Node cursor = first;
     while (cursor != null){
-      if (cursor.task.id == taskId) {
+      if (cursor.task.getId() == taskId) {
         this.count--;
         if (first == last) {
           first = last = null;

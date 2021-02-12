@@ -3,11 +3,11 @@ package com.julie.test.handler;
 import com.julie.test.domain.Member;
 
 public class MemberList {
-  Node first;
-  Node last;
-  int count = 0;
+  private Node first;
+  private Node last;
+  private int count = 0;
 
-  void add(Member m) {
+  public void add(Member m) {
     Node node = new Node(m);
 
     if (last == null) {
@@ -22,7 +22,7 @@ public class MemberList {
     count++;
   }
 
-  Member[] toArray() {
+  public Member[] toArray() {
     Member[] arr = new Member[count];
     Node cursor = this.first;
     int i = 0;
@@ -34,11 +34,11 @@ public class MemberList {
     return arr;
   }
 
-  Member get(int memberId) {
+  public Member get(int memberId) {
     Node cursor = first;
     while(cursor != null) {
       Member m = cursor.member;
-      if (m.id == memberId) {
+      if (m.getId() == memberId) {
         return m;
       }
       cursor = cursor.next;
@@ -46,10 +46,10 @@ public class MemberList {
     return null;
   }
 
-  void delete(int memberId) {
+  public void delete(int memberId) {
     Node cursor = first;
     while (cursor != null) {
-      if (cursor.member.id == memberId) {
+      if (cursor.member.getId() == memberId) {
         this.count--;
         if (first == last) {
           first = last = null;
@@ -78,7 +78,7 @@ public class MemberList {
 
     while (cursor != null) {
       Member m = cursor.member;
-      if (name.equals(m.name)) {
+      if (name.equals(m.getName())) {
         return true;
       }
       cursor = cursor.next;

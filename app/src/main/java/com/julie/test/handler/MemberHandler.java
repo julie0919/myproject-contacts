@@ -5,17 +5,17 @@ import com.julie.test.util.Prompt;
 
 public class MemberHandler {
 
-  public MemberList memberList = new MemberList();
+  private MemberList memberList = new MemberList();
 
   public void add () {
     System.out.println("[멤버 등록]");
 
     Member m = new Member();
-    m.id = Prompt.printInt("번호> ");
-    m.name = Prompt.printString("이름> ");
-    m.mail = Prompt.printString("이메일> ");
-    m.pw = Prompt.printString("비밀번호> ");
-    m.tel = Prompt.printString("전화> ");
+    m.setId(Prompt.printInt("번호> "));
+    m.setName(Prompt.printString("이름> "));
+    m.setMail(Prompt.printString("이메일> "));
+    m.setPw(Prompt.printString("비밀번호> "));
+    m.setTel(Prompt.printString("전화> "));
 
     memberList.add(m);
 
@@ -28,7 +28,7 @@ public class MemberHandler {
     Member[] members = memberList.toArray();
     for(Member m : members) {
       System.out.printf("번호: %d, 이름: %s, 이메일: %s, 비밀번호: %s, 전화: %s\n", 
-          m.id, m.name, m.mail, m.pw, m.tel);
+          m.getId(), m.getName(), m.getMail(), m.getPw(), m.getTel());
     }
   }
 
@@ -42,9 +42,9 @@ public class MemberHandler {
       System.out.println("해당 번호의 멤버가 없습니다.");
       return;
     }   
-    System.out.printf("이름: %s\n", member.name);
-    System.out.printf("이메일: %s\n", member.mail);
-    System.out.printf("전화: %s\n", member.tel);
+    System.out.printf("이름: %s\n", member.getName());
+    System.out.printf("이메일: %s\n", member.getMail());
+    System.out.printf("전화: %s\n", member.getTel());
   }
 
   public void update() {
@@ -56,18 +56,18 @@ public class MemberHandler {
       System.out.println("해당 번호의 멤버가 없습니다.");
       return;
     }  
-    String name = Prompt.printString(String.format("이름 (%s)> \n", member.name));
-    String mail = Prompt.printString(String.format("이메일 (%s)> \n", member.mail));
-    String pw = Prompt.printString(String.format("비밀번호 (%s)> \n", member.pw));
-    String tel = Prompt.printString(String.format("전화 (%s)> \n", member.tel));
+    String name = Prompt.printString(String.format("이름 (%s)> \n", member.getName()));
+    String mail = Prompt.printString(String.format("이메일 (%s)> \n", member.getMail()));
+    String pw = Prompt.printString(String.format("비밀번호 (%s)> \n", member.getPw()));
+    String tel = Prompt.printString(String.format("전화 (%s)> \n", member.getTel()));
 
     String input = Prompt.printString("위의 내용으로 수정하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      member.name = name;
-      member.mail = mail;
-      member.pw = pw;
-      member.tel = tel;
+      member.setName(name);
+      member.setMail(mail);
+      member.setPw(pw);
+      member.setTel(tel);
       System.out.println("멤버정보를 수정하였습니다.");
     } else {
       System.out.println("멤버수정을 취소하였습니다.");
@@ -92,5 +92,33 @@ public class MemberHandler {
     } else {
       System.out.println("멤버 삭제를 취소하였습니다.");
     }
-  }  
+  } 
+
+  String inputMember(String promptTitle) {
+    while (true) {
+      String name = Prompt.printString(promptTitle);
+      if (name.length() == 0) {
+        return null;
+      } else if (this.memberList.exist(name)) {
+        return name;
+      } else {
+        System.out.println("등록되지 않은 회원입니다.");
+      }
+    }
+  }
+
+  String inputMembers(String promptTitle) {
+    String team = "";
+    while (true) {
+      String name = inputMember(promptTitle);
+      if (name == null) {
+        return team;
+      } else {
+        if (!team.isEmpty()) {
+          team += ",";
+        }
+        team += name;
+      }
+    }  
+  }
 }

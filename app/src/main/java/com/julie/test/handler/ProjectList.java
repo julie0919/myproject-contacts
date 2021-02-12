@@ -3,11 +3,11 @@ package com.julie.test.handler;
 import com.julie.test.domain.Project;
 
 public class ProjectList {
-  Node first;
-  Node last;
-  int count = 0;
+  private Node first;
+  private Node last;
+  private int count = 0;
 
-  void add(Project p) {
+  public void add(Project p) {
     Node node = new Node(p);
 
     if (last == null) {
@@ -22,7 +22,7 @@ public class ProjectList {
     count++;
   }
 
-  Project[] toArray() {
+  public Project[] toArray() {
     Project[] arr = new Project[count];
     int i = 0;
 
@@ -35,11 +35,11 @@ public class ProjectList {
     return arr;
   }
 
-  Project get(int projectId) {
+  public Project get(int projectId) {
     Node cursor = first;
     while (cursor != null) {
       Project p = cursor.project;
-      if (p.id == projectId) {
+      if (p.getId() == projectId) {
         return p;
       }
       cursor = cursor.next;
@@ -47,10 +47,10 @@ public class ProjectList {
     return null;
   }
 
-  void delete(int projectId) {
+  public void delete(int projectId) {
     Node cursor = first;
     while (cursor != null){
-      if (cursor.project.id == projectId) {
+      if (cursor.project.getId() == projectId) {
         this.count--;
         if (first == last) {
           first = last = null;

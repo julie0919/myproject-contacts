@@ -3,11 +3,11 @@ package com.julie.test.handler;
 import com.julie.test.domain.Board;
 
 public class BoardList {
-  Node first;
-  Node last;
-  int count = 0;
+  private Node first;
+  private Node last;
+  private int count = 0;
 
-  void add(Board b) {
+  public void add(Board b) {
     Node node = new Node(b);
 
     if (last == null) {
@@ -22,7 +22,7 @@ public class BoardList {
     count++;
   }
 
-  Board[] toArray() {
+  public Board[] toArray() {
     Board[] arr = new Board[count];
 
     Node cursor = this.first;
@@ -35,11 +35,11 @@ public class BoardList {
     return arr;
   }
 
-  Board get(int boardId) {
+  public Board get(int boardId) {
     Node cursor = first;
     while (cursor != null) {
       Board b = cursor.board;
-      if (b.id == boardId) {
+      if (b.getId() == boardId) {
         return b;
       }
       cursor = cursor.next;
@@ -47,10 +47,10 @@ public class BoardList {
     return null;
   }
 
-  void delete(int boardId) {
+  public void delete(int boardId) {
     Node cursor = first;
     while (cursor != null) {
-      if (cursor.board.id == boardId) {
+      if (cursor.board.getId() == boardId) {
         this.count--;
         if (first == last) {
           first = last = null;
