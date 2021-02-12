@@ -1,14 +1,14 @@
 package com.julie.test.handler;
 
-import com.julie.test.domain.Board;
+import com.julie.test.domain.Member;
 
-public class BoardList {
+public class MemberList {
   Node first;
   Node last;
   int count = 0;
 
-  void add(Board b) {
-    Node node = new Node(b);
+  void add(Member m) {
+    Node node = new Node(m);
 
     if (last == null) {
       last = node;
@@ -22,35 +22,34 @@ public class BoardList {
     count++;
   }
 
-  Board[] toArray() {
-    Board[] arr = new Board[count];
-
+  Member[] toArray() {
+    Member[] arr = new Member[count];
     Node cursor = this.first;
     int i = 0;
 
     while (cursor != null) {
-      arr[i++] = cursor.board;
+      arr[i++] = cursor.member;
       cursor = cursor.next;
     }
     return arr;
   }
 
-  Board get(int boardId) {
+  Member get(int memberId) {
     Node cursor = first;
-    while (cursor != null) {
-      Board b = cursor.board;
-      if (b.id == boardId) {
-        return b;
+    while(cursor != null) {
+      Member m = cursor.member;
+      if (m.id == memberId) {
+        return m;
       }
       cursor = cursor.next;
     }
     return null;
   }
 
-  void delete(int boardId) {
+  void delete(int memberId) {
     Node cursor = first;
     while (cursor != null) {
-      if (cursor.board.id == boardId) {
+      if (cursor.member.id == memberId) {
         this.count--;
         if (first == last) {
           first = last = null;
@@ -71,17 +70,29 @@ public class BoardList {
         break;
       }
       cursor = cursor.next;
-    }    
-  }
-
-  static class Node {
-    Board board;
-    Node next;
-    Node prev;
-
-    Node(Board b) {
-      this.board = b;
     }
   }
 
+  public boolean exist(String name) {
+    Node cursor = first;
+
+    while (cursor != null) {
+      Member m = cursor.member;
+      if (name.equals(m.name)) {
+        return true;
+      }
+      cursor = cursor.next;
+    }
+    return false;
+  }
+
+  static class Node {
+    Member member;
+    Node next;
+    Node prev;
+
+    Node(Member m) {
+      this.member = m;
+    }
+  }
 }

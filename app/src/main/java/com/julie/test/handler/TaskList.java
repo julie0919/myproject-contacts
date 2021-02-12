@@ -1,14 +1,14 @@
 package com.julie.test.handler;
 
-import com.julie.test.domain.Board;
+import com.julie.test.domain.Task;
 
-public class BoardList {
+public class TaskList {
   Node first;
   Node last;
   int count = 0;
 
-  void add(Board b) {
-    Node node = new Node(b);
+  void add(Task t) {
+    Node node = new Node(t);
 
     if (last == null) {
       last = node;
@@ -19,38 +19,37 @@ public class BoardList {
       last = node;
     }
 
-    count++;
+    this.count++;
   }
 
-  Board[] toArray() {
-    Board[] arr = new Board[count];
-
+  Task[] toArray() {
+    Task[] arr = new Task[count];
     Node cursor = this.first;
     int i = 0;
 
-    while (cursor != null) {
-      arr[i++] = cursor.board;
+    while(cursor != null) {
+      arr[i++] = cursor.task;
       cursor = cursor.next;
     }
     return arr;
   }
 
-  Board get(int boardId) {
+  Task get(int taskId) {
     Node cursor = first;
     while (cursor != null) {
-      Board b = cursor.board;
-      if (b.id == boardId) {
-        return b;
+      Task t = cursor.task;
+      if (t.id == taskId) {
+        return t;
       }
       cursor = cursor.next;
     }
     return null;
   }
 
-  void delete(int boardId) {
+  void delete(int taskId) {
     Node cursor = first;
-    while (cursor != null) {
-      if (cursor.board.id == boardId) {
+    while (cursor != null){
+      if (cursor.task.id == taskId) {
         this.count--;
         if (first == last) {
           first = last = null;
@@ -71,16 +70,16 @@ public class BoardList {
         break;
       }
       cursor = cursor.next;
-    }    
+    }
   }
 
   static class Node {
-    Board board;
+    Task task;
     Node next;
     Node prev;
 
-    Node(Board b) {
-      this.board = b;
+    Node(Task t) {
+      this.task = t;
     }
   }
 

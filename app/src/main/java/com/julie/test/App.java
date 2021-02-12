@@ -9,57 +9,59 @@ import com.julie.test.util.Prompt;
 public class App {
   public static void main(String[] args) {
 
-    BoardHandler boardStorage = new BoardHandler();
-    MemberHandler memberStorage = new MemberHandler();
-    ProjectHandler projectStorage = new ProjectHandler(memberStorage);
-    TaskHandler taskStorage = new TaskHandler(memberStorage);
+    BoardHandler boardHandler = new BoardHandler();
+    MemberHandler memberHandler = new MemberHandler();
+    ProjectHandler projectHandler = new ProjectHandler(memberHandler.memberList);
+    TaskHandler taskHandler = new TaskHandler(memberHandler.memberList);
 
     while (true) {
       String command = Prompt.printString("명령> ");
 
       if (command.equals("/member/add")) {
-        memberStorage.add();
+        memberHandler.add();
       } else if (command.equals("/member/list")) {
-        memberStorage.list();
+        memberHandler.list();
       } else if (command.equals("/member/detail")) {
-        memberStorage.detail();
+        memberHandler.detail();
       }else if (command.equals("/member/update")) {
-        memberStorage.update();
+        memberHandler.update();
       }else if (command.equals("/member/delete")) {
-        memberStorage.delete();
+        memberHandler.delete();
       }else if (command.equals("/project/add")) {
-        projectStorage.add();
+        projectHandler.add();
       }else if (command.equals("/project/list")) {
-        projectStorage.list();
+        projectHandler.list();
       }else if (command.equals("/project/detail")) {
-        projectStorage.detail();
+        projectHandler.detail();
       }else if (command.equals("/project/update")) {
-        projectStorage.update();
+        projectHandler.update();
       }else if (command.equals("/project/delete")) {
-        projectStorage.delete();
+        projectHandler.delete();
       }else if (command.equals("/task/add")) {
-        taskStorage.add();
+        taskHandler.add();
       }else if (command.equals("/task/list")) {
-        taskStorage.list();
+        taskHandler.list();
       }else if (command.equals("/task/detail")) {
-        taskStorage.detail();
+        taskHandler.detail();
       }else if (command.equals("/task/update")) {
-        taskStorage.update();
+        taskHandler.update();
       }else if (command.equals("/task/delete")) {
-        taskStorage.delete();
+        taskHandler.delete();
       }else if (command.equals("/board/add")) {
-        boardStorage.add();
+        boardHandler.add();
       }else if (command.equals("/board/list")) {
-        boardStorage.list();
+        boardHandler.list();
       }else if (command.equals("/board/detail")) {
-        boardStorage.detail();
+        boardHandler.detail();
       }else if (command.equals("/board/update")) {
-        boardStorage.update();
+        boardHandler.update();
       }else if (command.equals("/board/delete")) {
-        boardStorage.delete();
+        boardHandler.delete();
       }else if (command.equalsIgnoreCase("exit")) {
         System.out.println("안녕!");
         break;
+      }else {
+        System.out.println("실행할 수 없는 명령입니다.");
       }
     }
     Prompt.close();
