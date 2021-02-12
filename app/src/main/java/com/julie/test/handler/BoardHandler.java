@@ -6,22 +6,34 @@ import com.julie.test.util.Prompt;
 
 public class BoardHandler {
 
-  static final int SIZE = 100;
-  Board[] boards = new Board[SIZE];
+  Node first;
+  Node last;
   int count = 0;
 
   public void add() {
 
+    System.out.println("[새 게시글]");
+
     Board b = new Board();
 
-    System.out.println("[새 게시글]");
     b.id = Prompt.printInt("번호> ");
     b.title = Prompt.printString("제목> ");
     b.content = Prompt.printString("내용> ");
     b.writer = Prompt.printString("작성자> ");
     b.registeredDate = new Date(System.currentTimeMillis());
-    b.viewCount = Prompt.printInt("조회수> "); 
-    this.boards[this.count++] = b;
+
+    Node node = new Node(b);
+
+    if (last == null) {
+      last = node;
+      first = node;
+    } else {
+      last.next = node;
+      node.prev = last;
+      last = node;
+    }
+
+    this.count++;
 
     System.out.println("게시글 등록을 완료했습니다.");
   }
@@ -29,13 +41,13 @@ public class BoardHandler {
   public void list() {
     System.out.println("[게시글 목록]");
 
-    for (int i = 0; i < this.count; i++) {
-      Board b = this.boards[i];
+    Node cursor = first;
 
-      if (b == null)
-        continue;
-
+    while (cursor != null) {
+      Board b = cursor.board;
       System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", b.id, b.title, b.content, b.writer, b.registeredDate, b.viewCount);
+
+      cursor = cursor.next;
     }
   }
 
@@ -87,7 +99,9 @@ public class BoardHandler {
     System.out.println("[게시글 삭제하기]");
 
     int id = Prompt.printInt("번호> ");
-    if(indexOf(id) == -1) {
+
+    Board board = findByNo(id);
+    if(board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");    
       return;
     }
@@ -95,34 +109,57 @@ public class BoardHandler {
     String input = Prompt.printString("게시글을 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      for (int x = indexOf(id) + 1; x < this.count; x++) {
-        this.boards[x-1] = this.boards[x];
-      }
-      boards[--this.count] = null;
+      Node cursor = first;
+      while (cursor != null) {
+        if (cursor.board == board) {
+          this.count--;
+          if (first == last) {
+            first = last = null;
+            break;
+          }
+          if (cursor == first) {
+            first = cursor.next;
+            cursor.prev = null;
+          } else {
+            cursor.prev.next = cursor.next;
+            if (cursor.next != null) {
+              cursor.next.prev = cursor.prev;
+            }
+          }
+          if (cursor == last) {
+            last = cursor.prev;
+          }
+          break;
+        }
+        cursor = cursor.next;
+      }    
       System.out.println("게시글을 삭제하였습니다.");
+
     } else {
+
       System.out.println("게시글 삭제를 취소하였습니다.");
     }
   }
 
-  int indexOf(int boardNo) {
-    for(int i = 0; i < this.count; i++) {
-      Board board = this.boards[i];
-      if(board != null && board.id == boardNo) {
-        return i;
-      } 
-    }   
-    return -1;
-  }
-
   Board findByNo(int boardNo) {
-    if(indexOf(boardNo) == -1) {
-      return null;
+    Node cursor = first;
+    while (cursor != null) {
+      Board b = cursor.board;
+      if (b.id == boardNo) {
+        return b;
+      }
+      cursor = cursor.next;
     }
-    return this.boards[indexOf(boardNo)];
+    return null;
   }
 
+  static class Node {
+    Board board;
+    Node next;
+    Node prev;
 
-
-
+    Node(Board b) {
+      this.board = b;
+    }
+  }
 }

@@ -6,11 +6,12 @@ import com.julie.test.util.Prompt;
 
 public class ProjectHandler {
 
-  static final int SIZE = 4;
-  Project[] projects = new Project[SIZE];
+  Node first;
+  Node last;
   int count = 0;
 
   public MemberHandler memberStorage;
+
   public ProjectHandler(MemberHandler memberHandler) {
     this.memberStorage = memberHandler;
   }
@@ -51,19 +52,33 @@ public class ProjectHandler {
       }
     }
 
-    this.projects[this.count++] = p;
-    System.out.println();
+    Node node = new Node(p);
+
+    if (last == null) {
+      last = node;
+      first = node;
+    } else {
+      last.next = node;
+      node.prev = last;
+      last = node;
+    }
+
+    this.count++;
+    System.out.println("프로젝트를 등록하였습니다.");
   }
 
   public void list() {
     System.out.println("-------------------------------");
     System.out.println("[프로젝트 목록]");
-    for (int i = 0; i < this.count; i++) {
-      Project p = this.projects[i];
+
+    Node cursor = first;
+
+    while (cursor != null) {
+      Project p = cursor.project;
       System.out.printf("번호: %d, 프로젝트명: %s, 내용: %s, 시작일: %s, 종료일: %s, 조장: %s, 팀원: [%s]\n", 
-          p.id, p.name, p.content, p.startDate, p.endDate, p.leader, p.team);      
+          p.id, p.name, p.content, p.startDate, p.endDate, p.leader, p.team); 
+      cursor = cursor.next;
     }
-    System.out.println();
   }
 
   public void detail() {
@@ -124,7 +139,8 @@ public class ProjectHandler {
     System.out.println("[프로젝트 삭제하기]");
 
     int id = Prompt.printInt("번호> ");
-    if(indexOf(id) == -1) {
+    Project project = findById(id);
+    if(project == null) {
       System.out.println("해당 번호의 프로젝트가 없습니다.");    
       return;
     }
@@ -132,31 +148,47 @@ public class ProjectHandler {
     String input = Prompt.printString("프로젝트를 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      for (int x = indexOf(id) + 1; x < this.count; x++) {
-        this.projects[x-1] = this.projects[x];
+      Node cursor = first;
+      while (cursor != null){
+        if (cursor.project == project) {
+          this.count--;
+          if (first == last) {
+            first = last = null;
+            break;
+          }
+          if (cursor == first) {
+            first = cursor.next;
+            cursor.prev = null;
+          } else {
+            cursor.prev.next = cursor.next;
+            if (cursor.next != null) {
+              cursor.next.prev = cursor.prev;
+            }
+          }
+          if (cursor == last) {
+            last = cursor.prev;
+          }
+          break;
+        }
+        cursor = cursor.next;
       }
-      projects[--this.count] = null;
+
       System.out.println("프로젝트를 삭제하였습니다.");
     } else {
       System.out.println("프로젝트 삭제를 취소하였습니다.");
     }    
   }
 
-  int indexOf(int projectId) {
-    for (int i = 0; i < this.count; i++) {
-      Project project = this.projects[i];
-      if (project != null && projectId == project.id) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
   Project findById(int projectId) {
-    if (indexOf(projectId) == -1) {
-      return null;
+    Node cursor = first;
+    while (cursor != null) {
+      Project p = cursor.project;
+      if (p.id == projectId) {
+        return p;
+      }
+      cursor = cursor.next;
     }
-    return this.projects[indexOf(projectId)];
+    return null;
   }
 
   String inputMember(String promptTitle) {
@@ -184,5 +216,15 @@ public class ProjectHandler {
         team += name;
       }
     }  
+  }
+
+  static class Node {
+    Project project;
+    Node next;
+    Node prev;
+
+    Node(Project p) {
+      this.project = p;
+    }
   }
 }

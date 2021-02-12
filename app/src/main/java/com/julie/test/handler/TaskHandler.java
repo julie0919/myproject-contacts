@@ -6,8 +6,8 @@ import com.julie.test.util.Prompt;
 
 public class TaskHandler {
 
-  static final int SIZE = 4;
-  Task[] tasks = new Task[SIZE];
+  Node first;
+  Node last;
   int count = 0;
 
   public MemberHandler memberStorage;
@@ -36,20 +36,33 @@ public class TaskHandler {
       System.out.println("등록되지 않은 회원입니다.");
     }
 
-    this.tasks[this.count++] = t;
-    System.out.println();
+    Node node = new Node(t);
+
+    if (last == null) {
+      last = node;
+      first = node;
+    } else {
+      last.next = node;
+      node.prev = last;
+      last = node;
+    }
+
+    this.count++;
+    System.out.println("작업 등록을 완료하였습니다.");
   }
 
   public void list() {
     System.out.println("-------------------------------");
     System.out.println("[작업 목록]");
-    for (int i = 0; i < this.count; i++) {
-      Task t = this.tasks[i];
+
+    Node cursor = first;
+    while (cursor != null) {
+      Task t = cursor.task;
       String status = t.progress == 1 ? "신규" : t.progress == 2 ? "진행중" : "완료";
       System.out.printf("번호: %d, 작업명: %s, 마감일: %s, 진행상태: %s, 담당자: %s\n", 
           t.id, t.name, t.endDate, status, t.leader);      
+      cursor = cursor.next;
     }
-    System.out.println();
   }
 
   public void detail() {
@@ -101,7 +114,8 @@ public class TaskHandler {
     System.out.println("[작업 삭제하기]");
 
     int id = Prompt.printInt("번호> ");
-    if(indexOf(id) == -1) {
+    Task task = findById(id);
+    if(task == null) {
       System.out.println("해당 번호의 작업이 없습니다.");    
       return;
     }
@@ -109,31 +123,46 @@ public class TaskHandler {
     String input = Prompt.printString("작업을 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      for (int x = indexOf(id) + 1; x < this.count; x++) {
-        this.tasks[x-1] = this.tasks[x];
+      Node cursor = first;
+      while (cursor != null){
+        if (cursor.task == task) {
+          this.count--;
+          if (first == last) {
+            first = last = null;
+            break;
+          }
+          if (cursor == first) {
+            first = cursor.next;
+            cursor.prev = null;
+          } else {
+            cursor.prev.next = cursor.next;
+            if (cursor.next != null) {
+              cursor.next.prev = cursor.prev;
+            }
+          }
+          if (cursor == last) {
+            last = cursor.prev;
+          }
+          break;
+        }
+        cursor = cursor.next;
       }
-      tasks[--this.count] = null;
       System.out.println("작업을 삭제하였습니다.");
     } else {
       System.out.println("작업 삭제를 취소하였습니다.");
     }    
   }
 
-  int indexOf(int taskId) {
-    for (int i = 0; i < this.count; i++) {
-      Task task = this.tasks[i];
-      if (task != null && taskId == task.id) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
   Task findById(int taskId) {
-    if (indexOf(taskId) == -1) {
-      return null;
+    Node cursor = first;
+    while (cursor != null) {
+      Task t = cursor.task;
+      if (t.id == taskId) {
+        return t;
+      }
+      cursor = cursor.next;
     }
-    return this.tasks[indexOf(taskId)];
+    return null;
   }
 
   String inputMember(String promptTitle) {
@@ -151,5 +180,15 @@ public class TaskHandler {
   String getStatusLabel(int progress) {
     String status = progress == 1 ? "신규" : progress == 2 ? "진행중" : "완료";
     return status;
+  }
+
+  static class Node {
+    Task task;
+    Node next;
+    Node prev;
+
+    Node(Task t) {
+      this.task = t;
+    }
   }
 }
