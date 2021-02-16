@@ -2,12 +2,13 @@ package com.julie.test.handler;
 
 import java.sql.Date;
 import com.julie.test.domain.Project;
+import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class ProjectHandler {
 
   private MemberHandler memberHandler;
-  private ProjectList projectList = new ProjectList();
+  private List projectList = new List();
 
   public ProjectHandler(MemberHandler memberHandler) {
     this.memberHandler = memberHandler;
@@ -38,8 +39,9 @@ public class ProjectHandler {
     System.out.println("-------------------------------");
     System.out.println("[프로젝트 목록]");
 
-    Project[] projects = projectList.toArray();
-    for(Project p : projects) {
+    Object[] list = projectList.toArray();
+    for(Object obj : list) {
+      Project p = (Project)obj;
       System.out.printf("번호: %d, 프로젝트명: %s, 내용: %s, 시작일: %s, 종료일: %s, 조장: %s, 팀원: [%s]\n", 
           p.getId(), p.getName(), p.getContent(), p.getStartDate(), p.getEndDate(), p.getLeader(), p.getTeam());
     }
@@ -49,7 +51,7 @@ public class ProjectHandler {
     System.out.println("[프로젝트 상세보기]");
     int id = Prompt.printInt("번호> ");
 
-    Project project = projectList.get(id);
+    Project project = findById(id);
     if (project == null) {
       System.out.println("해당 번호의 프로젝트가 없습니다.");
       return;
@@ -66,7 +68,7 @@ public class ProjectHandler {
     System.out.println("[프로젝트 수정하기]");
     int id = Prompt.printInt("번호> ");
 
-    Project project = projectList.get(id);
+    Project project = findById(id);
     if (project == null) {
       System.out.println("해당 번호의 프로젝트가 없습니다.");
       return;
@@ -103,7 +105,7 @@ public class ProjectHandler {
     System.out.println("[프로젝트 삭제하기]");
 
     int id = Prompt.printInt("번호> ");
-    Project project = projectList.get(id);
+    Project project = findById(id);
     if(project == null) {
       System.out.println("해당 번호의 프로젝트가 없습니다.");    
       return;
@@ -112,10 +114,21 @@ public class ProjectHandler {
     String input = Prompt.printString("프로젝트를 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      projectList.delete(id);
+      projectList.delete(project);
       System.out.println("프로젝트를 삭제하였습니다.");
     } else {
       System.out.println("프로젝트 삭제를 취소하였습니다.");
     }    
+  }
+
+  private Project findById(int projectId) {
+    Object[] list = projectList.toArray();
+    for (Object obj : list) {
+      Project p = (Project) obj;
+      if (p.getId() == projectId) {
+        return p;
+      }
+    }
+    return null;
   }
 }

@@ -2,11 +2,12 @@ package com.julie.test.handler;
 
 import java.sql.Date;
 import com.julie.test.domain.Board;
+import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class BoardHandler {
 
-  private BoardList boardList = new BoardList();
+  private List boardList = new List();
 
   public void add() {
     System.out.println("[새 게시글]");
@@ -27,9 +28,11 @@ public class BoardHandler {
   public void list() {
     System.out.println("[게시글 목록]");
 
-    Board[] boards = boardList.toArray();
+    Object[] list = boardList.toArray();
 
-    for (Board b : boards){
+    for (Object obj : list){
+      Board b = (Board)obj;
+
       System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", 
           b.getId(), b.getTitle(), b.getContent(), b.getWriter(), b.getRegisteredDate(), b.getViewCount());
     }
@@ -40,7 +43,7 @@ public class BoardHandler {
 
     int id = Prompt.printInt("번호> ");
 
-    Board board = boardList.get(id);
+    Board board = findById(id);
 
     if(board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");
@@ -60,7 +63,7 @@ public class BoardHandler {
 
     int id = Prompt.printInt("번호> ");
 
-    Board board = boardList.get(id);
+    Board board = findById(id);
 
     if(board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");   
@@ -86,7 +89,7 @@ public class BoardHandler {
 
     int id = Prompt.printInt("번호> ");
 
-    Board board = boardList.get(id);
+    Board board = findById(id);
     if(board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");    
       return;
@@ -95,11 +98,22 @@ public class BoardHandler {
     String input = Prompt.printString("게시글을 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      boardList.delete(id);
+      boardList.delete(board);
       System.out.println("게시글을 삭제하였습니다.");
 
     } else {
       System.out.println("게시글 삭제를 취소하였습니다.");
     }
+  }
+
+  private Board findById(int boardId) {
+    Object[] list = boardList.toArray();
+    for (Object obj : list) {
+      Board b = (Board) obj;
+      if (b.getId() == boardId) {
+        return b;
+      }
+    }
+    return null;
   }
 }

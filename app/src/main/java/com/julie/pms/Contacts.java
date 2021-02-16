@@ -17,10 +17,10 @@ public class Contacts {
     System.out.println("[연락처 관리 프로그램]");
 
     while (true) {
-      String main = Prompt.string("1. 연락처 추가 2. 연락처 목록 3. 연락처 검색 4. 연락처 수정 5. 연락처 삭제 6. 나가기\n> ");
+      String main = Prompt.printString("1. 연락처 추가 2. 연락처 목록 3. 연락처 검색 4. 연락처 수정 5. 연락처 삭제 6. 나가기\n> ");
       if (main.equals("1. 연락처 추가") || main.equals("1") || main.equals("연락처 추가") || main.equals("1. 추가") || main.equals("추가")) {
 
-        String add = Prompt.string("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
+        String add = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
 
         if (add.equals("1. 가족") || add.equals("1") || add.equals("가족")) {
           familyStorage.add();
@@ -33,7 +33,7 @@ public class Contacts {
 
       } else if (main.equals("2. 연락처 목록") || main.equals("2") || main.equals("연락처 목록") || main.equals("2. 목록") || main.equals("목록")) {
 
-        String list = Prompt.string("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
+        String list = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
 
         if (list.equals("1. 가족") || list.equals("1") || list.equals("가족")) {
           familyStorage.list();
@@ -45,7 +45,7 @@ public class Contacts {
         }  
 
       } else if (main.equals("3. 연락처 검색") || main.equals("3") || main.equals("연락처 검색")|| main.equals("3. 검색") || main.equals("검색")) {
-        String search = Prompt.string("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
+        String search = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
 
         if (search.equals("1. 가족") || search.equals("1") || search.equals("가족")) {
           familyStorage.search();
@@ -57,7 +57,7 @@ public class Contacts {
         }
 
       } else if (main.equals("4. 연락처 수정") || main.equals("4") || main.equals("연락처 수정")|| main.equals("4. 수정") || main.equals("수정")) {
-        String edit = Prompt.string("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
+        String edit = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
 
         if (edit.equals("1. 가족") || edit.equals("1") || edit.equals("가족")) {
           familyStorage.edit();
@@ -69,7 +69,7 @@ public class Contacts {
         }
 
       }else if (main.equals("5. 연락처 삭제") || main.equals("5") || main.equals("연락처 삭제")|| main.equals("5. 검색") || main.equals("삭제")) {
-        String delete = Prompt.string("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
+        String delete = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
 
         if (delete.equals("1. 가족") || delete.equals("1") || delete.equals("가족")) {
           familyStorage.delete();

@@ -1,11 +1,12 @@
 package com.julie.test.handler;
 
 import com.julie.test.domain.Member;
+import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class MemberHandler {
 
-  private MemberList memberList = new MemberList();
+  private List memberList = new List();
 
   public void add () {
     System.out.println("[멤버 등록]");
@@ -25,8 +26,9 @@ public class MemberHandler {
   public void list() {
     System.out.println("-------------------------------");
     System.out.println("[멤버 목록]");
-    Member[] members = memberList.toArray();
-    for(Member m : members) {
+    Object[] list = memberList.toArray();
+    for(Object obj : list) {
+      Member m = (Member)obj;
       System.out.printf("번호: %d, 이름: %s, 이메일: %s, 비밀번호: %s, 전화: %s\n", 
           m.getId(), m.getName(), m.getMail(), m.getPw(), m.getTel());
     }
@@ -36,7 +38,7 @@ public class MemberHandler {
     System.out.println("[멤버 상세보기]");
     int id = Prompt.printInt("번호> ");
 
-    Member member = memberList.get(id);
+    Member member = findById(id);
 
     if(member == null) {
       System.out.println("해당 번호의 멤버가 없습니다.");
@@ -51,7 +53,7 @@ public class MemberHandler {
     System.out.println("[멤버 수정하기]");
     int id = Prompt.printInt("번호> ");
 
-    Member member = memberList.get(id);
+    Member member = findById(id);
     if (member == null) {
       System.out.println("해당 번호의 멤버가 없습니다.");
       return;
@@ -78,7 +80,7 @@ public class MemberHandler {
     System.out.println("[멤버 삭제하기]");
     int id = Prompt.printInt("번호> ");
 
-    Member member = memberList.get(id);
+    Member member = findById(id);
     if(member == null) {
       System.out.println("해당 번호의 멤버가 없습니다.");
       return; 
@@ -87,7 +89,7 @@ public class MemberHandler {
     String input = Prompt.printString("멤버를 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      memberList.delete(id);
+      memberList.delete(member);
       System.out.println("멤버를 삭제하였습니다.");
     } else {
       System.out.println("멤버 삭제를 취소하였습니다.");
@@ -99,7 +101,7 @@ public class MemberHandler {
       String name = Prompt.printString(promptTitle);
       if (name.length() == 0) {
         return null;
-      } else if (this.memberList.exist(name)) {
+      } else if (findByName(name) != null) {
         return name;
       } else {
         System.out.println("등록되지 않은 회원입니다.");
@@ -120,5 +122,27 @@ public class MemberHandler {
         team += name;
       }
     }  
+  }
+
+  private Member findById(int memberId) {
+    Object[] list = memberList.toArray();
+    for (Object obj : list) {
+      Member m = (Member) obj;
+      if (m.getId() == memberId) {
+        return m;
+      }
+    }
+    return null;
+  }
+
+  private Member findByName(String name) {
+    Object[] list = memberList.toArray();
+    for (Object obj : list) {
+      Member m = (Member) obj;
+      if (m.getName().equals(name)) {
+        return m;
+      }
+    }
+    return null;
   }
 }

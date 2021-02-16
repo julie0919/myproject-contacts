@@ -1,11 +1,12 @@
 package com.julie.handler;
 
 import com.julie.domain.Family;
+import com.julie.util.List;
 import com.julie.util.Prompt;
 
 public class FamilyHandler {
 
-  private FamilyList familyList = new FamilyList();
+  private List familyList = new List();
 
   //가족 등록 메소드
   public void add() {
@@ -15,35 +16,37 @@ public class FamilyHandler {
 
     Family f = new Family();
 
-    f.setName(Prompt.string("이름> "));
+    f.setNo(Prompt.printInt("번호> "));
+    if (f.getNo() == 0) {
+      System.out.println("연락처 등록을 취소합니다.");
+      return;
+    }
 
+    f.setName(Prompt.printString("이름> "));
     if (f.getName().length() == 0) {
       System.out.println("연락처 등록을 취소합니다.");
       return;
     }
 
-    f.setName(Prompt.string("전화번호> "));
-
-    if (f.getNum().length() == 0) {
+    f.setTel(Prompt.printString("전화번호> "));
+    if (f.getTel().length() == 0) {
       System.out.println("연락처 등록을 취소합니다.");
       return;
     }
 
-    f.setMail(Prompt.string("이메일> "));
-
+    f.setMail(Prompt.printString("이메일> "));
     if (f.getMail().length() == 0) {
       System.out.println("연락처 등록을 취소합니다.");
       return;
     }
 
-    f.setAddress(Prompt.string("주소> "));
-
+    f.setAddress(Prompt.printString("주소> "));
     if (f.getAddress().length() == 0) {
       System.out.println("연락처 등록을 취소합니다.");
       return;
     }
 
-    f.setBirth(Prompt.date("생일> "));
+    f.setBirth(Prompt.printDate("생일> "));
 
     familyList.add(f);
 
@@ -55,24 +58,27 @@ public class FamilyHandler {
     System.out.println("--------------------------------");
     System.out.println("[가족 목록]");
 
-    Family[] families = familyList.toArray();
-    for(Family f : families){
-      System.out.printf("%s, %s, %s, %s, %s\n",
-          f.getName(), f.getNum(), f.getMail(), f.getAddress(), f.getBirth());
+    Object[] list = familyList.toArray();
+    for(Object obj : list){
+      Family f = (Family)obj;
+
+      System.out.printf("%d) %s / %s / %s / %s / %s\n",
+          f.getNo(), f.getName(), f.getTel(), f.getMail(), f.getAddress(), f.getBirth());
     }
   }
 
   // 가족 연락처 검색 메소드
   public void search() {
-    String name = Prompt.string("검색하고싶은 연락처의 이름을 입력하세요> ");
+    int no = Prompt.printInt("검색하고싶은 연락처의 번호를 입력하세요> ");
 
-    Family family = familyList.get(name);
+
+    Family family = findByNo(no);
     if (family == null) {
-      System.out.println("해당 이름의 연락처정보가 없습니다.");
+      System.out.println("해당 연락처정보가 존재하지 않습니다.");
       return;
     }
     System.out.printf("이름: %s\n", family.getName());
-    System.out.printf("전화번호: %s\n", family.getNum());
+    System.out.printf("전화번호: %s\n", family.getTel());
     System.out.printf("이메일: %s\n", family.getMail());
     System.out.printf("주소: %s\n", family.getAddress());
     System.out.printf("생일: %s\n", family.getBirth());
@@ -80,23 +86,23 @@ public class FamilyHandler {
 
   // 가족 연락처 수정 메소드
   public void edit() {
-    String name = Prompt.string("수정하고싶은 연락처의 이름을 입력하세요> ");
+    int no = Prompt.printInt("수정하고싶은 연락처의 번호를 입력하세요> ");
 
-    Family family = familyList.get(name);
+    Family family = findByNo(no);
     if (family == null) {
-      System.out.println("해당 이름의 연락처정보가 없습니다.");
+      System.out.println("해당 연락처정보가 존재하지 않습니다.");
       return;
     }
 
-    String newName = Prompt.string(String.format("이름(%s)> ", family.getName()));
-    String newNum = Prompt.string(String.format("전화번호(%s)> ", family.getNum()));
-    String newMail = Prompt.string(String.format("이메일(%s)> ", family.getMail()));
-    String newAddress = Prompt.string(String.format("주소(%s)> ", family.getAddress()));
+    String newName = Prompt.printString(String.format("이름(%s)> ", family.getName()));
+    String newNum = Prompt.printString(String.format("전화번호(%s)> ", family.getTel()));
+    String newMail = Prompt.printString(String.format("이메일(%s)> ", family.getMail()));
+    String newAddress = Prompt.printString(String.format("주소(%s)> ", family.getAddress()));
 
-    String input = Prompt.string(String.format("변경사항을 저장하시겠습니까?(y/N)"));
+    String input = Prompt.printString(String.format("변경사항을 저장하시겠습니까?(y/N)"));
     if (input.equalsIgnoreCase("Y")) {
       family.setName(newName);
-      family.setNum(newNum);
+      family.setTel(newNum);
       family.setMail(newMail);
       family.setAddress(newAddress);
       System.out.println("연락처 정보를 수정하였습니다.");
@@ -107,19 +113,30 @@ public class FamilyHandler {
 
   // 가족 연락처 삭제 메소드
   public void delete() {
-    String name = Prompt.string("삭제하고싶은 연락처의 이름을 입력하세요> ");
+    int no = Prompt.printInt("삭제하고싶은 연락처의 번호를 입력하세요> ");
 
-    Family family = familyList.get(name);
+    Family family = findByNo(no);
     if (family == null) {
-      System.out.println("해당 이름의 연락처정보가 없습니다.");
+      System.out.println("해당 연락처정보가 존재하지 않습니다");
       return;
     }
-    String input = Prompt.string(String.format("연락처를 삭제하시겠습니까?(y/N)"));
+    String input = Prompt.printString(String.format("연락처를 삭제하시겠습니까?(y/N)"));
     if (input.equalsIgnoreCase("Y")) {
-      familyList.delete(name);
+      familyList.delete(family);
       System.out.println("연락처를 삭제하였습니다.");
     } else {
       System.out.println("연락처 삭제를 취소하였습니다.");
     }
+  }
+
+  private Family findByNo(int familyNo) {
+    Object[] list = familyList.toArray();
+    for (Object obj : list) {
+      Family f = (Family) obj;
+      if (f.getNo() == familyNo) {
+        return f;
+      }
+    }
+    return null;
   }
 }

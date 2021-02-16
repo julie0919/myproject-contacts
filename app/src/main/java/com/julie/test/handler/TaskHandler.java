@@ -2,12 +2,13 @@ package com.julie.test.handler;
 
 import java.sql.Date;
 import com.julie.test.domain.Task;
+import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class TaskHandler {
 
   private MemberHandler memberHandler;
-  private TaskList taskList = new TaskList();
+  private List taskList = new List();
 
   public TaskHandler(MemberHandler memberHandler) {
     this.memberHandler = memberHandler;
@@ -35,8 +36,9 @@ public class TaskHandler {
     System.out.println("-------------------------------");
     System.out.println("[작업 목록]");
 
-    Task[] tasks = taskList.toArray();
-    for (Task t : tasks){
+    Object[] list = taskList.toArray();
+    for (Object obj : list){
+      Task t = (Task) obj;
       String status = t.getProgress() == 1 ? "신규" : t.getProgress() == 2 ? "진행중" : "완료";
       System.out.printf("번호: %d, 작업명: %s, 마감일: %s, 진행상태: %s, 담당자: %s\n", 
           t.getId(), t.getName(), t.getEndDate(), status, t.getLeader());      
@@ -47,7 +49,7 @@ public class TaskHandler {
     System.out.println("[작업 상세보기]");
     int id = Prompt.printInt("번호> ");
 
-    Task task = taskList.get(id);
+    Task task = findById(id);
     if (task == null) {
       System.out.println("해당 번호의 작업이 없습니다.");
       return;
@@ -62,7 +64,7 @@ public class TaskHandler {
     System.out.println("[작업 수정하기]");
     int id = Prompt.printInt("번호> ");
 
-    Task task = taskList.get(id);
+    Task task = findById(id);
     if (task == null) {
       System.out.println("해당 번호의 작업이 없습니다.");
       return;
@@ -92,7 +94,7 @@ public class TaskHandler {
     System.out.println("[작업 삭제하기]");
 
     int id = Prompt.printInt("번호> ");
-    Task task = taskList.get(id);
+    Task task = findById(id);
     if(task == null) {
       System.out.println("해당 번호의 작업이 없습니다.");    
       return;
@@ -101,7 +103,7 @@ public class TaskHandler {
     String input = Prompt.printString("작업을 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      taskList.delete(id);
+      taskList.delete(task);
       System.out.println("작업을 삭제하였습니다.");
     } else {
       System.out.println("작업 삭제를 취소하였습니다.");
@@ -111,5 +113,16 @@ public class TaskHandler {
   String getStatusLabel(int progress) {
     String status = progress == 1 ? "신규" : progress == 2 ? "진행중" : "완료";
     return status;
+  }
+
+  private Task findById(int taskId) {
+    Object[] list = taskList.toArray();
+    for (Object obj : list) {
+      Task t = (Task) obj;
+      if (t.getId() == taskId) {
+        return t;
+      }
+    }
+    return null;
   }
 }
