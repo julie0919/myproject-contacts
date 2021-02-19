@@ -1,5 +1,8 @@
 package com.julie.pms;
 
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.LinkedList;
 import com.julie.handler.CompanyHandler;
 import com.julie.handler.FamilyHandler;
 import com.julie.handler.SchoolHandler;
@@ -7,8 +10,11 @@ import com.julie.util.Prompt;
 
 public class Contacts {
 
+  static ArrayDeque<String> commandStack = new ArrayDeque<>();
+  static LinkedList<String> commandQueue = new LinkedList<>();
 
-  public static void main(String[] args) {
+
+  public static void main(String[] args) throws CloneNotSupportedException {
 
     FamilyHandler familyStorage = new FamilyHandler();
     SchoolHandler schoolStorage = new SchoolHandler();
@@ -17,7 +23,13 @@ public class Contacts {
     System.out.println("[연락처 관리 프로그램]");
 
     while (true) {
-      String main = Prompt.printString("1. 연락처 추가 2. 연락처 목록 3. 연락처 검색 4. 연락처 수정 5. 연락처 삭제 6. 나가기\n> ");
+      String main = Prompt.printString("1. 연락처 추가 2. 연락처 목록 3. 연락처 검색 4. 연락처 수정 5. 연락처 삭제 6. 검색기록조회 7. 나가기\n> ");
+
+      if (main.length() == 0)
+        continue;
+      commandStack.push(main);
+      commandQueue.offer(main);
+
       if (main.equals("1. 연락처 추가") || main.equals("1") || main.equals("연락처 추가") || main.equals("1. 추가") || main.equals("추가")) {
 
         String add = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
@@ -80,7 +92,17 @@ public class Contacts {
         } else if (delete.equals("4. 뒤로가기") || delete.equals("4") || delete.equals("뒤로가기")) {
         }
 
-      }else if (main.equals("6. 나가기") || main.equals("6") || main.equals("나가기")) {
+      }else if (main.equals("6. 검색기록조회") || main.equals("6") || main.equals("검색기록조회")) {
+        String history = Prompt.printString("1. 처음부터 2. 마지막부터 3. 뒤로가기\n> ");
+
+        if (history.equals("1. 처음부터") || history.equals("1") || history.equals("처음부터")) {
+          printCommandHistory(commandQueue.iterator());
+        } else if(history.equals("2. 마지막부터") || history.equals("2") || history.equals("마지막부터")) {
+          printCommandHistory(commandStack.iterator());
+        } else if (history.equals("3. 뒤로가기") || history.equals("3") || history.equals("뒤로가기")) {
+        }      
+
+      }else if (main.equals("7. 나가기") || main.equals("7") || main.equals("나가기")) {
         System.out.println("안녕!");
         break;
       } else {
@@ -89,5 +111,18 @@ public class Contacts {
       System.out.println();
     }
     Prompt.close();
+  }
+
+  static void printCommandHistory(Iterator<String> iterator) {
+    int count = 0;
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+      if ((++count % 5) == 0) {
+        String input = Prompt.printString(": ");
+        if (input.equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    }
   }
 }

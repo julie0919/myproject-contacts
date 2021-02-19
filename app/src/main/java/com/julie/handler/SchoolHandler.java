@@ -1,12 +1,13 @@
 package com.julie.handler;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import com.julie.domain.School;
-import com.julie.util.List;
 import com.julie.util.Prompt;
 
 public class SchoolHandler {
 
-  private List schoolList = new List();
+  private ArrayList<School> schoolList = new ArrayList<>();
 
   //친구 등록 메소드
   public void add() {
@@ -57,13 +58,19 @@ public class SchoolHandler {
   }
 
   // 친구 목록 메소드
-  public void list() {
+  public void list() throws CloneNotSupportedException {
     System.out.println("--------------------------------");
     System.out.println("[친구 목록]");
 
-    Object[] list = schoolList.toArray();
-    for(Object obj : list){
-      School s = (School)obj;
+    //    Object[] list = schoolList.toArray();
+    //    for(Object obj : list){
+    //      School s = (School)obj;
+
+    Iterator<School> iterator = schoolList.iterator();
+
+    while(iterator.hasNext()) {
+      School s = iterator.next();
+
       System.out.printf("%d) %s / %s / %s / %s / %s\n", 
           s.getNo(), s.getName(), s.getTel(), s.getMail(), s.getSchool(), s.getAddress());
     } 
@@ -71,6 +78,7 @@ public class SchoolHandler {
 
   // 친구 연락처 검색 메소드
   public void search() {
+    System.out.println("[연락처 검색]");
     int no = Prompt.printInt("검색하고싶은 연락처의 번호를 입력하세요> ");
 
     School school = findByNo(no);
@@ -87,6 +95,7 @@ public class SchoolHandler {
 
   // 친구 연락처 수정 메소드
   public void edit() {
+    System.out.println("[연락처 수정]");
     int no = Prompt.printInt("수정하고싶은 연락처의 번호를 입력하세요> ");
 
     School school = findByNo(no);
@@ -125,7 +134,7 @@ public class SchoolHandler {
     }
     String input = Prompt.printString(String.format("연락처를 삭제하시겠습니까?(y/N)"));
     if (input.equalsIgnoreCase("Y")) {
-      schoolList.delete(school);
+      schoolList.remove(school);
       System.out.println("연락처를 삭제하였습니다.");
     } else {
       System.out.println("연락처 삭제를 취소하였습니다.");
@@ -133,9 +142,8 @@ public class SchoolHandler {
   }
 
   private School findByNo(int schoolNo) {
-    Object[] list = schoolList.toArray();
-    for (Object obj : list) {
-      School s = (School) obj;
+    School[] list = schoolList.toArray(new School[schoolList.size()]);
+    for (School s : list) {
       if (s.getNo() == schoolNo) {
         return s;
       }

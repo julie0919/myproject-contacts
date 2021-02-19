@@ -5,9 +5,16 @@ import com.julie.test.handler.MemberHandler;
 import com.julie.test.handler.ProjectHandler;
 import com.julie.test.handler.TaskHandler;
 import com.julie.test.util.Prompt;
+import com.julie.test.util.Queue;
+import com.julie.test.util.Stack;
+
 
 public class App {
-  public static void main(String[] args) {
+
+  static Stack commandStack = new Stack();
+  static Queue commandQueue = new Queue();
+
+  public static void main(String[] args) throws CloneNotSupportedException {
 
     BoardHandler boardHandler = new BoardHandler();
     MemberHandler memberHandler = new MemberHandler();
@@ -16,6 +23,12 @@ public class App {
 
     while (true) {
       String command = Prompt.printString("명령> ");
+
+      if (command.length() == 0) 
+        continue;
+
+      commandStack.push(command);
+      commandQueue.offer(command);
 
       if (command.equals("/member/add")) {
         memberHandler.add();
@@ -57,6 +70,10 @@ public class App {
         boardHandler.update();
       }else if (command.equals("/board/delete")) {
         boardHandler.delete();
+      }else if (command.equals("history")) {
+        printCommandHistory();
+      }else if (command.equals("history2")) {
+        printCommandHistory2();
       }else if (command.equalsIgnoreCase("exit")) {
         System.out.println("안녕!");
         break;
@@ -65,5 +82,37 @@ public class App {
       }
     }
     Prompt.close();
+  }
+
+  static void printCommandHistory() throws CloneNotSupportedException {
+
+    Stack stack = commandStack.clone();
+
+    int size = 0;
+    while (stack.count() > 0) {
+      System.out.println(stack.pop());
+      if ((++size % 5) == 0) {
+        String input = Prompt.printString(": ");
+        if(input.equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    }
+  }
+
+  static void printCommandHistory2() throws CloneNotSupportedException {
+
+    Queue queue = commandQueue.clone();
+
+    int size = 0;
+    while (queue.count() > 0) {
+      System.out.println(queue.poll());
+      if ((++size % 5) == 0) {
+        String input = Prompt.printString(": ");
+        if(input.equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    }
   }
 }

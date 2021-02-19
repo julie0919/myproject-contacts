@@ -3,7 +3,7 @@ package com.julie.test.util;
 public class List {
   private Node first;
   private Node last;
-  private int count = 0;
+  protected int count = 0;
 
   public void add(Object obj) {
     Node node = new Node(obj);
@@ -120,6 +120,10 @@ public class List {
       }
     }
     return -1;
+  }
+
+  public int count() {
+    return this.count;
   }
 
   static class Node {

@@ -1,12 +1,13 @@
 package com.julie.handler;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import com.julie.domain.Company;
-import com.julie.util.List;
 import com.julie.util.Prompt;
 
 public class CompanyHandler {
 
-  private List companyList = new List();
+  private ArrayList<Company> companyList = new ArrayList<>();
 
   // 회사 등록 메소드
   public void add() {
@@ -57,13 +58,18 @@ public class CompanyHandler {
   }
 
   // 회사 목록 메소드
-  public void list() {
+  public void list() throws CloneNotSupportedException {
     System.out.println("--------------------------------");
     System.out.println("[회사 목록]");
 
-    Object[] list = companyList.toArray();
-    for(Object obj : list) {
-      Company c = (Company)obj;
+    //    Object[] list = companyList.toArray();
+    //    for(Object obj : list) {
+    //      Company c = (Company)obj;
+    Iterator<Company> iterator = companyList.iterator();
+
+    while (iterator.hasNext()) {
+      Company c = iterator.next();
+
       System.out.printf("%d) %s, %s, %s, %s, %s\n",
           c.getNo(), c.getName(), c.getTel(), c.getMail(), c.getWork(), c.getAddress());
     }        
@@ -75,6 +81,7 @@ public class CompanyHandler {
 
     Company company = findByNo(no);
     if (company == null) {
+      System.out.println("[연락처 검색]");
       System.out.println("해당 연락처정보가 존재하지 않습니다.");
       return;
     }
@@ -87,6 +94,7 @@ public class CompanyHandler {
 
   // 회사 연락처 수정 메소드
   public void edit() {
+    System.out.println("[연락처 수정]");
     int no = Prompt.printInt("수정하고싶은 연락처의 번호를 입력하세요> ");
 
     Company company = findByNo(no);
@@ -125,7 +133,7 @@ public class CompanyHandler {
     }
     String input = Prompt.printString(String.format("연락처를 삭제하시겠습니까?(y/N)"));
     if (input.equalsIgnoreCase("Y")) {
-      companyList.delete(company);
+      companyList.remove(company);
       System.out.println("연락처를 삭제하였습니다.");
     } else {
       System.out.println("연락처 삭제를 취소하였습니다.");
@@ -133,9 +141,8 @@ public class CompanyHandler {
   }
 
   private Company findByNo(int companyNo) {
-    Object[] list = companyList.toArray();
-    for (Object obj : list) {
-      Company c = (Company) obj;
+    Company[] list = companyList.toArray(new Company[companyList.size()]);
+    for (Company c : list) {
       if (c.getNo() == companyNo) {
         return c;
       }

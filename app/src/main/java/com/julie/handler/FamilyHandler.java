@@ -1,12 +1,13 @@
 package com.julie.handler;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import com.julie.domain.Family;
-import com.julie.util.List;
 import com.julie.util.Prompt;
 
 public class FamilyHandler {
 
-  private List familyList = new List();
+  private ArrayList<Family> familyList = new ArrayList<>();
 
   //가족 등록 메소드
   public void add() {
@@ -54,13 +55,18 @@ public class FamilyHandler {
   }
 
   //가족 목록 메소드
-  public void list() {
+  public void list() throws CloneNotSupportedException {
     System.out.println("--------------------------------");
     System.out.println("[가족 목록]");
 
-    Object[] list = familyList.toArray();
-    for(Object obj : list){
-      Family f = (Family)obj;
+    //    Object[] list = familyList.toArray();
+    //    for(Object obj : list){
+    //      Family f = (Family)obj;
+
+    Iterator<Family> iterator = familyList.iterator();
+
+    while (iterator.hasNext()) {
+      Family f = iterator.next();  
 
       System.out.printf("%d) %s / %s / %s / %s / %s\n",
           f.getNo(), f.getName(), f.getTel(), f.getMail(), f.getAddress(), f.getBirth());
@@ -69,6 +75,7 @@ public class FamilyHandler {
 
   // 가족 연락처 검색 메소드
   public void search() {
+    System.out.println("[연락처 검색]");
     int no = Prompt.printInt("검색하고싶은 연락처의 번호를 입력하세요> ");
 
 
@@ -86,6 +93,7 @@ public class FamilyHandler {
 
   // 가족 연락처 수정 메소드
   public void edit() {
+    System.out.println("[연락처 수정]");
     int no = Prompt.printInt("수정하고싶은 연락처의 번호를 입력하세요> ");
 
     Family family = findByNo(no);
@@ -113,6 +121,7 @@ public class FamilyHandler {
 
   // 가족 연락처 삭제 메소드
   public void delete() {
+    System.out.println("[연락처 삭제]");
     int no = Prompt.printInt("삭제하고싶은 연락처의 번호를 입력하세요> ");
 
     Family family = findByNo(no);
@@ -122,7 +131,7 @@ public class FamilyHandler {
     }
     String input = Prompt.printString(String.format("연락처를 삭제하시겠습니까?(y/N)"));
     if (input.equalsIgnoreCase("Y")) {
-      familyList.delete(family);
+      familyList.remove(family);
       System.out.println("연락처를 삭제하였습니다.");
     } else {
       System.out.println("연락처 삭제를 취소하였습니다.");
@@ -130,9 +139,8 @@ public class FamilyHandler {
   }
 
   private Family findByNo(int familyNo) {
-    Object[] list = familyList.toArray();
-    for (Object obj : list) {
-      Family f = (Family) obj;
+    Family [] list = familyList.toArray(new Family[familyList.size()]);
+    for (Family f: list) {
       if (f.getNo() == familyNo) {
         return f;
       }
