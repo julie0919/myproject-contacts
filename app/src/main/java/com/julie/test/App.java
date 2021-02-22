@@ -7,9 +7,7 @@ import com.julie.test.handler.TaskHandler;
 import com.julie.test.util.Iterator;
 import com.julie.test.util.Prompt;
 import com.julie.test.util.Queue;
-import com.julie.test.util.QueueIterator;
 import com.julie.test.util.Stack;
-import com.julie.test.util.StackIterator;
 
 
 public class App {
@@ -74,9 +72,9 @@ public class App {
       }else if (command.equals("/board/delete")) {
         boardHandler.delete();
       }else if (command.equals("history")) {
-        printCommandHistory(new StackIterator(commandStack));
+        printCommandHistory(commandStack.iterator());
       }else if (command.equals("history2")) {
-        printCommandHistory(new QueueIterator(commandQueue));
+        printCommandHistory(commandQueue.iterator());
       }else if (command.equalsIgnoreCase("exit")) {
         System.out.println("안녕!");
         break;

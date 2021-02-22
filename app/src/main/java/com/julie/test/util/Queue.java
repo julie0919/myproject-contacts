@@ -20,4 +20,8 @@ public class Queue extends List implements Cloneable {
     }
     return queue;
   }
+
+  public Iterator iterator() throws CloneNotSupportedException {
+    return new QueueIterator(this);
+  }
 }

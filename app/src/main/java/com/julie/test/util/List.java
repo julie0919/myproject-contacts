@@ -136,5 +136,9 @@ public class List {
     }
   }
 
+  public Iterator iterator() throws CloneNotSupportedException {
+    return new ListIterator(this);
+  }
+
 
 }
