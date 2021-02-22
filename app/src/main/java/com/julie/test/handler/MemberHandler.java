@@ -2,6 +2,7 @@ package com.julie.test.handler;
 
 import com.julie.test.domain.Member;
 import com.julie.test.util.List;
+import com.julie.test.util.ListIterator;
 import com.julie.test.util.Prompt;
 
 public class MemberHandler {
@@ -26,9 +27,10 @@ public class MemberHandler {
   public void list() {
     System.out.println("-------------------------------");
     System.out.println("[멤버 목록]");
-    Object[] list = memberList.toArray();
-    for(Object obj : list) {
-      Member m = (Member)obj;
+
+    ListIterator iterator = new ListIterator(this.memberList);
+    while (iterator.hasNext()) {
+      Member m = (Member) iterator.next();
       System.out.printf("번호: %d, 이름: %s, 이메일: %s, 비밀번호: %s, 전화: %s\n", 
           m.getId(), m.getName(), m.getMail(), m.getPw(), m.getTel());
     }

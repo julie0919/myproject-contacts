@@ -3,6 +3,7 @@ package com.julie.test.handler;
 import java.sql.Date;
 import com.julie.test.domain.Project;
 import com.julie.test.util.List;
+import com.julie.test.util.ListIterator;
 import com.julie.test.util.Prompt;
 
 public class ProjectHandler {
@@ -39,9 +40,9 @@ public class ProjectHandler {
     System.out.println("-------------------------------");
     System.out.println("[프로젝트 목록]");
 
-    Object[] list = projectList.toArray();
-    for(Object obj : list) {
-      Project p = (Project)obj;
+    ListIterator iterator = new ListIterator(this.projectList);
+    while (iterator.hasNext()){
+      Project p = (Project) iterator.next();
       System.out.printf("번호: %d, 프로젝트명: %s, 내용: %s, 시작일: %s, 종료일: %s, 조장: %s, 팀원: [%s]\n", 
           p.getId(), p.getName(), p.getContent(), p.getStartDate(), p.getEndDate(), p.getLeader(), p.getTeam());
     }

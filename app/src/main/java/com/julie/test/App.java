@@ -4,9 +4,12 @@ import com.julie.test.handler.BoardHandler;
 import com.julie.test.handler.MemberHandler;
 import com.julie.test.handler.ProjectHandler;
 import com.julie.test.handler.TaskHandler;
+import com.julie.test.util.Iterator;
 import com.julie.test.util.Prompt;
 import com.julie.test.util.Queue;
+import com.julie.test.util.QueueIterator;
 import com.julie.test.util.Stack;
+import com.julie.test.util.StackIterator;
 
 
 public class App {
@@ -71,9 +74,9 @@ public class App {
       }else if (command.equals("/board/delete")) {
         boardHandler.delete();
       }else if (command.equals("history")) {
-        printCommandHistory();
+        printCommandHistory(new StackIterator(commandStack));
       }else if (command.equals("history2")) {
-        printCommandHistory2();
+        printCommandHistory(new QueueIterator(commandQueue));
       }else if (command.equalsIgnoreCase("exit")) {
         System.out.println("안녕!");
         break;
@@ -84,29 +87,11 @@ public class App {
     Prompt.close();
   }
 
-  static void printCommandHistory() throws CloneNotSupportedException {
-
-    Stack stack = commandStack.clone();
+  static void printCommandHistory(Iterator iterator) {
 
     int size = 0;
-    while (stack.count() > 0) {
-      System.out.println(stack.pop());
-      if ((++size % 5) == 0) {
-        String input = Prompt.printString(": ");
-        if(input.equalsIgnoreCase("q")) {
-          break;
-        }
-      }
-    }
-  }
-
-  static void printCommandHistory2() throws CloneNotSupportedException {
-
-    Queue queue = commandQueue.clone();
-
-    int size = 0;
-    while (queue.count() > 0) {
-      System.out.println(queue.poll());
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
       if ((++size % 5) == 0) {
         String input = Prompt.printString(": ");
         if(input.equalsIgnoreCase("q")) {

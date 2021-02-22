@@ -3,6 +3,7 @@ package com.julie.test.handler;
 import java.sql.Date;
 import com.julie.test.domain.Board;
 import com.julie.test.util.List;
+import com.julie.test.util.ListIterator;
 import com.julie.test.util.Prompt;
 
 public class BoardHandler {
@@ -28,10 +29,9 @@ public class BoardHandler {
   public void list() {
     System.out.println("[게시글 목록]");
 
-    Object[] list = boardList.toArray();
-
-    for (Object obj : list){
-      Board b = (Board)obj;
+    ListIterator iterator = new ListIterator(this.boardList);
+    while (iterator.hasNext()){
+      Board b = (Board) iterator.next();
 
       System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", 
           b.getId(), b.getTitle(), b.getContent(), b.getWriter(), b.getRegisteredDate(), b.getViewCount());
