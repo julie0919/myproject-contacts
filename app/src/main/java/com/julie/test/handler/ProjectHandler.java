@@ -2,14 +2,14 @@ package com.julie.test.handler;
 
 import java.sql.Date;
 import com.julie.test.domain.Project;
+import com.julie.test.util.Iterator;
 import com.julie.test.util.List;
-import com.julie.test.util.ListIterator;
 import com.julie.test.util.Prompt;
 
 public class ProjectHandler {
 
   private MemberHandler memberHandler;
-  private List projectList = new List();
+  private List<Project> projectList = new List<>();
 
   public ProjectHandler(MemberHandler memberHandler) {
     this.memberHandler = memberHandler;
@@ -36,13 +36,13 @@ public class ProjectHandler {
     System.out.println("프로젝트를 등록하였습니다.");
   }
 
-  public void list() {
+  public void list() throws CloneNotSupportedException {
     System.out.println("-------------------------------");
     System.out.println("[프로젝트 목록]");
 
-    ListIterator iterator = new ListIterator(this.projectList);
+    Iterator<Project> iterator = projectList.iterator();
     while (iterator.hasNext()){
-      Project p = (Project) iterator.next();
+      Project p = iterator.next();
       System.out.printf("번호: %d, 프로젝트명: %s, 내용: %s, 시작일: %s, 종료일: %s, 조장: %s, 팀원: [%s]\n", 
           p.getId(), p.getName(), p.getContent(), p.getStartDate(), p.getEndDate(), p.getLeader(), p.getTeam());
     }

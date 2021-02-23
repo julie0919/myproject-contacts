@@ -1,13 +1,17 @@
 package com.julie.test.handler;
 
 import com.julie.test.domain.Member;
+import com.julie.test.util.Iterator;
 import com.julie.test.util.List;
-import com.julie.test.util.ListIterator;
 import com.julie.test.util.Prompt;
 
 public class MemberHandler {
 
-  private List memberList = new List();
+  private List<Member> memberList = new List<>();
+
+  public List<Member> getMemberList() {
+    return this.memberList;
+  }
 
   public void add () {
     System.out.println("[멤버 등록]");
@@ -24,13 +28,13 @@ public class MemberHandler {
     System.out.println("멤버 등록을 완료했습니다.");
   }
 
-  public void list() {
+  public void list() throws CloneNotSupportedException {
     System.out.println("-------------------------------");
     System.out.println("[멤버 목록]");
 
-    ListIterator iterator = new ListIterator(this.memberList);
+    Iterator<Member> iterator = memberList.iterator();
     while (iterator.hasNext()) {
-      Member m = (Member) iterator.next();
+      Member m = iterator.next();
       System.out.printf("번호: %d, 이름: %s, 이메일: %s, 비밀번호: %s, 전화: %s\n", 
           m.getId(), m.getName(), m.getMail(), m.getPw(), m.getTel());
     }

@@ -2,14 +2,14 @@ package com.julie.test.handler;
 
 import java.sql.Date;
 import com.julie.test.domain.Task;
+import com.julie.test.util.Iterator;
 import com.julie.test.util.List;
-import com.julie.test.util.ListIterator;
 import com.julie.test.util.Prompt;
 
 public class TaskHandler {
 
   private MemberHandler memberHandler;
-  private List taskList = new List();
+  private List<Task> taskList = new List<>();
 
   public TaskHandler(MemberHandler memberHandler) {
     this.memberHandler = memberHandler;
@@ -33,13 +33,13 @@ public class TaskHandler {
     System.out.println("작업 등록을 완료하였습니다.");
   }
 
-  public void list() {
+  public void list() throws CloneNotSupportedException {
     System.out.println("-------------------------------");
     System.out.println("[작업 목록]");
 
-    ListIterator iterator = new ListIterator(this.taskList);
+    Iterator<Task> iterator = taskList.iterator();
     while (iterator.hasNext()){
-      Task t = (Task) iterator.next();
+      Task t = iterator.next();
       String status = t.getProgress() == 1 ? "신규" : t.getProgress() == 2 ? "진행중" : "완료";
       System.out.printf("번호: %d, 작업명: %s, 마감일: %s, 진행상태: %s, 담당자: %s\n", 
           t.getId(), t.getName(), t.getEndDate(), status, t.getLeader());      

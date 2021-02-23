@@ -1,12 +1,14 @@
 package com.julie.test.util;
 
-public class List {
-  private Node first;
-  private Node last;
+import java.lang.reflect.Array;
+
+public class List<E> {
+  private Node<E> first;
+  private Node<E> last;
   protected int count = 0;
 
-  public void add(Object obj) {
-    Node node = new Node(obj);
+  public void add(E obj) {
+    Node<E> node = new Node<>(obj);
 
     if (last == null) {
       last = node;
@@ -23,7 +25,7 @@ public class List {
   public Object[] toArray() {
     Object[] arr = new Object[count];
 
-    Node cursor = this.first;
+    Node<E> cursor = this.first;
     int i = 0;
 
     while (cursor != null) {
@@ -33,11 +35,26 @@ public class List {
     return arr;
   }
 
-  public Object get(int index) {
+  @SuppressWarnings("unchecked")
+  public E[] toArray(E[] arr) {
+    if (arr.length < count) {
+      arr = (E[]) Array.newInstance(arr.getClass().getComponentType(), count);
+    }
+
+    Node<E> cursor = this.first;
+
+    for (int i = 0; i < count; i++) {
+      arr[i] = cursor.obj;
+      cursor = cursor.next;
+    }
+    return arr;
+  }
+
+  public E get(int index) {
     if (index <0 || index >= this.count) {
       return null;
     }
-    Node cursor = first;
+    Node<E> cursor = first;
     int num = 0;
     while (cursor != null) {
       if (index == num++) {
@@ -48,8 +65,8 @@ public class List {
     return null;
   }
 
-  public boolean delete(Object obj) {
-    Node cursor = first;
+  public boolean delete(E obj) {
+    Node<E> cursor = first;
     while (cursor != null) {
       if (cursor.obj.equals(obj)) {
         this.count--;
@@ -77,14 +94,14 @@ public class List {
   }
 
 
-  public Object delete(int index) {
+  public E delete(int index) {
     if (index <0 || index >= this.count) {
       return null;
     }
 
-    Object deleted = null;
+    E deleted = null;
     int num = 0;
-    Node cursor = first;
+    Node<E> cursor = first;
     while (cursor != null) {
       if (index == num++) {
         deleted = cursor.obj;
@@ -112,12 +129,16 @@ public class List {
     return deleted;
   }
 
-  public int indexOf(Object obj) {
-    Object[] list = this.toArray();
-    for (int i = 0; i < list.length; i++) {
-      if (list[i].equals(obj)) {
-        return i;
+  public int indexOf(E obj) {
+    int index = 0;
+    Node<E> cursor = first;
+
+    while (cursor != null) {
+      if (cursor.obj == obj) {
+        return index;
       }
+      cursor = cursor.next;
+      index++;
     }
     return -1;
   }
@@ -126,18 +147,18 @@ public class List {
     return this.count;
   }
 
-  static class Node {
-    Object obj;
-    Node next;
-    Node prev;
+  private static class Node<T> {
+    T obj;
+    Node<T> next;
+    Node<T> prev;
 
-    Node(Object obj) {
+    Node(T obj) {
       this.obj = obj;
     }
   }
 
-  public Iterator iterator() throws CloneNotSupportedException {
-    return new Iterator() {
+  public Iterator<E> iterator() throws CloneNotSupportedException {
+    return new Iterator<E>() {
 
       int cursor = 0;
 
@@ -147,7 +168,7 @@ public class List {
       }
 
       @Override
-      public Object next() {
+      public E next() {
         return List.this.get(cursor++);
       }
     };

@@ -2,13 +2,13 @@ package com.julie.test.handler;
 
 import java.sql.Date;
 import com.julie.test.domain.Board;
+import com.julie.test.util.Iterator;
 import com.julie.test.util.List;
-import com.julie.test.util.ListIterator;
 import com.julie.test.util.Prompt;
 
 public class BoardHandler {
 
-  private List boardList = new List();
+  private List<Board> boardList = new List<>();
 
   public void add() {
     System.out.println("[새 게시글]");
@@ -26,12 +26,12 @@ public class BoardHandler {
     System.out.println("게시글 등록을 완료했습니다.");
   }
 
-  public void list() {
+  public void list() throws CloneNotSupportedException {
     System.out.println("[게시글 목록]");
 
-    ListIterator iterator = new ListIterator(this.boardList);
+    Iterator<Board> iterator = boardList.iterator();
     while (iterator.hasNext()){
-      Board b = (Board) iterator.next();
+      Board b = iterator.next();
 
       System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", 
           b.getId(), b.getTitle(), b.getContent(), b.getWriter(), b.getRegisteredDate(), b.getViewCount());
