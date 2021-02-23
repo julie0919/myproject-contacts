@@ -21,7 +21,22 @@ public class Queue extends List implements Cloneable {
     return queue;
   }
 
+  @Override
   public Iterator iterator() throws CloneNotSupportedException {
-    return new QueueIterator(this);
+    return this.new QueueIterator();
+  }
+
+  private class QueueIterator implements Iterator {
+
+    @Override
+    public boolean hasNext() {
+      return Queue.this.count() > 0;
+    }
+
+    @Override
+    public Object next() {
+      return Queue.this.poll();
+    }
+
   }
 }
