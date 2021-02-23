@@ -137,7 +137,7 @@ public class List {
   }
 
   public Iterator iterator() throws CloneNotSupportedException {
-    class ListIterator implements Iterator{
+    return new Iterator() {
 
       int cursor = 0;
 
@@ -150,8 +150,6 @@ public class List {
       public Object next() {
         return List.this.get(cursor++);
       }
-    }
-    return new ListIterator();
+    };
   }
-
 }  

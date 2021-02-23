@@ -24,7 +24,7 @@ public class Stack extends List implements Cloneable {
 
   @Override
   public Iterator iterator() throws CloneNotSupportedException {
-    class StackIterator implements Iterator {
+    return new Iterator() {
 
       @Override
       public boolean hasNext() {
@@ -35,8 +35,7 @@ public class Stack extends List implements Cloneable {
       public Object next() {
         return Stack.this.pop();
       }
-    }
-    return new StackIterator();
+    };
   }
 
 }
