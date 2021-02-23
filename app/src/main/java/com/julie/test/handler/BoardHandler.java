@@ -1,14 +1,14 @@
 package com.julie.test.handler;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Iterator;
 import com.julie.test.domain.Board;
-import com.julie.test.util.Iterator;
-import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class BoardHandler {
 
-  private List<Board> boardList = new List<>();
+  private ArrayList<Board> boardList = new ArrayList<>();
 
   public void add() {
     System.out.println("[새 게시글]");
@@ -98,7 +98,7 @@ public class BoardHandler {
     String input = Prompt.printString("게시글을 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      boardList.delete(board);
+      boardList.remove(board);
       System.out.println("게시글을 삭제하였습니다.");
 
     } else {

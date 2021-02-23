@@ -1,15 +1,15 @@
 package com.julie.test.handler;
 
 import java.sql.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
 import com.julie.test.domain.Task;
-import com.julie.test.util.Iterator;
-import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class TaskHandler {
 
   private MemberHandler memberHandler;
-  private List<Task> taskList = new List<>();
+  private LinkedList<Task> taskList = new LinkedList<>();
 
   public TaskHandler(MemberHandler memberHandler) {
     this.memberHandler = memberHandler;
@@ -104,7 +104,7 @@ public class TaskHandler {
     String input = Prompt.printString("작업을 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      taskList.delete(task);
+      taskList.remove(task);
       System.out.println("작업을 삭제하였습니다.");
     } else {
       System.out.println("작업 삭제를 취소하였습니다.");

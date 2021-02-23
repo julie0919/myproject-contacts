@@ -1,17 +1,13 @@
 package com.julie.test.handler;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import com.julie.test.domain.Member;
-import com.julie.test.util.Iterator;
-import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class MemberHandler {
 
-  private List<Member> memberList = new List<>();
-
-  public List<Member> getMemberList() {
-    return this.memberList;
-  }
+  private ArrayList<Member> memberList = new ArrayList<>();
 
   public void add () {
     System.out.println("[멤버 등록]");
@@ -95,7 +91,7 @@ public class MemberHandler {
     String input = Prompt.printString("멤버를 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      memberList.delete(member);
+      memberList.remove(member);
       System.out.println("멤버를 삭제하였습니다.");
     } else {
       System.out.println("멤버 삭제를 취소하였습니다.");

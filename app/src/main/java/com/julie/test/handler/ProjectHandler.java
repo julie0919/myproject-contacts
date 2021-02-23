@@ -1,15 +1,15 @@
 package com.julie.test.handler;
 
 import java.sql.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
 import com.julie.test.domain.Project;
-import com.julie.test.util.Iterator;
-import com.julie.test.util.List;
 import com.julie.test.util.Prompt;
 
 public class ProjectHandler {
 
   private MemberHandler memberHandler;
-  private List<Project> projectList = new List<>();
+  private LinkedList<Project> projectList = new LinkedList<>();
 
   public ProjectHandler(MemberHandler memberHandler) {
     this.memberHandler = memberHandler;
@@ -115,7 +115,7 @@ public class ProjectHandler {
     String input = Prompt.printString("프로젝트를 삭제하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      projectList.delete(project);
+      projectList.remove(project);
       System.out.println("프로젝트를 삭제하였습니다.");
     } else {
       System.out.println("프로젝트 삭제를 취소하였습니다.");
