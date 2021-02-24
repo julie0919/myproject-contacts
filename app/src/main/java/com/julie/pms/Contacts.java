@@ -1,11 +1,29 @@
 package com.julie.pms;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import com.julie.handler.CompanyHandler;
-import com.julie.handler.FamilyHandler;
-import com.julie.handler.SchoolHandler;
+import com.julie.domain.Company;
+import com.julie.domain.Family;
+import com.julie.domain.School;
+import com.julie.handler.Command;
+import com.julie.handler.CompanyAddHandler;
+import com.julie.handler.CompanyDeleteHandler;
+import com.julie.handler.CompanyDetailHandler;
+import com.julie.handler.CompanyListHandler;
+import com.julie.handler.CompanyUpdateHandler;
+import com.julie.handler.FamilyAddHandler;
+import com.julie.handler.FamilyDeleteHandler;
+import com.julie.handler.FamilyDetailHandler;
+import com.julie.handler.FamilyListHandler;
+import com.julie.handler.FamilyUpdateHandler;
+import com.julie.handler.SchoolAddHandler;
+import com.julie.handler.SchoolDeleteHandler;
+import com.julie.handler.SchoolDetailHandler;
+import com.julie.handler.SchoolListHandler;
+import com.julie.handler.SchoolUpdateHandler;
 import com.julie.util.Prompt;
 
 public class Contacts {
@@ -16,99 +34,65 @@ public class Contacts {
 
   public static void main(String[] args) throws CloneNotSupportedException {
 
-    FamilyHandler familyStorage = new FamilyHandler();
-    SchoolHandler schoolStorage = new SchoolHandler();
-    CompanyHandler companyStorage = new CompanyHandler();
+    ArrayList<Family> familyList = new ArrayList<>();
+    ArrayList<School> schoolList = new ArrayList<>();
+    ArrayList<Company> companyList = new ArrayList<>();
+
+    // 사용자 명령을 처리하는 객체를 맵에 보관한다.
+    HashMap<String,Command> commandMap = new HashMap<>();
+
+    commandMap.put("연락처추가(가족)", new FamilyAddHandler(familyList));
+    commandMap.put("연락처목록(가족)", new FamilyListHandler(familyList));
+    commandMap.put("연락처상세보기(가족)", new FamilyDetailHandler(familyList));
+    commandMap.put("연락처수정(가족)", new FamilyUpdateHandler(familyList));
+    commandMap.put("연락처삭제(가족)", new FamilyDeleteHandler(familyList));
+
+    commandMap.put("연락처추가(친구)", new SchoolAddHandler(schoolList));
+    commandMap.put("연락처목록(친구)", new SchoolListHandler(schoolList));
+    commandMap.put("연락처상세보기(친구)", new SchoolDetailHandler(schoolList));
+    commandMap.put("연락처수정(친구)", new SchoolUpdateHandler(schoolList));
+    commandMap.put("연락처삭제(친구)", new SchoolDeleteHandler(schoolList));
+
+    commandMap.put("연락처추가(회사)", new CompanyAddHandler(companyList));
+    commandMap.put("연락처목록(회사)", new CompanyListHandler(companyList));
+    commandMap.put("연락처상세보기(회사)", new CompanyDetailHandler(companyList));
+    commandMap.put("연락처수정(회사)", new CompanyUpdateHandler(companyList));
+    commandMap.put("연락처삭제(회사)", new CompanyDeleteHandler(companyList));
 
     System.out.println("[연락처 관리 프로그램]");
 
     while (true) {
-      String main = Prompt.printString("1. 연락처 추가 2. 연락처 목록 3. 연락처 검색 4. 연락처 수정 5. 연락처 삭제 6. 검색기록조회 7. 나가기\n> ");
+      String command = Prompt.printString("--------------------원하시는 메뉴를 선택해주세요--------------------\n"
+          + "**연락처추가(가족/친구/회사)**\n**연락처목록(가족/친구/회사)**\n**연락처상세보기(가족/친구/회사)**\n"
+          + "**연락처수정(가족/친구/회사)**\n**연락처삭제(가족/친구/회사)**\n**검색기록조회(처음부터/마지막부터)**\n**나가기**\n>> ");
 
-      if (main.length() == 0)
+      if (command.length() == 0)
         continue;
-      commandStack.push(main);
-      commandQueue.offer(main);
+      commandStack.push(command);
+      commandQueue.offer(command);
+      try { 
+        Command commandHandler = commandMap.get(command);
+        if (commandHandler == null) {
+          System.out.println("실행할 수 없는 명령입니다.");
 
-      if (main.equals("1. 연락처 추가") || main.equals("1") || main.equals("연락처 추가") || main.equals("1. 추가") || main.equals("추가")) {
-
-        String add = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
-
-        if (add.equals("1. 가족") || add.equals("1") || add.equals("가족")) {
-          familyStorage.add();
-        } else if (add.equals("2. 친구") || add.equals("2") || add.equals("친구")) {
-          schoolStorage.add();
-        } else if (add.equals("3. 회사") || add.equals("3") || add.equals("회사")) {
-          companyStorage.add();
-        } else if (add.equals("4. 뒤로가기") || add.equals("4") || add.equals("뒤로가기")) {
-        }
-
-      } else if (main.equals("2. 연락처 목록") || main.equals("2") || main.equals("연락처 목록") || main.equals("2. 목록") || main.equals("목록")) {
-
-        String list = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
-
-        if (list.equals("1. 가족") || list.equals("1") || list.equals("가족")) {
-          familyStorage.list();
-        } else if(list.equals("2. 친구") || list.equals("2") || list.equals("친구")) {
-          schoolStorage.list();
-        } else if(list.equals("3. 회사") || list.equals("3") || list.equals("회사")) {
-          companyStorage.list();
-        } else if (list.equals("4. 뒤로가기") || list.equals("4") || list.equals("뒤로가기")) {
-        }  
-
-      } else if (main.equals("3. 연락처 검색") || main.equals("3") || main.equals("연락처 검색")|| main.equals("3. 검색") || main.equals("검색")) {
-        String search = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
-
-        if (search.equals("1. 가족") || search.equals("1") || search.equals("가족")) {
-          familyStorage.search();
-        } else if(search.equals("2. 친구") || search.equals("2") || search.equals("친구")) {
-          schoolStorage.search();
-        } else if(search.equals("3. 회사") || search.equals("3") || search.equals("회사")) {
-          companyStorage.search();
-        } else if (search.equals("4. 뒤로가기") || search.equals("4") || search.equals("뒤로가기")) {
-        }
-
-      } else if (main.equals("4. 연락처 수정") || main.equals("4") || main.equals("연락처 수정")|| main.equals("4. 수정") || main.equals("수정")) {
-        String edit = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
-
-        if (edit.equals("1. 가족") || edit.equals("1") || edit.equals("가족")) {
-          familyStorage.edit();
-        } else if(edit.equals("2. 친구") || edit.equals("2") || edit.equals("친구")) {
-          schoolStorage.edit();
-        } else if(edit.equals("3. 회사") || edit.equals("3") || edit.equals("회사")) {
-          companyStorage.edit();
-        } else if (edit.equals("4. 뒤로가기") || edit.equals("4") || edit.equals("뒤로가기")) {
-        }
-
-      }else if (main.equals("5. 연락처 삭제") || main.equals("5") || main.equals("연락처 삭제")|| main.equals("5. 검색") || main.equals("삭제")) {
-        String delete = Prompt.printString("1. 가족 2. 친구 3. 회사 4. 뒤로가기\n> ");
-
-        if (delete.equals("1. 가족") || delete.equals("1") || delete.equals("가족")) {
-          familyStorage.delete();
-        } else if(delete.equals("2. 친구") || delete.equals("2") || delete.equals("친구")) {
-          schoolStorage.delete();
-        } else if(delete.equals("3. 회사") || delete.equals("3") || delete.equals("회사")) {
-          companyStorage.delete();
-        } else if (delete.equals("4. 뒤로가기") || delete.equals("4") || delete.equals("뒤로가기")) {
-        }
-
-      }else if (main.equals("6. 검색기록조회") || main.equals("6") || main.equals("검색기록조회")) {
-        String history = Prompt.printString("1. 처음부터 2. 마지막부터 3. 뒤로가기\n> ");
-
-        if (history.equals("1. 처음부터") || history.equals("1") || history.equals("처음부터")) {
+        } else if (command.equals("검색기록조회(처음부터)")) {
           printCommandHistory(commandQueue.iterator());
-        } else if(history.equals("2. 마지막부터") || history.equals("2") || history.equals("마지막부터")) {
+        } else if(command.equals("검색기록조회(마지막부터)")) {
           printCommandHistory(commandStack.iterator());
-        } else if (history.equals("3. 뒤로가기") || history.equals("3") || history.equals("뒤로가기")) {
-        }      
 
-      }else if (main.equals("7. 나가기") || main.equals("7") || main.equals("나가기")) {
-        System.out.println("안녕!");
-        break;
-      } else {
-        System.out.println("실행할 수 없는 명령입니다.");
+        }else if (command.equals("나가기")) {
+          System.out.println("안녕!");
+          break;
+        } else {
+          commandHandler.service();
+        }
+      } catch (Exception e) {
+        System.out.println("------------------------------------------");
+        System.out.printf("명령어 실행 중 오류 발생: %s - %s\n", 
+            e.getClass().getName(), e.getMessage());
+        System.out.println("------------------------------------------");
       }
-      System.out.println();
+      System.out.println(); // 이전 명령의 실행을 구분하기 위해 빈 줄 출력
     }
     Prompt.close();
   }

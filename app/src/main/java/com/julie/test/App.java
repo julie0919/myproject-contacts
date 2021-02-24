@@ -1,12 +1,36 @@
 package com.julie.test;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import com.julie.test.handler.BoardHandler;
-import com.julie.test.handler.MemberHandler;
-import com.julie.test.handler.ProjectHandler;
-import com.julie.test.handler.TaskHandler;
+import com.julie.test.domain.Board;
+import com.julie.test.domain.Member;
+import com.julie.test.domain.Project;
+import com.julie.test.domain.Task;
+import com.julie.test.handler.BoardAddHandler;
+import com.julie.test.handler.BoardDeleteHandler;
+import com.julie.test.handler.BoardDetailHandler;
+import com.julie.test.handler.BoardListHandler;
+import com.julie.test.handler.BoardUpdateHandler;
+import com.julie.test.handler.Command;
+import com.julie.test.handler.MemberAddHandler;
+import com.julie.test.handler.MemberDeleteHandler;
+import com.julie.test.handler.MemberDetailHandler;
+import com.julie.test.handler.MemberListHandler;
+import com.julie.test.handler.MemberUpdateHandler;
+import com.julie.test.handler.MemberValidatorHandler;
+import com.julie.test.handler.ProjectAddHandler;
+import com.julie.test.handler.ProjectDeleteHandler;
+import com.julie.test.handler.ProjectDetailHandler;
+import com.julie.test.handler.ProjectListHandler;
+import com.julie.test.handler.ProjectUpdateHandler;
+import com.julie.test.handler.TaskAddHandler;
+import com.julie.test.handler.TaskDeleteHandler;
+import com.julie.test.handler.TaskDetailHandler;
+import com.julie.test.handler.TaskListHandler;
+import com.julie.test.handler.TaskUpdateHandler;
 import com.julie.test.util.Prompt;
 
 
@@ -17,10 +41,37 @@ public class App {
 
   public static void main(String[] args) throws CloneNotSupportedException {
 
-    BoardHandler boardHandler = new BoardHandler();
-    MemberHandler memberHandler = new MemberHandler();
-    ProjectHandler projectHandler = new ProjectHandler(memberHandler);
-    TaskHandler taskHandler = new TaskHandler(memberHandler);
+    ArrayList<Board> boardList = new ArrayList<>();
+    ArrayList<Member> memberList = new ArrayList<>();
+    LinkedList<Project> projectList = new LinkedList<>();
+    LinkedList<Task> taskList = new LinkedList<>();
+
+    HashMap<String,Command> commandMap = new HashMap<>();
+
+    commandMap.put("/board/add", new BoardAddHandler(boardList));
+    commandMap.put("/board/list", new BoardListHandler(boardList));
+    commandMap.put("/board/detail", new BoardDetailHandler(boardList));
+    commandMap.put("/board/update", new BoardUpdateHandler(boardList));
+    commandMap.put("/board/delete", new BoardDeleteHandler(boardList));
+
+    commandMap.put("/member/add", new MemberAddHandler(memberList));
+    commandMap.put("/member/list", new MemberListHandler(memberList));
+    commandMap.put("/member/detail", new MemberDetailHandler(memberList));
+    commandMap.put("/member/update", new MemberUpdateHandler(memberList));
+    commandMap.put("/member/delete", new MemberDeleteHandler(memberList));
+    MemberValidatorHandler memberValidatorHandler = new MemberValidatorHandler(memberList);
+
+    commandMap.put("/project/add", new ProjectAddHandler(projectList, memberValidatorHandler));
+    commandMap.put("/project/list", new ProjectListHandler(projectList));
+    commandMap.put("/project/detail", new ProjectDetailHandler(projectList));
+    commandMap.put("/project/update", new ProjectUpdateHandler(projectList, memberValidatorHandler));
+    commandMap.put("/project/delete", new ProjectDeleteHandler(projectList));
+
+    commandMap.put("/task/add", new TaskAddHandler(taskList, memberValidatorHandler));
+    commandMap.put("/task/list", new TaskListHandler(taskList));
+    commandMap.put("/task/detail", new TaskDetailHandler(taskList));
+    commandMap.put("/task/update", new TaskUpdateHandler(taskList, memberValidatorHandler));
+    commandMap.put("/task/delete", new TaskDeleteHandler(taskList));
 
     while (true) {
       String command = Prompt.printString("명령> ");
@@ -31,55 +82,19 @@ public class App {
       commandStack.push(command);
       commandQueue.offer(command);
       try {  
-        if (command.equals("/member/add")) {
-          memberHandler.add();
-        } else if (command.equals("/member/list")) {
-          memberHandler.list();
-        } else if (command.equals("/member/detail")) {
-          memberHandler.detail();
-        }else if (command.equals("/member/update")) {
-          memberHandler.update();
-        }else if (command.equals("/member/delete")) {
-          memberHandler.delete();
-        }else if (command.equals("/project/add")) {
-          projectHandler.add();
-        }else if (command.equals("/project/list")) {
-          projectHandler.list();
-        }else if (command.equals("/project/detail")) {
-          projectHandler.detail();
-        }else if (command.equals("/project/update")) {
-          projectHandler.update();
-        }else if (command.equals("/project/delete")) {
-          projectHandler.delete();
-        }else if (command.equals("/task/add")) {
-          taskHandler.add();
-        }else if (command.equals("/task/list")) {
-          taskHandler.list();
-        }else if (command.equals("/task/detail")) {
-          taskHandler.detail();
-        }else if (command.equals("/task/update")) {
-          taskHandler.update();
-        }else if (command.equals("/task/delete")) {
-          taskHandler.delete();
-        }else if (command.equals("/board/add")) {
-          boardHandler.add();
-        }else if (command.equals("/board/list")) {
-          boardHandler.list();
-        }else if (command.equals("/board/detail")) {
-          boardHandler.detail();
-        }else if (command.equals("/board/update")) {
-          boardHandler.update();
-        }else if (command.equals("/board/delete")) {
-          boardHandler.delete();
-        }else if (command.equals("history")) {
+        Command commandHandler = commandMap.get(command);
+
+        if (commandHandler == null) {
+          System.out.println("실행할 수 없는 명령입니다.");
+        } else if (command.equals("history")) {
           printCommandHistory(commandStack.iterator());
-        }else if (command.equals("history2")) {
+        } else if (command.equals("history2")) {
           printCommandHistory(commandQueue.iterator());
-        }else if (command.equalsIgnoreCase("exit")) {
+        } else if (command.equalsIgnoreCase("exit")) {
           System.out.println("안녕!");
           break;
-        }else {
-          System.out.println("실행할 수 없는 명령입니다.");
+        } else {
+          commandHandler.service();
         }
       } catch (Exception e) {
         System.out.println("-----------------------------------------");
