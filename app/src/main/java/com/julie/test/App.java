@@ -42,62 +42,17 @@ public class App {
   static ArrayDeque<String> commandStack = new ArrayDeque<>();
   static LinkedList<String> commandQueue = new LinkedList<>();
 
+  // VO를 저장할 컬렉션 객체
+  static ArrayList<Board> boardList = new ArrayList<>();
+
   public static void main(String[] args) throws CloneNotSupportedException {
 
-    ArrayList<Board> boardList = new ArrayList<>();
     ArrayList<Member> memberList = new ArrayList<>();
     LinkedList<Project> projectList = new LinkedList<>();
     LinkedList<Task> taskList = new LinkedList<>();
 
     // 파일에서 데이터를 읽어온다. (데이터 로딩)
-    try (FileInputStream in = new FileInputStream("boards.data")) {
-      // boards.data 파일 포맷에 따라 데이터를 읽는다.
-      // 1) 게시글 개수
-      int size = in.read() << 8 | in.read();
-
-      // 2) 게시글 개수만큼 게시글을 읽는다.
-      for (int i = 0; i < size; i++) {
-        // 게시글 데이터를 저장할 객체 준비
-        Board b = new Board();
-
-        // 게시글 데이터를 읽어서 객체에 저장
-        // - 게시글 번호를 읽어서 객체에 저장
-        b.setId(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-        // - 게시글 제목을 읽어서 객체에 저장
-        int len = in.read() << 8 | in.read();
-        byte[] buf = new byte[len];
-        in.read(buf);
-        b.setTitle(new String(buf, "UTF-8"));
-
-        // - 게시글 내용을 읽어서 객체에 저장
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        b.setContent(new String(buf, "UTF-8"));
-
-        // - 게시글 작성자를 읽어서 객체에 저장
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        b.setWriter(new String(buf, "UTF-8"));
-
-        // - 게시글 등록일을 읽어서 객체에 저장
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        b.setRegisteredDate(Date.valueOf(new String(buf, "UTF-8")));
-
-        // - 게시글 조회수를 읽어서 객체에 저장
-        b.setViewCount(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-        // - 게시글 객체를 컬렉션에 저장
-        boardList.add(b);
-      }
-      System.out.println("게시글 데이터 로딩!");
-    } catch (Exception e) {
-      System.out.println("게시글 데이터 로딩 중 오류 발생!");
-    }
+    loadBoards();
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
@@ -160,7 +115,78 @@ public class App {
     } 
 
     // 게시글 데이터를 파일로 출력한다.
+    saveBoards();
 
+    Prompt.close();
+  }
+
+  static void printCommandHistory(Iterator<String> iterator) {
+
+    int size = 0;
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+      if ((++size % 5) == 0) {
+        String input = Prompt.printString(": ");
+        if(input.equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    }
+  }
+
+  static void loadBoards() {
+
+    try (FileInputStream in = new FileInputStream("boards.data")) {
+      // boards.data 파일 포맷에 따라 데이터를 읽는다.
+      // 1) 게시글 개수
+      int size = in.read() << 8 | in.read();
+
+      // 2) 게시글 개수만큼 게시글을 읽는다.
+      for (int i = 0; i < size; i++) {
+        // 게시글 데이터를 저장할 객체 준비
+        Board b = new Board();
+
+        // 게시글 데이터를 읽어서 객체에 저장
+        // - 게시글 번호를 읽어서 객체에 저장
+        b.setId(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
+
+        // - 게시글 제목을 읽어서 객체에 저장
+        int len = in.read() << 8 | in.read();
+        byte[] buf = new byte[len];
+        in.read(buf);
+        b.setTitle(new String(buf, "UTF-8"));
+
+        // - 게시글 내용을 읽어서 객체에 저장
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        b.setContent(new String(buf, "UTF-8"));
+
+        // - 게시글 작성자를 읽어서 객체에 저장
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        b.setWriter(new String(buf, "UTF-8"));
+
+        // - 게시글 등록일을 읽어서 객체에 저장
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        b.setRegisteredDate(Date.valueOf(new String(buf, "UTF-8")));
+
+        // - 게시글 조회수를 읽어서 객체에 저장
+        b.setViewCount(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
+
+        // - 게시글 객체를 컬렉션에 저장
+        boardList.add(b);
+      }
+      System.out.println("게시글 데이터 로딩!");
+    } catch (Exception e) {
+      System.out.println("게시글 데이터 로딩 중 오류 발생!");
+    }
+  }
+
+  static void saveBoards() {
     try (FileOutputStream out = new FileOutputStream("boards.data")) {
       // boards.data 파일 포맷
       // - 2바이트: 저장된 게시글 개수
@@ -225,21 +251,6 @@ public class App {
       System.out.println("게시글 데이터 저장!");
     } catch (Exception e) {
       System.out.println("게시글 데이터를 파일로 저장하는 중에 오류 발생!");
-    }
-    Prompt.close();
-  }
-
-  static void printCommandHistory(Iterator<String> iterator) {
-
-    int size = 0;
-    while (iterator.hasNext()) {
-      System.out.println(iterator.next());
-      if ((++size % 5) == 0) {
-        String input = Prompt.printString(": ");
-        if(input.equalsIgnoreCase("q")) {
-          break;
-        }
-      }
     }
   }
 }
