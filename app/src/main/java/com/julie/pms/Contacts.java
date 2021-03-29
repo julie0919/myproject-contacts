@@ -1,5 +1,8 @@
 package com.julie.pms;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,11 +35,11 @@ public class Contacts {
   static LinkedList<String> commandQueue = new LinkedList<>();
 
 
-  public static void main(String[] args) throws CloneNotSupportedException {
+  static ArrayList<Family> familyList = new ArrayList<>();
+  static ArrayList<School> schoolList = new ArrayList<>();
+  static ArrayList<Company> companyList = new ArrayList<>();
 
-    ArrayList<Family> familyList = new ArrayList<>();
-    ArrayList<School> schoolList = new ArrayList<>();
-    ArrayList<Company> companyList = new ArrayList<>();
+  public static void main(String[] args) throws CloneNotSupportedException {
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
@@ -107,6 +110,265 @@ public class Contacts {
           break;
         }
       }
+    }
+  }
+
+  static void loadFamily() {
+    try (FileInputStream in = new FileInputStream("family.data")) {
+      int size = in.read() << 8 | in.read();
+
+      for (int i = 0; i < size; i++) {
+        Family f = new Family();
+
+        f.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
+
+        int len = in.read() << 8 | in.read();
+        byte[] buf = new byte[len];
+        in.read(buf);
+        f.setName(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        f.setTel(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        f.setAddress(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        f.setMail(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        f.setBirth(Date.valueOf(new String(buf, "UTF-8")));
+
+        familyList.add(f);
+      }
+
+      System.out.println("연락처 정보(가족) 로딩");
+    } catch (Exception e) {
+      System.out.println("연락처 정보(가족) 로딩 중 오류 발생");
+    }
+  }
+
+  static void saveFamily() {
+    try (FileOutputStream out = new FileOutputStream("family.data")) {
+      int size = familyList.size();
+      out.write(size >> 8);
+      out.write(size);
+
+      for (Family f : familyList) {
+        out.write(f.getNo() >> 24);
+        out.write(f.getNo() >> 16);
+        out.write(f.getNo() >> 8);
+        out.write(f.getNo());
+
+        byte[] buf = f.getName().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = f.getTel().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = f.getAddress().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = f.getMail().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = f.getBirth().toString().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+      }
+      System.out.println("연락처 정보(가족) 저장");
+    }catch (Exception e) {
+      System.out.println("연락처 정보(가족)를 파일로 저장하는 중에 오류 발생");
+    }
+  }
+
+  static void loadSchool() {
+    try (FileInputStream in = new FileInputStream("school.data")) {
+      int size = in.read() << 8 | in.read();
+
+      for (int i = 0; i < size; i++) {
+        School s = new School();
+
+        s.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
+
+        int len = in.read() << 8 | in.read();
+        byte[] buf = new byte[len];
+        in.read(buf);
+        s.setName(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        s.setTel(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        s.setAddress(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        s.setMail(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        s.setSchool(new String(buf, "UTF-8"));
+
+        schoolList.add(s);
+      }
+
+      System.out.println("연락처 정보(친구) 로딩");
+    } catch (Exception e) {
+      System.out.println("연락처 정보(친구) 로딩 중 오류 발생");
+    }
+  }
+
+  static void saveSchool() {
+    try (FileOutputStream out = new FileOutputStream("school.data")) {
+      int size = schoolList.size();
+      out.write(size >> 8);
+      out.write(size);
+
+      for (School s : schoolList) {
+        out.write(s.getNo() >> 24);
+        out.write(s.getNo() >> 16);
+        out.write(s.getNo() >> 8);
+        out.write(s.getNo());
+
+        byte[] buf = s.getName().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = s.getTel().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = s.getAddress().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = s.getMail().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = s.getSchool().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+      }
+      System.out.println("연락처 정보(친구) 저장");
+    }catch (Exception e) {
+      System.out.println("연락처 정보(친구)를 파일로 저장하는 중에 오류 발생");
+    }
+  }
+
+
+  static void loadCompany() {
+    try (FileInputStream in = new FileInputStream("company.data")) {
+      int size = in.read() << 8 | in.read();
+
+      for (int i = 0; i < size; i++) {
+        Company c = new Company();
+
+        c.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
+
+        int len = in.read() << 8 | in.read();
+        byte[] buf = new byte[len];
+        in.read(buf);
+        c.setName(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        c.setTel(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        c.setAddress(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        c.setMail(new String(buf, "UTF-8"));
+
+        len = in.read() << 8 | in.read();
+        buf = new byte[len];
+        in.read(buf);
+        c.setWork(new String(buf, "UTF-8"));
+
+        companyList.add(c);
+      }
+
+      System.out.println("연락처 정보(회사) 로딩");
+    } catch (Exception e) {
+      System.out.println("연락처 정보(회사) 로딩 중 오류 발생");
+    }
+  }
+
+  static void saveCompany() {
+    try (FileOutputStream out = new FileOutputStream("company.data")) {
+      int size = companyList.size();
+      out.write(size >> 8);
+      out.write(size);
+
+      for (Company c : companyList) {
+        out.write(c.getNo() >> 24);
+        out.write(c.getNo() >> 16);
+        out.write(c.getNo() >> 8);
+        out.write(c.getNo());
+
+        byte[] buf = c.getName().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = c.getTel().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = c.getAddress().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = c.getMail().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+
+        buf = c.getWork().getBytes("UTF-8");
+        out.write(buf.length >> 8);
+        out.write(buf.length);
+        out.write(buf);
+      }
+      System.out.println("연락처 정보(회사) 저장");
+    }catch (Exception e) {
+      System.out.println("연락처 정보(회사)를 파일로 저장하는 중에 오류 발생");
     }
   }
 }
