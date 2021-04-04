@@ -1,5 +1,7 @@
 package com.julie.test;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -143,7 +145,9 @@ public class App {
   }
 
   static void loadBoards() {
-    try (DataInputStream in = new DataInputStream(new FileInputStream("boards.data"))) {
+    try (DataInputStream in = new DataInputStream(
+        new BufferedInputStream(new FileInputStream("boards.data")))) {
+
       // boards.data 파일 포맷에 따라 데이터를 읽는다.
       // 1) 게시글 개수
       int size = in.readInt();
@@ -169,7 +173,8 @@ public class App {
   }
 
   static void saveBoards() {
-    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("boards.data"))) {
+    try (DataOutputStream out = new DataOutputStream(
+        new BufferedOutputStream(new FileOutputStream("boards.data")))) {
 
       out.writeInt(boardList.size());
 
@@ -188,7 +193,9 @@ public class App {
   }
 
   static void loadMembers() {
-    try (DataInputStream in = new DataInputStream(new FileInputStream("members.data"))) {
+    try (DataInputStream in = new DataInputStream(
+        new BufferedInputStream(new FileInputStream("members.data")))) {
+
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
@@ -208,7 +215,9 @@ public class App {
   }
 
   static void saveMembers() {
-    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("members.data"))) {
+    try (DataOutputStream out = new DataOutputStream(
+        new BufferedOutputStream(new FileOutputStream("members.data")))) {
+
       out.writeInt(memberList.size());
 
       for(Member m : memberList) {
@@ -226,7 +235,8 @@ public class App {
   }
 
   static void loadProjects() {
-    try (DataInputStream in = new DataInputStream(new FileInputStream("projects.data"))) {
+    try (DataInputStream in = new DataInputStream(
+        new BufferedInputStream(new FileInputStream("projects.data")))) {
 
       int size = in.readInt();
 
@@ -249,7 +259,8 @@ public class App {
   }
 
   static void saveProjects() {
-    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("projects.data"))) {
+    try (DataOutputStream out = new DataOutputStream(
+        new BufferedOutputStream(new FileOutputStream("projects.data")))) {
 
       out.writeInt(projectList.size());
 
@@ -269,7 +280,9 @@ public class App {
   }
 
   static void loadTasks() {
-    try (DataInputStream in = new DataInputStream(new FileInputStream("tasks.data"))) {
+    try (DataInputStream in = new DataInputStream(
+        new BufferedInputStream(new FileInputStream("tasks.data")))) {
+
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
@@ -289,7 +302,8 @@ public class App {
   }
 
   static void saveTasks() {
-    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("tasks.data"))) {
+    try (DataOutputStream out = new DataOutputStream(
+        new BufferedOutputStream(new FileOutputStream("tasks.data")))) {
 
       out.writeInt(taskList.size());
 
