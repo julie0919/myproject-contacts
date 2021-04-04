@@ -1,5 +1,7 @@
 package com.julie.pms;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.Date;
@@ -8,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 import com.julie.domain.Company;
 import com.julie.domain.Family;
 import com.julie.domain.School;
@@ -144,25 +144,21 @@ public class Contacts {
   }
 
   static void loadFamily() {
-    try (Scanner in = new Scanner(new FileReader("family.csv"))) {
-      while (true) {
-        try {
-          String record = in.nextLine();
-          String[] fields = record.split(",");
+    try (BufferedReader in = new BufferedReader(new FileReader("family.csv"))) {
+      String record = null;
+      while ((record = in.readLine()) != null) {
+        String[] fields = record.split(",");
 
-          Family f = new Family();
-          f.setNo(Integer.parseInt(fields[0]));
-          f.setName(fields[1]);
-          f.setTel(fields[2]);
-          f.setMail(fields[3]);
-          f.setAddress(fields[4]);
-          f.setBirth(Date.valueOf(fields[5]));
+        Family f = new Family();
+        f.setNo(Integer.parseInt(fields[0]));
+        f.setName(fields[1]);
+        f.setTel(fields[2]);
+        f.setMail(fields[3]);
+        f.setAddress(fields[4]);
+        f.setBirth(Date.valueOf(fields[5]));
 
-          familyList.add(f);
-        } catch (NoSuchElementException e) {
-          break;
-        }
-      } 
+        familyList.add(f);            
+      }
       System.out.println("연락처(가족) 데이터 로딩!");
 
     } catch (Exception e) {
@@ -171,7 +167,7 @@ public class Contacts {
   }
 
   static void saveFamily() {
-    try (FileWriter out = new FileWriter("family.csv")) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter("family.csv"))) {
 
       // family.csv 파일 포맷
       // - 번호,이름,연락처,이메일,주소,기념일(CRLF)
@@ -192,24 +188,21 @@ public class Contacts {
   }
 
   static void loadSchool() {
-    try (Scanner in = new Scanner(new FileReader("school.csv"))) {
-      while (true) {
-        try {
-          String record = in.nextLine();
-          String[] fields = record.split(",");
+    try (BufferedReader in = new BufferedReader(new FileReader("school.csv"))) {
+      String record = null;
 
-          School s = new School();
-          s.setNo(Integer.parseInt(fields[0]));
-          s.setName(fields[1]);
-          s.setTel(fields[2]);
-          s.setMail(fields[3]);
-          s.setSchool(fields[4]);
-          s.setAddress(fields[5]);
+      while ((record = in.readLine()) != null) {
+        String[] fields = record.split(",");
 
-          schoolList.add(s);
-        } catch (NoSuchElementException e) {
-          break;
-        }
+        School s = new School();
+        s.setNo(Integer.parseInt(fields[0]));
+        s.setName(fields[1]);
+        s.setTel(fields[2]);
+        s.setMail(fields[3]);
+        s.setSchool(fields[4]);
+        s.setAddress(fields[5]);
+
+        schoolList.add(s);
       }
       System.out.println("연락처(친구) 데이터 로딩!");
 
@@ -219,7 +212,7 @@ public class Contacts {
   }
 
   static void saveSchool() {
-    try (FileWriter out = new FileWriter("school.csv")) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter("school.csv"))) {
 
       // school.csv 파일 포맷
       // - 번호,이름,연락처,이메일,학교,주소(CRLF)
@@ -239,24 +232,21 @@ public class Contacts {
     }
   }
   static void loadCompany() {
-    try (Scanner in = new Scanner(new FileReader("company.csv"))) {
-      while(true) {
-        try {
-          String record = in.nextLine();
-          String[] fields = record.split(",");
+    try (BufferedReader in = new BufferedReader(new FileReader("company.csv"))) {
+      String record = null;
 
-          Company c = new Company();
-          c.setNo(Integer.parseInt(fields[0]));
-          c.setName(fields[1]);
-          c.setTel(fields[2]);
-          c.setMail(fields[3]);
-          c.setWork(fields[4]);
-          c.setAddress(fields[5]);
+      while ((record = in.readLine()) != null) {
+        String[] fields = record.split(",");
 
-          companyList.add(c);
-        } catch (NoSuchElementException e) {
-          break;
-        }
+        Company c = new Company();
+        c.setNo(Integer.parseInt(fields[0]));
+        c.setName(fields[1]);
+        c.setTel(fields[2]);
+        c.setMail(fields[3]);
+        c.setWork(fields[4]);
+        c.setAddress(fields[5]);
+
+        companyList.add(c);
       }
       System.out.println("연락처(회사) 데이터 로딩!");
 
@@ -266,7 +256,7 @@ public class Contacts {
   }
 
   static void saveCompany() {
-    try (FileWriter out = new FileWriter("company.csv")) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter("company.csv"))) {
 
       // company.csv 파일 포맷
       // - 번호,이름,연락처,이메일,회사,주소(CRLF)
