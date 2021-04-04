@@ -2,10 +2,12 @@ package com.julie.pms;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,15 +37,26 @@ import com.julie.util.Prompt;
 
 public class Contacts {
 
+  // 사용자가 입력한 명령을 저장할 컬렉션 객체 준비
   static ArrayDeque<String> commandStack = new ArrayDeque<>();
   static LinkedList<String> commandQueue = new LinkedList<>();
 
-
+  // VO 를 저장할 컬렉션 객체
   static List<Family> familyList;
   static List<School> schoolList;
   static List<Company> companyList;
 
-  public static void main(String[] args) throws CloneNotSupportedException {
+  // 데이터 파일 정보
+  static File familyFile = new File("family.data");
+  static File schoolFile = new File("school.data");
+  static File companyFile = new File("company.data");
+
+  public static void main(String[] args) {
+
+    // 파일에서 데이터를 읽어온다 (데이터 로딩)
+    familyList = loadObjects(familyFile, Family.class);
+    schoolList = loadObjects(schoolFile, School.class);
+    companyList = loadObjects(companyFile, Company.class);
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
@@ -75,8 +88,10 @@ public class Contacts {
 
       if (command.length() == 0)
         continue;
+      // 사용자가 입력한 명령을 보관해둔다.
       commandStack.push(command);
       commandQueue.offer(command);
+
       try { 
         Command commandHandler = commandMap.get(command);
         if (commandHandler == null) {
@@ -101,6 +116,12 @@ public class Contacts {
       }
       System.out.println(); // 이전 명령의 실행을 구분하기 위해 빈 줄 출력
     }
+
+    // 게시글 데이터를 파일로 출력한다.
+    saveObjects(familyFile, familyList);
+    saveObjects(schoolFile, schoolList);
+    saveObjects(companyFile, companyList);
+
     Prompt.close();
   }
 
@@ -118,77 +139,28 @@ public class Contacts {
   }
 
   @SuppressWarnings("unchecked")
-  static void loadFamily() {
+  static <T extends Serializable> List<T> loadObjects(File file, Class<T> dataType) {
     try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream("family.data")))) {
+        new BufferedInputStream(new FileInputStream(file)))) {
 
-      familyList = (List<Family>) in.readObject();
+      System.out.printf("파일 %s 로딩!\n", file.getName());
+      return (List<T>) in.readObject();
 
-      System.out.println("연락처 정보(가족) 로딩");
     } catch (Exception e) {
-      System.out.println("연락처 정보(가족) 로딩 중 오류 발생");
-      familyList = new ArrayList<>();
+      System.out.printf("파일 %s 로딩 중 오류 발생!\n", file.getName());
+      return new ArrayList<T>();
     }
   }
 
-  static void saveFamily() {
+  static <T extends Serializable> void saveObjects(File file, List<T> dataList) {
     try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream("family.data")))) {
+        new BufferedOutputStream(new FileOutputStream(file)))) {
 
-      out.writeObject(familyList);
-      System.out.println("연락처 정보(가족) 저장");
+      out.writeObject(dataList);
+      System.out.printf("파일 %s 저장!\n", file.getName());
+
     }catch (Exception e) {
-      System.out.println("연락처 정보(가족)를 파일로 저장하는 중에 오류 발생");
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  static void loadSchool() {
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream("school.data")))) {
-
-      schoolList = (List<School>) in.readObject();
-
-      System.out.println("연락처 정보(친구) 로딩");
-    } catch (Exception e) {
-      System.out.println("연락처 정보(친구) 로딩 중 오류 발생");
-      schoolList = new ArrayList<>();
-    }
-  }
-
-  static void saveSchool() {
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream("school.data")))) {
-
-      out.writeObject(schoolList);
-      System.out.println("연락처 정보(친구) 저장");
-    }catch (Exception e) {
-      System.out.println("연락처 정보(친구)를 파일로 저장하는 중에 오류 발생");
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  static void loadCompany() {
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream("company.data")))) {
-
-      companyList = (List<Company>) in.readObject();
-
-      System.out.println("연락처 정보(회사) 로딩");
-    } catch (Exception e) {
-      System.out.println("연락처 정보(회사) 로딩 중 오류 발생");
-      companyList = new ArrayList<>();
-    }
-  }
-
-  static void saveCompany() {
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream("company.data")))) {
-
-      out.writeObject(companyList);
-      System.out.println("연락처 정보(회사) 저장");
-    }catch (Exception e) {
-      System.out.println("연락처 정보(회사)를 파일로 저장하는 중에 오류 발생");
+      System.out.printf("파일 %s 저장하는 중에 오류 발생\n", file.getName());
     }
   }
 }

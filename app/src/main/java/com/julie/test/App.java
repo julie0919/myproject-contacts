@@ -2,10 +2,12 @@ package com.julie.test;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,14 +54,19 @@ public class App {
   static List<Project> projectList;
   static List<Task> taskList;
 
-  public static void main(String[] args) throws CloneNotSupportedException {
+  // 데이터 파일 정보
+  static File boardFile = new File("boards.data");
+  static File memberFile = new File("members.data");
+  static File projectFile = new File("projects.data");
+  static File taskFile = new File("tasks.data");
 
+  public static void main(String[] args) {
 
     // 파일에서 데이터를 읽어온다. (데이터 로딩)
-    loadBoards();
-    loadMembers();
-    loadProjects();
-    loadTasks();
+    boardList = loadObjects(boardFile, Board.class);
+    memberList = loadObjects(memberFile, Member.class);
+    projectList = loadObjects(projectFile, Project.class);
+    taskList = loadObjects(taskFile, Task.class);
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
@@ -122,10 +129,10 @@ public class App {
     } 
 
     // 게시글 데이터를 파일로 출력한다.
-    saveBoards();
-    saveMembers();
-    saveProjects();
-    saveTasks();
+    saveObjects(boardFile, boardList);
+    saveObjects(memberFile, memberList);
+    saveObjects(projectFile, projectList);
+    saveObjects(taskFile, taskList);
 
     Prompt.close();
   }
@@ -145,98 +152,28 @@ public class App {
   }
 
   @SuppressWarnings("unchecked")
-  static void loadBoards() {
+  static <T extends Serializable> List<T> loadObjects(File file, Class<T> dataType) {
     try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream("boards.data")))) {
+        new BufferedInputStream(new FileInputStream(file)))) {
 
-      boardList = (List<Board>) in.readObject();
-      System.out.println("게시글 데이터 로딩!");
+      System.out.printf("파일 %s 로딩!\n", file.getName());
+      return (List<T>) in.readObject();
+
     } catch (Exception e) {
-      System.out.println("게시글 데이터 로딩 중 오류 발생!");
-      boardList = new ArrayList<>();
+      System.out.printf("파일 %s 로딩 중 오류 발생!\n", file.getName());
+      return new ArrayList<T>();
     }
   }
 
-  static void saveBoards() {
+  static <T extends Serializable> void saveObjects(File file, List<T> dataList) {
     try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream("boards.data")))) {
+        new BufferedOutputStream(new FileOutputStream(file)))) {
 
-      out.writeObject(boardList);
-      System.out.println("게시글 데이터 저장!");
+      out.writeObject(dataList);
+      System.out.printf("파일 %s 저장!\n", file.getName());
+
     } catch (Exception e) {
-      System.out.println("게시글 데이터를 파일로 저장하는 중에 오류 발생!");
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  static void loadMembers() {
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream("members.data")))) {
-
-      memberList = (List<Member>) in.readObject();
-      System.out.println("멤버 데이터 로딩!");
-    } catch (Exception e) {
-      System.out.println("멤버 데이터 로딩 중 오류 발생!");
-      memberList = new ArrayList<>();
-    }
-  }
-
-  static void saveMembers() {
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream("members.data")))) {
-
-      out.writeObject(memberList);
-      System.out.println("멤버 데이터 저장!");
-    } catch (Exception e) {
-      System.out.println("멤버 데이터를 파일로 저장하는 중에 오류 발생!");
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  static void loadProjects() {
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream("projects.data")))) {
-
-      projectList = (List<Project>) in.readObject();
-      System.out.println("프로젝트 데이터 로딩!");
-    } catch (Exception e) {
-      System.out.println("프로젝트 데이터 로딩 중 오류 발생!");
-      projectList = new ArrayList<>();
-    }
-  }
-
-  static void saveProjects() {
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream("projects.data")))) {
-
-      out.writeObject(projectList);
-      System.out.println("프로젝트 데이터 저장!");
-    } catch (Exception e) {
-      System.out.println("프로젝트 데이터를 파일로 저장하는 중에 오류 발생!");
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  static void loadTasks() {
-    try (ObjectInputStream in = new ObjectInputStream(
-        new BufferedInputStream(new FileInputStream("tasks.data")))) {
-
-      taskList = (List<Task>) in.readObject();
-      System.out.println("작업 데이터 로딩!");
-    } catch (Exception e) {
-      System.out.println("작업 데이터 로딩 중 오류 발생!");
-      taskList = new ArrayList<>();
-    }
-  }
-
-  static void saveTasks() {
-    try (ObjectOutputStream out = new ObjectOutputStream(
-        new BufferedOutputStream(new FileOutputStream("tasks.data")))) {
-
-      out.writeObject(taskList);
-      System.out.println("작업 데이터 저장!");
-    } catch (Exception e) {
-      System.out.println("작업 데이터를 파일로 저장하는 중에 오류 발생!");
+      System.out.printf("파일 %s 저장하는 중에 오류 발생!\n", file.getName());
     }
   }
 }
