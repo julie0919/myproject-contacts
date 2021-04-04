@@ -1,5 +1,7 @@
 package com.julie.pms;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.sql.Date;
@@ -114,38 +116,18 @@ public class Contacts {
   }
 
   static void loadFamily() {
-    try (FileInputStream in = new FileInputStream("family.data")) {
-      int size = in.read() << 8 | in.read();
+    try (DataInputStream in = new DataInputStream(new FileInputStream("family.data"))) {
+
+      int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
         Family f = new Family();
-
-        f.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-        int len = in.read() << 8 | in.read();
-        byte[] buf = new byte[len];
-        in.read(buf);
-        f.setName(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        f.setTel(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        f.setAddress(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        f.setMail(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        f.setBirth(Date.valueOf(new String(buf, "UTF-8")));
+        f.setNo(in.readInt());
+        f.setName(in.readUTF());
+        f.setTel(in.readUTF());
+        f.setAddress(in.readUTF());
+        f.setMail(in.readUTF());
+        f.setBirth(Date.valueOf(in.readUTF()));
 
         familyList.add(f);
       }
@@ -157,41 +139,17 @@ public class Contacts {
   }
 
   static void saveFamily() {
-    try (FileOutputStream out = new FileOutputStream("family.data")) {
-      int size = familyList.size();
-      out.write(size >> 8);
-      out.write(size);
+    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("family.data"))) {
+
+      out.writeInt(familyList.size());
 
       for (Family f : familyList) {
-        out.write(f.getNo() >> 24);
-        out.write(f.getNo() >> 16);
-        out.write(f.getNo() >> 8);
-        out.write(f.getNo());
-
-        byte[] buf = f.getName().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = f.getTel().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = f.getAddress().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = f.getMail().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = f.getBirth().toString().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
+        out.writeInt(f.getNo());
+        out.writeUTF(f.getName());
+        out.writeUTF(f.getTel());
+        out.writeUTF(f.getAddress());
+        out.writeUTF(f.getMail());
+        out.writeUTF(f.getBirth().toString());
       }
       System.out.println("연락처 정보(가족) 저장");
     }catch (Exception e) {
@@ -200,38 +158,18 @@ public class Contacts {
   }
 
   static void loadSchool() {
-    try (FileInputStream in = new FileInputStream("school.data")) {
-      int size = in.read() << 8 | in.read();
+    try (DataInputStream in = new DataInputStream(new FileInputStream("school.data"))) {
+
+      int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
         School s = new School();
-
-        s.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-        int len = in.read() << 8 | in.read();
-        byte[] buf = new byte[len];
-        in.read(buf);
-        s.setName(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        s.setTel(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        s.setAddress(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        s.setMail(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        s.setSchool(new String(buf, "UTF-8"));
+        s.setNo(in.readInt());
+        s.setName(in.readUTF());
+        s.setTel(in.readUTF());
+        s.setAddress(in.readUTF());
+        s.setMail(in.readUTF());
+        s.setSchool(in.readUTF());
 
         schoolList.add(s);
       }
@@ -243,41 +181,17 @@ public class Contacts {
   }
 
   static void saveSchool() {
-    try (FileOutputStream out = new FileOutputStream("school.data")) {
-      int size = schoolList.size();
-      out.write(size >> 8);
-      out.write(size);
+    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("school.data"))) {
+
+      out.writeInt(schoolList.size());
 
       for (School s : schoolList) {
-        out.write(s.getNo() >> 24);
-        out.write(s.getNo() >> 16);
-        out.write(s.getNo() >> 8);
-        out.write(s.getNo());
-
-        byte[] buf = s.getName().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = s.getTel().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = s.getAddress().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = s.getMail().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = s.getSchool().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
+        out.writeInt(s.getNo());
+        out.writeUTF(s.getName());
+        out.writeUTF(s.getTel());
+        out.writeUTF(s.getAddress());
+        out.writeUTF(s.getMail());
+        out.writeUTF(s.getSchool());
       }
       System.out.println("연락처 정보(친구) 저장");
     }catch (Exception e) {
@@ -287,38 +201,18 @@ public class Contacts {
 
 
   static void loadCompany() {
-    try (FileInputStream in = new FileInputStream("company.data")) {
-      int size = in.read() << 8 | in.read();
+    try (DataInputStream in = new DataInputStream(new FileInputStream("company.data"))) {
+
+      int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
         Company c = new Company();
-
-        c.setNo(in.read() << 24 | in.read() << 16 | in.read() << 8 | in.read());
-
-        int len = in.read() << 8 | in.read();
-        byte[] buf = new byte[len];
-        in.read(buf);
-        c.setName(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        c.setTel(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        c.setAddress(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        c.setMail(new String(buf, "UTF-8"));
-
-        len = in.read() << 8 | in.read();
-        buf = new byte[len];
-        in.read(buf);
-        c.setWork(new String(buf, "UTF-8"));
+        c.setNo(in.readInt());
+        c.setName(in.readUTF());
+        c.setTel(in.readUTF());
+        c.setAddress(in.readUTF());
+        c.setMail(in.readUTF());
+        c.setWork(in.readUTF());
 
         companyList.add(c);
       }
@@ -330,41 +224,17 @@ public class Contacts {
   }
 
   static void saveCompany() {
-    try (FileOutputStream out = new FileOutputStream("company.data")) {
-      int size = companyList.size();
-      out.write(size >> 8);
-      out.write(size);
+    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("company.data"))) {
+
+      out.writeInt(companyList.size());
 
       for (Company c : companyList) {
-        out.write(c.getNo() >> 24);
-        out.write(c.getNo() >> 16);
-        out.write(c.getNo() >> 8);
-        out.write(c.getNo());
-
-        byte[] buf = c.getName().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = c.getTel().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = c.getAddress().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = c.getMail().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
-
-        buf = c.getWork().getBytes("UTF-8");
-        out.write(buf.length >> 8);
-        out.write(buf.length);
-        out.write(buf);
+        out.writeInt(c.getNo());
+        out.writeUTF(c.getName());
+        out.writeUTF(c.getTel());
+        out.writeUTF(c.getAddress());
+        out.writeUTF(c.getMail());
+        out.writeUTF(c.getWork());
       }
       System.out.println("연락처 정보(회사) 저장");
     }catch (Exception e) {
