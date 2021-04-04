@@ -13,11 +13,12 @@ public class ProjectAddHandler extends AbstractProjectHandler {
     this.memberValidatorHandler = memberValidatorHandler;
   }
 
+  @Override
   public void service () {
     System.out.println("[프로젝트 등록]");
 
     Project p = new Project();
-    p.setId(Prompt.printInt("번호> "));
+    p.setNo(Prompt.printInt("번호> "));
     p.setName(Prompt.printString("프로젝트명> "));
     p.setContent(Prompt.printString("내용> "));
     p.setStartDate(Prompt.printDate("시작일> "));

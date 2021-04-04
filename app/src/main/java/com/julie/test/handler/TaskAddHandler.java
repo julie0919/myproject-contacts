@@ -18,7 +18,7 @@ public class TaskAddHandler extends AbstractTaskHandler {
     System.out.println("[작업 등록]");
 
     Task t = new Task();
-    t.setId(Prompt.printInt("번호> "));
+    t.setNo(Prompt.printInt("번호> "));
     t.setName(Prompt.printString("작업명> "));
     t.setEndDate(Prompt.printDate("마감일> "));
     t.setProgress(Prompt.printInt("진행 상태:\n1.신규\n2.진행중\n3.완료\n> "));

@@ -11,10 +11,10 @@ public abstract class AbstractMemberHandler implements Command {
     this.memberList = memberList;
   }
 
-  protected Member findById(int memberId) {
+  protected Member findByNo(int memberNo) {
     Member[] list = memberList.toArray(new Member[memberList.size()]);
     for (Member m : list) {
-      if (m.getId() == memberId) {
+      if (m.getNo() == memberNo) {
         return m;
       }
     }

@@ -19,7 +19,7 @@ public class ProjectListHandler extends AbstractProjectHandler {
     while (iterator.hasNext()){
       Project p = iterator.next();
       System.out.printf("번호: %d, 프로젝트명: %s, 내용: %s, 시작일: %s, 종료일: %s, 조장: %s, 팀원: [%s]\n", 
-          p.getId(), p.getName(), p.getContent(), p.getStartDate(), p.getEndDate(), p.getLeader(), p.getTeam());
+          p.getNo(), p.getName(), p.getContent(), p.getStartDate(), p.getEndDate(), p.getLeader(), p.getTeam());
     }
   }
 }

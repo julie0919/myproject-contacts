@@ -16,10 +16,10 @@ public abstract class AbstractTaskHandler implements Command {
     return status;
   }
 
-  protected Task findById(int taskId) {
+  protected Task findByNo(int taskNo) {
     Task[] list = taskList.toArray(new Task[taskList.size()]);
     for (Task t : list) {
-      if (t.getId() == taskId) {
+      if (t.getNo() == taskNo) {
         return t;
       }
     }

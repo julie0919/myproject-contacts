@@ -10,11 +10,12 @@ public class MemberAddHandler extends AbstractMemberHandler {
     super(memberList);
   }
 
+  @Override
   public void service () {
     System.out.println("[멤버 등록]");
 
     Member m = new Member();
-    m.setId(Prompt.printInt("번호> "));
+    m.setNo(Prompt.printInt("번호> "));
     m.setName(Prompt.printString("이름> "));
     m.setMail(Prompt.printString("이메일> "));
     m.setPw(Prompt.printString("비밀번호> "));

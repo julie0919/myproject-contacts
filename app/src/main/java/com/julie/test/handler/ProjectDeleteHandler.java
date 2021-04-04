@@ -10,11 +10,12 @@ public class ProjectDeleteHandler extends AbstractProjectHandler {
     super(projectList);
   }
 
+  @Override
   public void service() {
     System.out.println("[프로젝트 삭제하기]");
 
-    int id = Prompt.printInt("번호> ");
-    Project project = findById(id);
+    int no = Prompt.printInt("번호> ");
+    Project project = findByNo(no);
     if(project == null) {
       System.out.println("해당 번호의 프로젝트가 없습니다.");    
       return;

@@ -11,11 +11,12 @@ public class MemberDetailHandler extends AbstractMemberHandler {
   }
 
 
+  @Override
   public void service() {
     System.out.println("[멤버 상세보기]");
-    int id = Prompt.printInt("번호> ");
+    int no = Prompt.printInt("번호> ");
 
-    Member member = findById(id);
+    Member member = findByNo(no);
 
     if(member == null) {
       System.out.println("해당 번호의 멤버가 없습니다.");

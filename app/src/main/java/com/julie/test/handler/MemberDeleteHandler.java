@@ -10,11 +10,12 @@ public class MemberDeleteHandler extends AbstractMemberHandler {
     super(memberList);
   }
 
+  @Override
   public void service() {
     System.out.println("[멤버 삭제하기]");
-    int id = Prompt.printInt("번호> ");
+    int no = Prompt.printInt("번호> ");
 
-    Member member = findById(id);
+    Member member = findByNo(no);
     if(member == null) {
       System.out.println("해당 번호의 멤버가 없습니다.");
       return; 

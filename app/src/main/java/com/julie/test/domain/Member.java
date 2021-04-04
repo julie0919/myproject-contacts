@@ -1,7 +1,11 @@
 package com.julie.test.domain;
 
-public class Member {
-  private int id;
+import java.io.Serializable;
+
+public class Member implements Serializable {
+  private static final long serialVersionUID = 1L;
+
+  private int no;
   private String name;
   private String mail;
   private String pw;
@@ -11,7 +15,7 @@ public class Member {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + id;
+    result = prime * result + no;
     result = prime * result + ((mail == null) ? 0 : mail.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + ((pw == null) ? 0 : pw.hashCode());
@@ -27,7 +31,7 @@ public class Member {
     if (getClass() != obj.getClass())
       return false;
     Member other = (Member) obj;
-    if (id != other.id)
+    if (no != other.no)
       return false;
     if (mail == null) {
       if (other.mail != null)
@@ -51,11 +55,11 @@ public class Member {
       return false;
     return true;
   }
-  public int getId() {
-    return id;
+  public int getNo() {
+    return no;
   }
-  public void setId(int id) {
-    this.id = id;
+  public void setNo(int no) {
+    this.no = no;
   }
   public String getName() {
     return name;

@@ -2,16 +2,16 @@ package com.julie.test;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.sql.Date;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import com.julie.test.domain.Board;
 import com.julie.test.domain.Member;
 import com.julie.test.domain.Project;
@@ -47,10 +47,10 @@ public class App {
   static LinkedList<String> commandQueue = new LinkedList<>();
 
   // VO를 저장할 컬렉션 객체
-  static ArrayList<Board> boardList = new ArrayList<>();
-  static ArrayList<Member> memberList = new ArrayList<>();
-  static LinkedList<Project> projectList = new LinkedList<>();
-  static LinkedList<Task> taskList = new LinkedList<>();
+  static List<Board> boardList;
+  static List<Member> memberList;
+  static List<Project> projectList;
+  static List<Task> taskList;
 
   public static void main(String[] args) throws CloneNotSupportedException {
 
@@ -144,176 +144,96 @@ public class App {
     }
   }
 
+  @SuppressWarnings("unchecked")
   static void loadBoards() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("boards.data")))) {
 
-      // boards.data 파일 포맷에 따라 데이터를 읽는다.
-      // 1) 게시글 개수
-      int size = in.readInt();
-
-      // 2) 게시글 개수만큼 게시글을 읽는다.
-      for (int i = 0; i < size; i++) {
-        // 게시글 데이터를 저장할 객체 준비
-        Board b = new Board();
-        b.setId(in.readInt());
-        b.setTitle(in.readUTF());
-        b.setContent(in.readUTF());
-        b.setWriter(in.readUTF());
-        b.setRegisteredDate(Date.valueOf(in.readUTF()));
-        b.setViewCount(in.readInt());
-
-        // - 게시글 객체를 컬렉션에 저장
-        boardList.add(b);
-      }
+      boardList = (List<Board>) in.readObject();
       System.out.println("게시글 데이터 로딩!");
     } catch (Exception e) {
       System.out.println("게시글 데이터 로딩 중 오류 발생!");
+      boardList = new ArrayList<>();
     }
   }
 
   static void saveBoards() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("boards.data")))) {
 
-      out.writeInt(boardList.size());
-
-      for (Board b : boardList) {
-        out.writeInt(b.getId());
-        out.writeUTF(b.getTitle());
-        out.writeUTF(b.getContent());
-        out.writeUTF(b.getWriter());
-        out.writeUTF(b.getRegisteredDate().toString());
-        out.writeInt(b.getViewCount());
-      }
+      out.writeObject(boardList);
       System.out.println("게시글 데이터 저장!");
     } catch (Exception e) {
       System.out.println("게시글 데이터를 파일로 저장하는 중에 오류 발생!");
     }
   }
 
+  @SuppressWarnings("unchecked")
   static void loadMembers() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("members.data")))) {
 
-      int size = in.readInt();
-
-      for (int i = 0; i < size; i++) {
-        Member m = new Member();
-        m.setId(in.readInt());
-        m.setName(in.readUTF());
-        m.setMail(in.readUTF());
-        m.setTel(in.readUTF());
-        m.setPw(in.readUTF());
-
-        memberList.add(m);
-      }
+      memberList = (List<Member>) in.readObject();
       System.out.println("멤버 데이터 로딩!");
     } catch (Exception e) {
       System.out.println("멤버 데이터 로딩 중 오류 발생!");
+      memberList = new ArrayList<>();
     }
   }
 
   static void saveMembers() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("members.data")))) {
 
-      out.writeInt(memberList.size());
-
-      for(Member m : memberList) {
-        out.writeInt(m.getId());
-        out.writeUTF(m.getName());
-        out.writeUTF(m.getMail());
-        out.writeUTF(m.getTel());
-        out.writeUTF(m.getPw());
-
-      }
+      out.writeObject(memberList);
       System.out.println("멤버 데이터 저장!");
     } catch (Exception e) {
       System.out.println("멤버 데이터를 파일로 저장하는 중에 오류 발생!");
     }
   }
 
+  @SuppressWarnings("unchecked")
   static void loadProjects() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("projects.data")))) {
 
-      int size = in.readInt();
-
-      for (int i = 0; i < size; i++) {
-        Project p = new Project();
-        p.setId(in.readInt());
-        p.setName(in.readUTF());
-        p.setContent(in.readUTF());
-        p.setStartDate(Date.valueOf(in.readUTF()));
-        p.setEndDate(Date.valueOf(in.readUTF()));
-        p.setLeader(in.readUTF());
-        p.setTeam(in.readUTF());
-
-        projectList.add(p);
-      }
+      projectList = (List<Project>) in.readObject();
       System.out.println("프로젝트 데이터 로딩!");
     } catch (Exception e) {
       System.out.println("프로젝트 데이터 로딩 중 오류 발생!");
+      projectList = new ArrayList<>();
     }
   }
 
   static void saveProjects() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("projects.data")))) {
 
-      out.writeInt(projectList.size());
-
-      for (Project p : projectList) {
-        out.writeInt(p.getId());
-        out.writeUTF(p.getName());
-        out.writeUTF(p.getContent());
-        out.writeUTF(p.getStartDate().toString());
-        out.writeUTF(p.getEndDate().toString());
-        out.writeUTF(p.getLeader());
-        out.writeUTF(p.getTeam());
-      }
+      out.writeObject(projectList);
       System.out.println("프로젝트 데이터 저장!");
     } catch (Exception e) {
       System.out.println("프로젝트 데이터를 파일로 저장하는 중에 오류 발생!");
     }
   }
 
+  @SuppressWarnings("unchecked")
   static void loadTasks() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("tasks.data")))) {
 
-      int size = in.readInt();
-
-      for (int i = 0; i < size; i++) {
-        Task t = new Task();
-        t.setId(in.readInt());
-        t.setName(in.readUTF());
-        t.setEndDate(Date.valueOf(in.readUTF()));
-        t.setLeader(in.readUTF());
-        t.setProgress(in.readInt());
-
-        taskList.add(t);
-      }
+      taskList = (List<Task>) in.readObject();
       System.out.println("작업 데이터 로딩!");
     } catch (Exception e) {
       System.out.println("작업 데이터 로딩 중 오류 발생!");
+      taskList = new ArrayList<>();
     }
   }
 
   static void saveTasks() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("tasks.data")))) {
 
-      out.writeInt(taskList.size());
-
-      for (Task t : taskList) {
-        out.writeInt(t.getId());
-        out.writeUTF(t.getName());
-        out.writeUTF(t.getEndDate().toString());
-        out.writeUTF(t.getLeader());
-        out.writeInt(t.getProgress());
-      }
+      out.writeObject(taskList);
       System.out.println("작업 데이터 저장!");
     } catch (Exception e) {
       System.out.println("작업 데이터를 파일로 저장하는 중에 오류 발생!");

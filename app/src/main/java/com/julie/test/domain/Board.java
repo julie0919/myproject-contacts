@@ -1,9 +1,12 @@
 package com.julie.test.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Board {
-  private int id;
+public class Board implements Serializable {
+  private static final long serialVersionUID = 1L;
+
+  private int no;
   private String title;
   private String content;
   private String writer;
@@ -15,7 +18,7 @@ public class Board {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((content == null) ? 0 : content.hashCode());
-    result = prime * result + id;
+    result = prime * result + no;
     result = prime * result + ((registeredDate == null) ? 0 : registeredDate.hashCode());
     result = prime * result + ((title == null) ? 0 : title.hashCode());
     result = prime * result + viewCount;
@@ -36,7 +39,7 @@ public class Board {
         return false;
     } else if (!content.equals(other.content))
       return false;
-    if (id != other.id)
+    if (no != other.no)
       return false;
     if (registeredDate == null) {
       if (other.registeredDate != null)
@@ -57,11 +60,11 @@ public class Board {
       return false;
     return true;
   }
-  public int getId() {
-    return id;
+  public int getNo() {
+    return no;
   }
-  public void setId(int id) {
-    this.id = id;
+  public void setNo(int no) {
+    this.no = no;
   }
   public String getTitle() {
     return title;

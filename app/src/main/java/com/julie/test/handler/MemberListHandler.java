@@ -10,6 +10,7 @@ public class MemberListHandler extends AbstractMemberHandler {
     super(memberList);
   }
 
+  @Override
   public void service() {
     System.out.println("-------------------------------");
     System.out.println("[멤버 목록]");
@@ -18,7 +19,7 @@ public class MemberListHandler extends AbstractMemberHandler {
     while (iterator.hasNext()) {
       Member m = iterator.next();
       System.out.printf("번호: %d, 이름: %s, 이메일: %s, 비밀번호: %s, 전화: %s\n", 
-          m.getId(), m.getName(), m.getMail(), m.getPw(), m.getTel());
+          m.getNo(), m.getName(), m.getMail(), m.getPw(), m.getTel());
     }
   }
 }

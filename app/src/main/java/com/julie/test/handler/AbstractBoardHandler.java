@@ -11,10 +11,10 @@ public abstract class AbstractBoardHandler implements Command {
     this.boardList = boardList;
   }
 
-  protected Board findById(int boardId) {
+  protected Board findByNo(int boardNo) {
     Board[] list = boardList.toArray(new Board[boardList.size()]);
     for (Board b : list) {
-      if (b.getId() == boardId) {
+      if (b.getNo() == boardNo) {
         return b;
       }
     }

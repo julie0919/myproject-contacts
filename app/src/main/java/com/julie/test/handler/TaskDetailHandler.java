@@ -10,11 +10,12 @@ public class TaskDetailHandler  extends AbstractTaskHandler {
     super(taskList);
   }
 
+  @Override
   public void service() {
     System.out.println("[작업 상세보기]");
-    int id = Prompt.printInt("번호> ");
+    int no = Prompt.printInt("번호> ");
 
-    Task task = findById(id);
+    Task task = findByNo(no);
     if (task == null) {
       System.out.println("해당 번호의 작업이 없습니다.");
       return;

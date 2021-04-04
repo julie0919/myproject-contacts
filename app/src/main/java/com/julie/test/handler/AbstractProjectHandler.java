@@ -11,10 +11,10 @@ public abstract class AbstractProjectHandler implements Command {
     this.projectList = projectList;
   }
 
-  protected Project findById(int projectId) {
+  protected Project findByNo(int projectNo) {
     Project[] list = projectList.toArray(new Project[projectList.size()]);
     for (Project p : list) {
-      if (p.getId() == projectId) {
+      if (p.getNo() == projectNo) {
         return p;
       }
     }

@@ -10,6 +10,7 @@ public class BoardListHandler extends AbstractBoardHandler {
     super(boardList);
   }
 
+  @Override
   public void service() {
     System.out.println("[게시글 목록]");
 
@@ -18,7 +19,7 @@ public class BoardListHandler extends AbstractBoardHandler {
       Board b = iterator.next();
 
       System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", 
-          b.getId(), b.getTitle(), b.getContent(), b.getWriter(), b.getRegisteredDate(), b.getViewCount());
+          b.getNo(), b.getTitle(), b.getContent(), b.getWriter(), b.getRegisteredDate(), b.getViewCount());
     }
   }
 

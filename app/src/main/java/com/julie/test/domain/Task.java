@@ -1,9 +1,12 @@
 package com.julie.test.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Task {
-  private int id;
+public class Task implements Serializable {
+  private static final long serialVersionUID = 1L;
+
+  private int no;
   private String name;
   private Date endDate;
   private int progress;
@@ -14,7 +17,7 @@ public class Task {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-    result = prime * result + id;
+    result = prime * result + no;
     result = prime * result + ((leader == null) ? 0 : leader.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + progress;
@@ -34,7 +37,7 @@ public class Task {
         return false;
     } else if (!endDate.equals(other.endDate))
       return false;
-    if (id != other.id)
+    if (no != other.no)
       return false;
     if (leader == null) {
       if (other.leader != null)
@@ -50,11 +53,12 @@ public class Task {
       return false;
     return true;
   }
-  public int getId() {
-    return id;
+
+  public int getNo() {
+    return no;
   }
-  public void setId(int id) {
-    this.id = id;
+  public void setNo(int no) {
+    this.no = no;
   }
   public String getName() {
     return name;

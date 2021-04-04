@@ -11,12 +11,13 @@ public class BoardAddHandler extends AbstractBoardHandler {
     super(boardList);
   }
 
+  @Override
   public void service() {
     System.out.println("[새 게시글]");
 
     Board b = new Board();
 
-    b.setId(Prompt.printInt("번호> "));
+    b.setNo(Prompt.printInt("번호> "));
     b.setTitle(Prompt.printString("제목> "));
     b.setContent(Prompt.printString("내용> "));
     b.setWriter(Prompt.printString("작성자> "));

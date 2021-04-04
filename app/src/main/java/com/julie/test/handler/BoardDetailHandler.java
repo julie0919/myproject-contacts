@@ -10,12 +10,13 @@ public class BoardDetailHandler extends AbstractBoardHandler {
     super(boardList);
   }
 
+  @Override
   public void service() {    
     System.out.println("[게시글 상세보기]");
 
-    int id = Prompt.printInt("번호> ");
+    int no = Prompt.printInt("번호> ");
 
-    Board board = findById(id);
+    Board board = findByNo(no);
 
     if(board == null) {
       System.out.println("해당 번호의 게시글이 없습니다.");
