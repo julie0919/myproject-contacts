@@ -19,8 +19,8 @@ public class TaskListHandler extends AbstractTaskHandler {
     while (iterator.hasNext()){
       Task t = iterator.next();
       String status = t.getProgress() == 1 ? "신규" : t.getProgress() == 2 ? "진행중" : "완료";
-      System.out.printf("번호: %d, 작업명: %s, 마감일: %s, 진행상태: %s, 담당자: %s\n", 
-          t.getNo(), t.getName(), t.getEndDate(), status, t.getLeader());      
+      System.out.printf("%d) 작업 내용: %s, 마감일: %s, 담당자: %s, 진행상태: %s\n", 
+          t.getNo(), t.getContent(), t.getEndDate(), t.getLeader(), status);      
     }
   }
 }

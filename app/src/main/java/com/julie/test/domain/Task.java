@@ -7,7 +7,7 @@ public class Task implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private int no;
-  private String name;
+  private String content;
   private Date endDate;
   private int progress;
   private String leader;
@@ -19,7 +19,7 @@ public class Task implements Serializable {
     result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
     result = prime * result + no;
     result = prime * result + ((leader == null) ? 0 : leader.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((content == null) ? 0 : content.hashCode());
     result = prime * result + progress;
     return result;
   }
@@ -44,10 +44,10 @@ public class Task implements Serializable {
         return false;
     } else if (!leader.equals(other.leader))
       return false;
-    if (name == null) {
-      if (other.name != null)
+    if (content == null) {
+      if (other.content != null)
         return false;
-    } else if (!name.equals(other.name))
+    } else if (!content.equals(other.content))
       return false;
     if (progress != other.progress)
       return false;
@@ -60,11 +60,12 @@ public class Task implements Serializable {
   public void setNo(int no) {
     this.no = no;
   }
-  public String getName() {
-    return name;
+
+  public String getContent() {
+    return content;
   }
-  public void setName(String name) {
-    this.name = name;
+  public void setContent(String content) {
+    this.content = content;
   }
   public Date getEndDate() {
     return endDate;

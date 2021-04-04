@@ -19,7 +19,7 @@ public class ProjectAddHandler extends AbstractProjectHandler {
 
     Project p = new Project();
     p.setNo(Prompt.printInt("번호> "));
-    p.setName(Prompt.printString("프로젝트명> "));
+    p.setTitle(Prompt.printString("프로젝트명> "));
     p.setContent(Prompt.printString("내용> "));
     p.setStartDate(Prompt.printDate("시작일> "));
     p.setEndDate(Prompt.printDate("종료일> "));

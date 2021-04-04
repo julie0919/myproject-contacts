@@ -15,10 +15,11 @@ public class BoardListHandler extends AbstractBoardHandler {
     System.out.println("[게시글 목록]");
 
     Iterator<Board> iterator = boardList.iterator();
+
     while (iterator.hasNext()){
       Board b = iterator.next();
 
-      System.out.printf("%d, %s, %s, 작성자: %s, 등록일: %s, 조회수: %d", 
+      System.out.printf("%d) 제목: %s, 내용: %s, 작성자: %s, 등록일: %s, 조회수: %d\n", 
           b.getNo(), b.getTitle(), b.getContent(), b.getWriter(), b.getRegisteredDate(), b.getViewCount());
     }
   }

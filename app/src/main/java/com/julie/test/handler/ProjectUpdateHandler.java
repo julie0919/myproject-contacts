@@ -24,7 +24,7 @@ public class ProjectUpdateHandler extends AbstractProjectHandler {
       System.out.println("해당 번호의 프로젝트가 없습니다.");
       return;
     }
-    String name = Prompt.printString(String.format("프로젝트명 (%s)> \n", project.getName()));
+    String title = Prompt.printString(String.format("프로젝트명 (%s)> \n", project.getTitle()));
     String content = Prompt.printString(String.format("내용 (%s)> \n", project.getContent()));
     Date startDate = Prompt.printDate(String.format("시작일 (%s)> \n", project.getStartDate()));
     Date endDate = Prompt.printDate(String.format("종료일 (%s)> \n", project.getEndDate()));
@@ -39,7 +39,7 @@ public class ProjectUpdateHandler extends AbstractProjectHandler {
     String input = Prompt.printString("위의 내용으로 수정하시겠습니까? (Y/N)");
 
     if (input.equalsIgnoreCase("Y")) {
-      project.setName(name);
+      project.setTitle(title);
       project.setContent(content);
       project.setStartDate(startDate);
       project.setEndDate(endDate);

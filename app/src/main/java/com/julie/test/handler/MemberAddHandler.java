@@ -18,8 +18,8 @@ public class MemberAddHandler extends AbstractMemberHandler {
     m.setNo(Prompt.printInt("번호> "));
     m.setName(Prompt.printString("이름> "));
     m.setMail(Prompt.printString("이메일> "));
+    m.setTel(Prompt.printString("연락처> "));
     m.setPw(Prompt.printString("비밀번호> "));
-    m.setTel(Prompt.printString("전화> "));
 
     memberList.add(m);
 

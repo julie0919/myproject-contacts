@@ -20,9 +20,9 @@ public class TaskDetailHandler  extends AbstractTaskHandler {
       System.out.println("해당 번호의 작업이 없습니다.");
       return;
     }
-    System.out.printf("작업명: %s\n", task.getName());
+    System.out.printf("작업 내용: %s\n", task.getContent());
     System.out.printf("마감일: %s\n", task.getEndDate());
-    System.out.printf("진행상태: %s\n", getStatusLabel(task.getProgress()));
     System.out.printf("담당자: %s\n", task.getLeader());
+    System.out.printf("진행상태: %s\n", getStatusLabel(task.getProgress()));
   }
 }

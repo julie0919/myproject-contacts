@@ -7,7 +7,7 @@ public class Project implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private int no;
-  private String name;
+  private String title;
   private String content;
   private Date startDate;
   private Date endDate;
@@ -22,7 +22,7 @@ public class Project implements Serializable {
     result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
     result = prime * result + no;
     result = prime * result + ((leader == null) ? 0 : leader.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((title == null) ? 0 : title.hashCode());
     result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
     result = prime * result + ((team == null) ? 0 : team.hashCode());
     return result;
@@ -53,10 +53,10 @@ public class Project implements Serializable {
         return false;
     } else if (!leader.equals(other.leader))
       return false;
-    if (name == null) {
-      if (other.name != null)
+    if (title == null) {
+      if (other.title != null)
         return false;
-    } else if (!name.equals(other.name))
+    } else if (!title.equals(other.title))
       return false;
     if (startDate == null) {
       if (other.startDate != null)
@@ -76,11 +76,11 @@ public class Project implements Serializable {
   public void setNo(int no) {
     this.no = no;
   }
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
   }
-  public void setName(String name) {
-    this.name = name;
+  public void setTitle(String title) {
+    this.title = title;
   }
   public String getContent() {
     return content;

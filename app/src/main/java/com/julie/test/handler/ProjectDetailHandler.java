@@ -20,7 +20,7 @@ public class ProjectDetailHandler extends AbstractProjectHandler {
       System.out.println("해당 번호의 프로젝트가 없습니다.");
       return;
     }
-    System.out.printf("프로젝트명: %s\n", project.getName());
+    System.out.printf("프로젝트명: %s\n", project.getTitle());
     System.out.printf("내용: %s\n", project.getContent());
     System.out.printf("시작일: %s\n", project.getStartDate());
     System.out.printf("종료일: %s\n", project.getEndDate());

@@ -18,8 +18,8 @@ public class MemberListHandler extends AbstractMemberHandler {
     Iterator<Member> iterator = memberList.iterator();
     while (iterator.hasNext()) {
       Member m = iterator.next();
-      System.out.printf("번호: %d, 이름: %s, 이메일: %s, 비밀번호: %s, 전화: %s\n", 
-          m.getNo(), m.getName(), m.getMail(), m.getPw(), m.getTel());
+      System.out.printf("%d) 이름: %s, 이메일: %s, 연락처: %s, 비밀번호: %s\n", 
+          m.getNo(), m.getName(), m.getMail(), m.getTel(), m.getPw());
     }
   }
 }

@@ -24,6 +24,6 @@ public class MemberDetailHandler extends AbstractMemberHandler {
     }   
     System.out.printf("이름: %s\n", member.getName());
     System.out.printf("이메일: %s\n", member.getMail());
-    System.out.printf("전화: %s\n", member.getTel());
+    System.out.printf("연락처: %s\n", member.getTel());
   }
 }
