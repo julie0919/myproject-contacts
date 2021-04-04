@@ -1,5 +1,7 @@
 package com.julie.pms;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -116,7 +118,8 @@ public class Contacts {
   }
 
   static void loadFamily() {
-    try (DataInputStream in = new DataInputStream(new FileInputStream("family.data"))) {
+    try (DataInputStream in = new DataInputStream(
+        new BufferedInputStream(new FileInputStream("family.data")))) {
 
       int size = in.readInt();
 
@@ -139,7 +142,8 @@ public class Contacts {
   }
 
   static void saveFamily() {
-    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("family.data"))) {
+    try (DataOutputStream out = new DataOutputStream(
+        new BufferedOutputStream(new FileOutputStream("family.data")))) {
 
       out.writeInt(familyList.size());
 
@@ -158,7 +162,8 @@ public class Contacts {
   }
 
   static void loadSchool() {
-    try (DataInputStream in = new DataInputStream(new FileInputStream("school.data"))) {
+    try (DataInputStream in = new DataInputStream(
+        new BufferedInputStream(new FileInputStream("school.data")))) {
 
       int size = in.readInt();
 
@@ -181,7 +186,8 @@ public class Contacts {
   }
 
   static void saveSchool() {
-    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("school.data"))) {
+    try (DataOutputStream out = new DataOutputStream(
+        new BufferedOutputStream(new FileOutputStream("school.data")))) {
 
       out.writeInt(schoolList.size());
 
@@ -201,7 +207,8 @@ public class Contacts {
 
 
   static void loadCompany() {
-    try (DataInputStream in = new DataInputStream(new FileInputStream("company.data"))) {
+    try (DataInputStream in = new DataInputStream(
+        new BufferedInputStream(new FileInputStream("company.data")))) {
 
       int size = in.readInt();
 
@@ -224,7 +231,8 @@ public class Contacts {
   }
 
   static void saveCompany() {
-    try (DataOutputStream out = new DataOutputStream(new FileOutputStream("company.data"))) {
+    try (DataOutputStream out = new DataOutputStream(
+        new BufferedOutputStream(new FileOutputStream("company.data")))) {
 
       out.writeInt(companyList.size());
 
