@@ -11,6 +11,35 @@ public class Member implements Serializable {
   private String pw;
   private String tel;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s,%d",
+        this.getNo(),
+        this.getName(),
+        this.getMail(),
+        this.getTel(),
+        this.getPw()); 
+  }
+
+  //다음과 같이 인스턴스를 생성해주는 메서드를 
+  // "factory method"라 부른다.
+  // 팩토리 메서드 패턴
+  // - 인스턴스 생성 과정이 복잡할 때 
+  //   인스턴스 생성을 대신 해주는 메서드를 만들어
+  //   그 메서드를 통해 객체를 생성하는 프로그래밍 방식이다.
+
+  public static Member valueOfCsv(String csv) {
+    String[] fields = csv.split(","); // 번호, 이름, 이메일, 연락처, 비밀번호
+
+    Member m = new Member();
+    m.setNo(Integer.parseInt(fields[0]));
+    m.setName(fields[1]);
+    m.setMail(fields[2]);
+    m.setTel(fields[3]);
+    m.setPw(fields[4]);
+
+    return m;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

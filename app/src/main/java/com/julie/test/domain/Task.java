@@ -12,6 +12,28 @@ public class Task implements Serializable {
   private int progress;
   private String leader;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%d\n",
+        this.getNo(),
+        this.getContent(),
+        this.getEndDate().toString(),
+        this.getLeader(),
+        this.getProgress());
+  }
+
+  public static Task valueOfCsv(String csv) {
+    String[] fields = csv.split(","); // 번호, 내용, 마감일, 조장, 진행상태
+
+    Task t = new Task();
+    t.setNo(Integer.parseInt(fields[0]));
+    t.setContent(fields[1]);
+    t.setEndDate(Date.valueOf(fields[2]));
+    t.setLeader(fields[3]);
+    t.setProgress(Integer.parseInt(fields[4]));
+
+    return t;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

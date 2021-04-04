@@ -12,6 +12,29 @@ public class School implements Serializable {
   private String school;
   private String address;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s,%s",
+        this.getNo(),
+        this.getName(),
+        this.getTel(),
+        this.getMail(),
+        this.getSchool(),
+        this.getAddress());
+  }
+
+  public static School valueOfCsv(String csv) {
+    String[] fields = csv.split(",");
+
+    School s = new School();
+    s.setNo(Integer.parseInt(fields[0]));
+    s.setName(fields[1]);
+    s.setTel(fields[2]);
+    s.setMail(fields[3]);
+    s.setSchool(fields[4]);
+    s.setAddress(fields[5]);
+
+    return s;
+  }
 
   @Override
   public int hashCode() {

@@ -12,6 +12,29 @@ public class Company implements Serializable {
   private String work;
   private String address;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s,%s\n",
+        this.getNo(),
+        this.getName(),
+        this.getTel(),
+        this.getMail(),
+        this.getWork(),
+        this.getAddress());
+  }
+
+  public static Company valueOfCsv(String csv) {
+    String[] fields = csv.split(",");
+
+    Company c = new Company();
+    c.setNo(Integer.parseInt(fields[0]));
+    c.setName(fields[1]);
+    c.setTel(fields[2]);
+    c.setMail(fields[3]);
+    c.setWork(fields[4]);
+    c.setAddress(fields[5]);
+
+    return c;
+  }
 
   @Override
   public int hashCode() {

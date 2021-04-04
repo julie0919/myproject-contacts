@@ -13,6 +13,29 @@ public class Family implements Serializable {
   private String address; 
   private Date birth;
 
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%s,%s\n",
+        this.getNo(),
+        this.getName(),
+        this.getTel(),
+        this.getMail(),
+        this.getAddress(),
+        this.getBirth().toString());
+  }
+
+  public static Family valueOfCsv(String csv) {
+    String[] fields = csv.split(",");
+
+    Family f = new Family();
+    f.setNo(Integer.parseInt(fields[0]));
+    f.setName(fields[1]);
+    f.setTel(fields[2]);
+    f.setMail(fields[3]);
+    f.setAddress(fields[4]);
+    f.setBirth(Date.valueOf(fields[5]));
+
+    return f;
+  }
 
   @Override
   public int hashCode() {

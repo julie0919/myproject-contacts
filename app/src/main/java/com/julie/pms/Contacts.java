@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,19 +144,9 @@ public class Contacts {
 
   static void loadFamily() {
     try (BufferedReader in = new BufferedReader(new FileReader("family.csv"))) {
-      String record = null;
-      while ((record = in.readLine()) != null) {
-        String[] fields = record.split(",");
-
-        Family f = new Family();
-        f.setNo(Integer.parseInt(fields[0]));
-        f.setName(fields[1]);
-        f.setTel(fields[2]);
-        f.setMail(fields[3]);
-        f.setAddress(fields[4]);
-        f.setBirth(Date.valueOf(fields[5]));
-
-        familyList.add(f);            
+      String csvStr = null;
+      while ((csvStr = in.readLine()) != null) {
+        familyList.add(Family.valueOfCsv(csvStr));            
       }
       System.out.println("연락처(가족) 데이터 로딩!");
 
@@ -172,13 +161,7 @@ public class Contacts {
       // family.csv 파일 포맷
       // - 번호,이름,연락처,이메일,주소,기념일(CRLF)
       for (Family f : familyList) {
-        out.write(String.format("%d,%s,%s,%s,%s,%s\n",
-            f.getNo(),
-            f.getName(),
-            f.getTel(),
-            f.getMail(),
-            f.getAddress(),
-            f.getBirth().toString()));
+        out.write(f.toCsvString() + "\n");
       }
       System.out.println("연락처(가족) 데이터 저장!");
 
@@ -189,20 +172,10 @@ public class Contacts {
 
   static void loadSchool() {
     try (BufferedReader in = new BufferedReader(new FileReader("school.csv"))) {
-      String record = null;
+      String csvStr = null;
 
-      while ((record = in.readLine()) != null) {
-        String[] fields = record.split(",");
-
-        School s = new School();
-        s.setNo(Integer.parseInt(fields[0]));
-        s.setName(fields[1]);
-        s.setTel(fields[2]);
-        s.setMail(fields[3]);
-        s.setSchool(fields[4]);
-        s.setAddress(fields[5]);
-
-        schoolList.add(s);
+      while ((csvStr = in.readLine()) != null) {
+        schoolList.add(School.valueOfCsv(csvStr));
       }
       System.out.println("연락처(친구) 데이터 로딩!");
 
@@ -217,13 +190,7 @@ public class Contacts {
       // school.csv 파일 포맷
       // - 번호,이름,연락처,이메일,학교,주소(CRLF)
       for (School s : schoolList) {
-        out.write(String.format("%d,%s,%s,%s,%s,%s",
-            s.getNo(),
-            s.getName(),
-            s.getTel(),
-            s.getMail(),
-            s.getSchool(),
-            s.getAddress()));
+        out.write(s.toCsvString() + "\n");
       }
       System.out.println("연락처(친구) 데이터 저장!");
 
@@ -233,20 +200,10 @@ public class Contacts {
   }
   static void loadCompany() {
     try (BufferedReader in = new BufferedReader(new FileReader("company.csv"))) {
-      String record = null;
+      String csvStr = null;
 
-      while ((record = in.readLine()) != null) {
-        String[] fields = record.split(",");
-
-        Company c = new Company();
-        c.setNo(Integer.parseInt(fields[0]));
-        c.setName(fields[1]);
-        c.setTel(fields[2]);
-        c.setMail(fields[3]);
-        c.setWork(fields[4]);
-        c.setAddress(fields[5]);
-
-        companyList.add(c);
+      while ((csvStr = in.readLine()) != null) {
+        companyList.add(Company.valueOfCsv(csvStr));
       }
       System.out.println("연락처(회사) 데이터 로딩!");
 
@@ -261,13 +218,7 @@ public class Contacts {
       // company.csv 파일 포맷
       // - 번호,이름,연락처,이메일,회사,주소(CRLF)
       for (Company c : companyList) {
-        out.write(String.format("%d,%s,%s,%s,%s,%s\n",
-            c.getNo(),
-            c.getName(),
-            c.getTel(),
-            c.getMail(),
-            c.getWork(),
-            c.getAddress()));
+        out.write(c.toCsvString() + "\n");
       }
       System.out.println("연락처(회사) 데이터 저장!"); 
 
