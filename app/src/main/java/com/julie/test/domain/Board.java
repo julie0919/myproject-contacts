@@ -1,10 +1,9 @@
 package com.julie.test.domain;
 
-import java.io.Serializable;
 import java.sql.Date;
+import com.julie.test.util.CsvObject;
 
-public class Board implements Serializable {
-  private static final long serialVersionUID = 1L;
+public class Board implements CsvObject {
 
   private int no;
   private String title;
@@ -13,6 +12,20 @@ public class Board implements Serializable {
   private Date registeredDate;
   private int viewCount;
 
+  public Board() {}
+
+  public Board(String csv) {
+    String[] fields = csv.split(","); // 번호, 제목, 내용, 작성자, 등록일, 조회수
+
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setTitle(fields[1]);
+    this.setContent(fields[2]);
+    this.setWriter(fields[3]);
+    this.setRegisteredDate(Date.valueOf(fields[4]));
+    this.setViewCount(Integer.parseInt(fields[5]));
+  }
+
+  @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%s,%d",
         this.getNo(),

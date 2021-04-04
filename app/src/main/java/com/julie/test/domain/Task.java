@@ -1,10 +1,9 @@
 package com.julie.test.domain;
 
-import java.io.Serializable;
 import java.sql.Date;
+import com.julie.test.util.CsvObject;
 
-public class Task implements Serializable {
-  private static final long serialVersionUID = 1L;
+public class Task implements CsvObject {
 
   private int no;
   private String content;
@@ -12,6 +11,19 @@ public class Task implements Serializable {
   private int progress;
   private String leader;
 
+  public Task() {}
+
+  public Task(String csv) {
+    String[] fields = csv.split(","); // 번호, 내용, 마감일, 조장, 진행상태
+
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setContent(fields[1]);
+    this.setEndDate(Date.valueOf(fields[2]));
+    this.setLeader(fields[3]);
+    this.setProgress(Integer.parseInt(fields[4]));
+  }
+
+  @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%d\n",
         this.getNo(),

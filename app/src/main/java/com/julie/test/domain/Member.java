@@ -1,9 +1,8 @@
 package com.julie.test.domain;
 
-import java.io.Serializable;
+import com.julie.test.util.CsvObject;
 
-public class Member implements Serializable {
-  private static final long serialVersionUID = 1L;
+public class Member implements CsvObject {
 
   private int no;
   private String name;
@@ -11,6 +10,19 @@ public class Member implements Serializable {
   private String pw;
   private String tel;
 
+  public Member() {}
+
+  public Member(String csv) {
+    String[] fields = csv.split(","); // 번호, 이름, 이메일, 연락처, 비밀번호
+
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setName(fields[1]);
+    this.setMail(fields[2]);
+    this.setTel(fields[3]);
+    this.setPw(fields[4]);
+  }
+
+  @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%s,%d",
         this.getNo(),

@@ -1,9 +1,8 @@
 package com.julie.domain;
 
-import java.io.Serializable;
+import com.julie.util.CsvObject;
 
-public class School implements Serializable {
-  private static final long serialVersionUID = 1L;
+public class School implements CsvObject {
 
   private int no;
   private String name;
@@ -12,6 +11,20 @@ public class School implements Serializable {
   private String school;
   private String address;
 
+  public School() {}
+
+  public School(String csv) {
+    String[] fields = csv.split(",");
+
+    this.setNo(Integer.parseInt(fields[0]));
+    this.setName(fields[1]);
+    this.setTel(fields[2]);
+    this.setMail(fields[3]);
+    this.setSchool(fields[4]);
+    this.setAddress(fields[5]);
+  }
+
+  @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%s,%s",
         this.getNo(),

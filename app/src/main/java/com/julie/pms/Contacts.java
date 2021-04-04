@@ -2,6 +2,7 @@ package com.julie.pms;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayDeque;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import com.julie.domain.Company;
 import com.julie.domain.Family;
 import com.julie.domain.School;
@@ -28,6 +30,8 @@ import com.julie.handler.SchoolDeleteHandler;
 import com.julie.handler.SchoolDetailHandler;
 import com.julie.handler.SchoolListHandler;
 import com.julie.handler.SchoolUpdateHandler;
+import com.julie.util.CsvObject;
+import com.julie.util.ObjectFactory;
 import com.julie.util.Prompt;
 
 public class Contacts {
@@ -42,19 +46,16 @@ public class Contacts {
   static ArrayList<Company> companyList = new ArrayList<>();
 
   // 데이터 파일 정보
-  //  static File familyFile = new File("family.data");
-  //  static File schoolFile = new File("school.data");
-  //  static File companyFile = new File("company.data");
+  static File familyFile = new File("family.csv");
+  static File schoolFile = new File("school.csv");
+  static File companyFile = new File("company.csv");
 
   public static void main(String[] args) {
 
     // 파일에서 데이터를 읽어온다. (데이터 로딩)
-    loadFamily();
-    loadSchool();
-    loadCompany();
-    //    familyList = loadObjects(familyFile, Family.class);
-    //    schoolList = loadObjects(schoolFile, School.class);
-    //    companyList = loadObjects(companyFile, Company.class);
+    loadObjects(familyFile, familyList, Family::new);
+    loadObjects(schoolFile, schoolList, School::new);
+    loadObjects(companyFile, companyList, Company::new);
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
@@ -119,12 +120,9 @@ public class Contacts {
       }
 
     // 게시글 데이터를 파일로 출력한다.
-    saveFamily();
-    saveSchool();
-    saveCompany();
-    //    saveObjects(familyFile, familyList);
-    //    saveObjects(schoolFile, schoolList);
-    //    saveObjects(companyFile, companyList);
+    saveObjects(familyFile, familyList);
+    saveObjects(schoolFile, schoolList);
+    saveObjects(companyFile, companyList);
 
     Prompt.close();
   }
@@ -142,113 +140,31 @@ public class Contacts {
     }
   }
 
-  static void loadFamily() {
-    try (BufferedReader in = new BufferedReader(new FileReader("family.csv"))) {
-      String csvStr = null;
-      while ((csvStr = in.readLine()) != null) {
-        familyList.add(Family.valueOfCsv(csvStr));            
-      }
-      System.out.println("연락처(가족) 데이터 로딩!");
-
-    } catch (Exception e) {
-      System.out.println("연락처(가족) 데이터 로딩 중 오류 발생!");
-    }
-  }
-
-  static void saveFamily() {
-    try (BufferedWriter out = new BufferedWriter(new FileWriter("family.csv"))) {
-
-      // family.csv 파일 포맷
-      // - 번호,이름,연락처,이메일,주소,기념일(CRLF)
-      for (Family f : familyList) {
-        out.write(f.toCsvString() + "\n");
-      }
-      System.out.println("연락처(가족) 데이터 저장!");
-
-    } catch (Exception e) {
-      System.out.println("연락처(가족) 데이터를 파일로 저장하는 중에 오류 발생!");
-    }
-  }
-
-  static void loadSchool() {
-    try (BufferedReader in = new BufferedReader(new FileReader("school.csv"))) {
+  static <T> void loadObjects(File file, List<T> list, ObjectFactory<T> objFactory) {
+    try (BufferedReader in = new BufferedReader(new FileReader(file))) {
       String csvStr = null;
 
       while ((csvStr = in.readLine()) != null) {
-        schoolList.add(School.valueOfCsv(csvStr));
+        list.add(objFactory.create(csvStr));
       }
-      System.out.println("연락처(친구) 데이터 로딩!");
+      System.out.printf("%s 파일 데이터 로딩!\n", file.getName());
 
     } catch (Exception e) {
-      System.out.println("연락처(친구) 데이터 로딩 중 오류 발생!");
+      System.out.printf("%s 파일 데이터 로딩 중 오류 발생!\n", file.getName());
     }
   }
 
-  static void saveSchool() {
-    try (BufferedWriter out = new BufferedWriter(new FileWriter("school.csv"))) {
 
-      // school.csv 파일 포맷
-      // - 번호,이름,연락처,이메일,학교,주소(CRLF)
-      for (School s : schoolList) {
-        out.write(s.toCsvString() + "\n");
+  static <T extends CsvObject> void saveObjects(File file, List<T> list) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+
+      for (CsvObject csvObj : list) {
+        out.write(csvObj.toCsvString() + "\n");
       }
-      System.out.println("연락처(친구) 데이터 저장!");
+      System.out.printf("파일 %s 데이터 저장!\n", file.getName());
 
     } catch (Exception e) {
-      System.out.println("연락처(친구) 데이터를 파일로 저장하는 중에 오류 발생!");
+      System.out.printf("파일 %s에 데이터를 저장하는 중에 오류 발생!\n", file.getName());
     }
   }
-  static void loadCompany() {
-    try (BufferedReader in = new BufferedReader(new FileReader("company.csv"))) {
-      String csvStr = null;
-
-      while ((csvStr = in.readLine()) != null) {
-        companyList.add(Company.valueOfCsv(csvStr));
-      }
-      System.out.println("연락처(회사) 데이터 로딩!");
-
-    } catch (Exception e) {
-      System.out.println("연락처(회사) 데이터 로딩 중 오류 발생!");
-    }
-  }
-
-  static void saveCompany() {
-    try (BufferedWriter out = new BufferedWriter(new FileWriter("company.csv"))) {
-
-      // company.csv 파일 포맷
-      // - 번호,이름,연락처,이메일,회사,주소(CRLF)
-      for (Company c : companyList) {
-        out.write(c.toCsvString() + "\n");
-      }
-      System.out.println("연락처(회사) 데이터 저장!"); 
-
-    } catch (Exception e) {
-      System.out.println("연락처(회사) 데이터를 파일로 저장하는 중에 오류 발생!");
-    }
-  }
-  //  @SuppressWarnings("unchecked")
-  //  static <T extends Serializable> List<T> loadObjects(File file, Class<T> dataType) {
-  //    try (ObjectInputStream in = new ObjectInputStream(
-  //        new BufferedInputStream(new FileInputStream(file)))) {
-  //
-  //      System.out.printf("파일 %s 로딩!\n", file.getName());
-  //      return (List<T>) in.readObject();
-  //
-  //    } catch (Exception e) {
-  //      System.out.printf("파일 %s 로딩 중 오류 발생!\n", file.getName());
-  //      return new ArrayList<T>();
-  //    }
-  //  }
-  //
-  //  static <T extends Serializable> void saveObjects(File file, List<T> dataList) {
-  //    try (ObjectOutputStream out = new ObjectOutputStream(
-  //        new BufferedOutputStream(new FileOutputStream(file)))) {
-  //
-  //      out.writeObject(dataList);
-  //      System.out.printf("파일 %s 저장!\n", file.getName());
-  //
-  //    }catch (Exception e) {
-  //      System.out.printf("파일 %s 저장하는 중에 오류 발생\n", file.getName());
-  //    }
-  //  }
 }
