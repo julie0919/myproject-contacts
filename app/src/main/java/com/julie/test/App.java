@@ -5,12 +5,16 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.julie.test.domain.Board;
 import com.julie.test.domain.Member;
 import com.julie.test.domain.Project;
@@ -38,7 +42,6 @@ import com.julie.test.handler.TaskDetailHandler;
 import com.julie.test.handler.TaskListHandler;
 import com.julie.test.handler.TaskUpdateHandler;
 import com.julie.test.util.CsvObject;
-import com.julie.test.util.ObjectFactory;
 import com.julie.test.util.Prompt;
 
 
@@ -55,18 +58,18 @@ public class App {
   static LinkedList<Task> taskList = new LinkedList<>();
 
   // 데이터 파일 정보
-  static File boardFile = new File("boards.csv");
-  static File memberFile = new File("members.csv");
-  static File projectFile = new File("projects.csv");
-  static File taskFile = new File("tasks.csv");
+  static File boardFile = new File("boards.json");
+  static File memberFile = new File("members.json");
+  static File projectFile = new File("projects.json");
+  static File taskFile = new File("tasks.json");
 
   public static void main(String[] args) {
 
     // 파일에서 데이터를 읽어온다. (데이터 로딩)
-    loadObjects(boardFile, boardList, Board::new);
-    loadObjects(memberFile, memberList, Member::new);
-    loadObjects(projectFile, projectList, Project::new);
-    loadObjects(taskFile, taskList, Task::new);
+    loadObjects(boardFile, boardList, Board.class);
+    loadObjects(memberFile, memberList, Member.class);
+    loadObjects(projectFile, projectList, Project.class);
+    loadObjects(taskFile, taskList, Task.class);
 
     // 사용자 명령을 처리하는 객체를 맵에 보관한다.
     HashMap<String,Command> commandMap = new HashMap<>();
@@ -154,13 +157,29 @@ public class App {
     }
   }
 
-  static <T> void loadObjects(File file, List<T> list, ObjectFactory<T> objFactory) {
+  static <T> void loadObjects(File file, List<T> list, Class<T> elementType) {
     try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-      String csvStr = null;
 
-      while ((csvStr = in.readLine()) != null) {
-        list.add(objFactory.create(csvStr));
+      // 1) 파일의 모든 데이터를 읽어서 StringBuilder 객체에 보관한다.
+      StringBuilder strBuilder = new StringBuilder();
+      String str = null;
+
+      while ((str = in.readLine()) != null) {
+        strBuilder.append(str);
       }
+
+      // 2) StringBuilder 객체에 보관된 값을 꺼내 자바 객체로 만든다.
+      Gson gson = new Gson();
+
+      // JSON 문자열 ==> 컬렉션 객체
+      Type collectionType = TypeToken.getParameterized(Collection.class, elementType).getType();
+
+      // JSON 문자열을 컬렉션 객체로 변환
+      Collection<T> collection = gson.fromJson(strBuilder.toString(), collectionType);
+
+      // JSON 문자열을 읽어 만든 객체 목록을 해당 컬렉션으로 옮긴다.
+      list.addAll(collection);
+
       System.out.printf("%s 파일 데이터 로딩!\n", file.getName());
 
     } catch (Exception e) {
@@ -171,9 +190,7 @@ public class App {
   static <T extends CsvObject> void saveObjects(File file, List<T> list) {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
 
-      for (CsvObject csvObj : list) {
-        out.write(csvObj.toCsvString() + "\n");
-      }
+      out.write(new Gson().toJson(list));
       System.out.printf("파일 %s 데이터 저장!\n", file.getName());
 
     } catch (Exception e) {
