@@ -2,16 +2,16 @@ package com.julie.pms;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.sql.Date;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import com.julie.domain.Company;
 import com.julie.domain.Family;
 import com.julie.domain.School;
@@ -39,9 +39,9 @@ public class Contacts {
   static LinkedList<String> commandQueue = new LinkedList<>();
 
 
-  static ArrayList<Family> familyList = new ArrayList<>();
-  static ArrayList<School> schoolList = new ArrayList<>();
-  static ArrayList<Company> companyList = new ArrayList<>();
+  static List<Family> familyList;
+  static List<School> schoolList;
+  static List<Company> companyList;
 
   public static void main(String[] args) throws CloneNotSupportedException {
 
@@ -117,133 +117,75 @@ public class Contacts {
     }
   }
 
+  @SuppressWarnings("unchecked")
   static void loadFamily() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("family.data")))) {
 
-      int size = in.readInt();
-
-      for (int i = 0; i < size; i++) {
-        Family f = new Family();
-        f.setNo(in.readInt());
-        f.setName(in.readUTF());
-        f.setTel(in.readUTF());
-        f.setAddress(in.readUTF());
-        f.setMail(in.readUTF());
-        f.setBirth(Date.valueOf(in.readUTF()));
-
-        familyList.add(f);
-      }
+      familyList = (List<Family>) in.readObject();
 
       System.out.println("연락처 정보(가족) 로딩");
     } catch (Exception e) {
       System.out.println("연락처 정보(가족) 로딩 중 오류 발생");
+      familyList = new ArrayList<>();
     }
   }
 
   static void saveFamily() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("family.data")))) {
 
-      out.writeInt(familyList.size());
-
-      for (Family f : familyList) {
-        out.writeInt(f.getNo());
-        out.writeUTF(f.getName());
-        out.writeUTF(f.getTel());
-        out.writeUTF(f.getAddress());
-        out.writeUTF(f.getMail());
-        out.writeUTF(f.getBirth().toString());
-      }
+      out.writeObject(familyList);
       System.out.println("연락처 정보(가족) 저장");
     }catch (Exception e) {
       System.out.println("연락처 정보(가족)를 파일로 저장하는 중에 오류 발생");
     }
   }
 
+  @SuppressWarnings("unchecked")
   static void loadSchool() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("school.data")))) {
 
-      int size = in.readInt();
-
-      for (int i = 0; i < size; i++) {
-        School s = new School();
-        s.setNo(in.readInt());
-        s.setName(in.readUTF());
-        s.setTel(in.readUTF());
-        s.setAddress(in.readUTF());
-        s.setMail(in.readUTF());
-        s.setSchool(in.readUTF());
-
-        schoolList.add(s);
-      }
+      schoolList = (List<School>) in.readObject();
 
       System.out.println("연락처 정보(친구) 로딩");
     } catch (Exception e) {
       System.out.println("연락처 정보(친구) 로딩 중 오류 발생");
+      schoolList = new ArrayList<>();
     }
   }
 
   static void saveSchool() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("school.data")))) {
 
-      out.writeInt(schoolList.size());
-
-      for (School s : schoolList) {
-        out.writeInt(s.getNo());
-        out.writeUTF(s.getName());
-        out.writeUTF(s.getTel());
-        out.writeUTF(s.getAddress());
-        out.writeUTF(s.getMail());
-        out.writeUTF(s.getSchool());
-      }
+      out.writeObject(schoolList);
       System.out.println("연락처 정보(친구) 저장");
     }catch (Exception e) {
       System.out.println("연락처 정보(친구)를 파일로 저장하는 중에 오류 발생");
     }
   }
 
-
+  @SuppressWarnings("unchecked")
   static void loadCompany() {
-    try (DataInputStream in = new DataInputStream(
+    try (ObjectInputStream in = new ObjectInputStream(
         new BufferedInputStream(new FileInputStream("company.data")))) {
 
-      int size = in.readInt();
-
-      for (int i = 0; i < size; i++) {
-        Company c = new Company();
-        c.setNo(in.readInt());
-        c.setName(in.readUTF());
-        c.setTel(in.readUTF());
-        c.setAddress(in.readUTF());
-        c.setMail(in.readUTF());
-        c.setWork(in.readUTF());
-
-        companyList.add(c);
-      }
+      companyList = (List<Company>) in.readObject();
 
       System.out.println("연락처 정보(회사) 로딩");
     } catch (Exception e) {
       System.out.println("연락처 정보(회사) 로딩 중 오류 발생");
+      companyList = new ArrayList<>();
     }
   }
 
   static void saveCompany() {
-    try (DataOutputStream out = new DataOutputStream(
+    try (ObjectOutputStream out = new ObjectOutputStream(
         new BufferedOutputStream(new FileOutputStream("company.data")))) {
 
-      out.writeInt(companyList.size());
-
-      for (Company c : companyList) {
-        out.writeInt(c.getNo());
-        out.writeUTF(c.getName());
-        out.writeUTF(c.getTel());
-        out.writeUTF(c.getAddress());
-        out.writeUTF(c.getMail());
-        out.writeUTF(c.getWork());
-      }
+      out.writeObject(companyList);
       System.out.println("연락처 정보(회사) 저장");
     }catch (Exception e) {
       System.out.println("연락처 정보(회사)를 파일로 저장하는 중에 오류 발생");

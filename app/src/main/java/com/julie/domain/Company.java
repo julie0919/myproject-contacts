@@ -1,6 +1,10 @@
 package com.julie.domain;
 
-public class Company {
+import java.io.Serializable;
+
+public class Company implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   private int no;
   private String name;
   private String tel;
