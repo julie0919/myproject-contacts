@@ -53,7 +53,7 @@ public class Contacts {
 
   public static void main(String[] args) {
 
-    // 파일에서 데이터를 읽어온다 (데이터 로딩)
+    // 파일에서 데이터를 읽어온다. (데이터 로딩)
     familyList = loadObjects(familyFile, Family.class);
     schoolList = loadObjects(schoolFile, School.class);
     companyList = loadObjects(companyFile, Company.class);
