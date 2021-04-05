@@ -1,4 +1,4 @@
-package com.julie.domain;
+package com.julie.pms.domain;
 
 import java.sql.Date;
 import com.julie.util.CsvObject;

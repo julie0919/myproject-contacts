@@ -1,52 +1,52 @@
-package com.julie.domain;
+package com.julie.pms.domain;
 
 import com.julie.util.CsvObject;
 
-public class Company implements CsvObject {
+public class School implements CsvObject {
 
   private int no;
   private String name;
   private String tel;
   private String mail;
-  private String work;
+  private String school;
   private String address;
 
-  public Company() {}
+  public School() {}
 
-  public Company(String csv) {
+  public School(String csv) {
     String[] fields = csv.split(",");
 
     this.setNo(Integer.parseInt(fields[0]));
     this.setName(fields[1]);
     this.setTel(fields[2]);
     this.setMail(fields[3]);
-    this.setWork(fields[4]);
+    this.setSchool(fields[4]);
     this.setAddress(fields[5]);
   }
 
   @Override
   public String toCsvString() {
-    return String.format("%d,%s,%s,%s,%s,%s\n",
+    return String.format("%d,%s,%s,%s,%s,%s",
         this.getNo(),
         this.getName(),
         this.getTel(),
         this.getMail(),
-        this.getWork(),
+        this.getSchool(),
         this.getAddress());
   }
 
-  public static Company valueOfCsv(String csv) {
+  public static School valueOfCsv(String csv) {
     String[] fields = csv.split(",");
 
-    Company c = new Company();
-    c.setNo(Integer.parseInt(fields[0]));
-    c.setName(fields[1]);
-    c.setTel(fields[2]);
-    c.setMail(fields[3]);
-    c.setWork(fields[4]);
-    c.setAddress(fields[5]);
+    School s = new School();
+    s.setNo(Integer.parseInt(fields[0]));
+    s.setName(fields[1]);
+    s.setTel(fields[2]);
+    s.setMail(fields[3]);
+    s.setSchool(fields[4]);
+    s.setAddress(fields[5]);
 
-    return c;
+    return s;
   }
 
   @Override
@@ -57,8 +57,8 @@ public class Company implements CsvObject {
     result = prime * result + ((mail == null) ? 0 : mail.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + no;
+    result = prime * result + ((school == null) ? 0 : school.hashCode());
     result = prime * result + ((tel == null) ? 0 : tel.hashCode());
-    result = prime * result + ((work == null) ? 0 : work.hashCode());
     return result;
   }
   @Override
@@ -69,7 +69,7 @@ public class Company implements CsvObject {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Company other = (Company) obj;
+    School other = (School) obj;
     if (address == null) {
       if (other.address != null)
         return false;
@@ -87,15 +87,15 @@ public class Company implements CsvObject {
       return false;
     if (no != other.no)
       return false;
+    if (school == null) {
+      if (other.school != null)
+        return false;
+    } else if (!school.equals(other.school))
+      return false;
     if (tel == null) {
       if (other.tel != null)
         return false;
     } else if (!tel.equals(other.tel))
-      return false;
-    if (work == null) {
-      if (other.work != null)
-        return false;
-    } else if (!work.equals(other.work))
       return false;
     return true;
   }
@@ -124,11 +124,11 @@ public class Company implements CsvObject {
   public void setMail(String mail) {
     this.mail = mail;
   }
-  public String getWork() {
-    return work;
+  public String getSchool() {
+    return school;
   }
-  public void setWork(String work) {
-    this.work = work;
+  public void setSchool(String school) {
+    this.school = school;
   }
   public String getAddress() {
     return address;
@@ -136,4 +136,5 @@ public class Company implements CsvObject {
   public void setAddress(String address) {
     this.address = address;
   }
+
 }

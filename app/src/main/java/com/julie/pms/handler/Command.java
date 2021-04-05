@@ -1,4 +1,4 @@
-package com.julie.handler;
+package com.julie.pms.handler;
 
 public interface Command {
   void service();

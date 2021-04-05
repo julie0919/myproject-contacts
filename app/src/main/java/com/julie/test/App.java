@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.julie.test.context.ApplicationContextListener;
 import com.julie.test.domain.Board;
 import com.julie.test.domain.Member;
 import com.julie.test.domain.Project;
@@ -41,29 +42,51 @@ import com.julie.test.handler.TaskDeleteHandler;
 import com.julie.test.handler.TaskDetailHandler;
 import com.julie.test.handler.TaskListHandler;
 import com.julie.test.handler.TaskUpdateHandler;
+import com.julie.test.listener.AppListener;
 import com.julie.test.util.CsvObject;
 import com.julie.test.util.Prompt;
 
 
 public class App {
 
+  // 옵저버 객체 (ApplicationContextListener 구현체) 목록을 저장할 컬렉션 준비
+  List<ApplicationContextListener> listeners = new ArrayList<>();
+
   // 사용자가 입력한 명령을 저장할 컬렉션 객체 준비
-  static ArrayDeque<String> commandStack = new ArrayDeque<>();
-  static LinkedList<String> commandQueue = new LinkedList<>();
+  ArrayDeque<String> commandStack = new ArrayDeque<>();
+  LinkedList<String> commandQueue = new LinkedList<>();
 
   // VO를 저장할 컬렉션 객체
-  static ArrayList<Board> boardList = new ArrayList<>();
-  static ArrayList<Member> memberList = new ArrayList<>();
-  static LinkedList<Project> projectList = new LinkedList<>();
-  static LinkedList<Task> taskList = new LinkedList<>();
+  ArrayList<Board> boardList = new ArrayList<>();
+  ArrayList<Member> memberList = new ArrayList<>();
+  LinkedList<Project> projectList = new LinkedList<>();
+  LinkedList<Task> taskList = new LinkedList<>();
 
   // 데이터 파일 정보
-  static File boardFile = new File("boards.json");
-  static File memberFile = new File("members.json");
-  static File projectFile = new File("projects.json");
-  static File taskFile = new File("tasks.json");
+  File boardFile = new File("boards.json");
+  File memberFile = new File("members.json");
+  File projectFile = new File("projects.json");
+  File taskFile = new File("tasks.json");
 
   public static void main(String[] args) {
+
+    App app = new App();
+    app.addApplicationContextListener(new AppListener());
+    app.service();
+  }
+
+  public void addApplicationContextListener(ApplicationContextListener listener) {
+    listeners.add(listener);
+  }
+
+  public void removeApplicationContextListener(ApplicationContextListener listener) {
+    listeners.remove(listener);
+  }
+
+  public void service() {
+
+    // 애플리케이션 실행 전후에 리스너에게 보고하는 기능
+    notifyOnServiceStarted();
 
     // 파일에서 데이터를 읽어온다. (데이터 로딩)
     loadObjects(boardFile, boardList, Board.class);
@@ -141,9 +164,25 @@ public class App {
     saveObjects(taskFile, taskList);
 
     Prompt.close();
+
+    // 애플리케이션 실행 전후에 리스너에게 보고하는 기능
+    notifyOnServiceStopped();
   }
 
-  static void printCommandHistory(Iterator<String> iterator) {
+  private void notifyOnServiceStarted() {
+    // 애플리케이션의 서비스가 시작되면 이 이벤트를 통지 받을 리스너에게 메서드를 호출하여 알린다.
+    for (ApplicationContextListener listener : listeners) {
+      listener.contextInitialized();
+    }
+  }
+
+  private void notifyOnServiceStopped() {
+    // 애플리케이션의 서비스가 종료되면 이 이벤트를 통지 받을 리스너에게 메서드를 호출하여 알린다.
+    for (ApplicationContextListener listener : listeners) {
+      listener.contextDestroyed();
+    }
+  }
+  private void printCommandHistory(Iterator<String> iterator) {
 
     int size = 0;
     while (iterator.hasNext()) {
@@ -157,7 +196,7 @@ public class App {
     }
   }
 
-  static <T> void loadObjects(File file, List<T> list, Class<T> elementType) {
+  private <T> void loadObjects(File file, List<T> list, Class<T> elementType) {
     try (BufferedReader in = new BufferedReader(new FileReader(file))) {
 
       // 1) 파일의 모든 데이터를 읽어서 StringBuilder 객체에 보관한다.
@@ -187,7 +226,7 @@ public class App {
     }
   }
 
-  static <T extends CsvObject> void saveObjects(File file, List<T> list) {
+  private <T extends CsvObject> void saveObjects(File file, List<T> list) {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
 
       out.write(new Gson().toJson(list));

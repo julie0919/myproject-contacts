@@ -1,7 +1,7 @@
-package com.julie.handler;
+package com.julie.pms.handler;
 
 import java.util.List;
-import com.julie.domain.Company;
+import com.julie.pms.domain.Company;
 import com.julie.util.Prompt;
 
 public class CompanyDeleteHandler extends AbstractCompanyHandler {

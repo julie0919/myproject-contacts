@@ -1,7 +1,7 @@
-package com.julie.handler;
+package com.julie.pms.handler;
 
 import java.util.List;
-import com.julie.domain.Company;
+import com.julie.pms.domain.Company;
 
 public abstract class AbstractCompanyHandler implements Command {
 

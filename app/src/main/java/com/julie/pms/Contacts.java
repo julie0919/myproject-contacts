@@ -15,45 +15,68 @@ import java.util.LinkedList;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.julie.domain.Company;
-import com.julie.domain.Family;
-import com.julie.domain.School;
-import com.julie.handler.Command;
-import com.julie.handler.CompanyAddHandler;
-import com.julie.handler.CompanyDeleteHandler;
-import com.julie.handler.CompanyDetailHandler;
-import com.julie.handler.CompanyListHandler;
-import com.julie.handler.CompanyUpdateHandler;
-import com.julie.handler.FamilyAddHandler;
-import com.julie.handler.FamilyDeleteHandler;
-import com.julie.handler.FamilyDetailHandler;
-import com.julie.handler.FamilyListHandler;
-import com.julie.handler.FamilyUpdateHandler;
-import com.julie.handler.SchoolAddHandler;
-import com.julie.handler.SchoolDeleteHandler;
-import com.julie.handler.SchoolDetailHandler;
-import com.julie.handler.SchoolListHandler;
-import com.julie.handler.SchoolUpdateHandler;
+import com.julie.context.ApplicationContextListener;
+import com.julie.pms.domain.Company;
+import com.julie.pms.domain.Family;
+import com.julie.pms.domain.School;
+import com.julie.pms.handler.Command;
+import com.julie.pms.handler.CompanyAddHandler;
+import com.julie.pms.handler.CompanyDeleteHandler;
+import com.julie.pms.handler.CompanyDetailHandler;
+import com.julie.pms.handler.CompanyListHandler;
+import com.julie.pms.handler.CompanyUpdateHandler;
+import com.julie.pms.handler.FamilyAddHandler;
+import com.julie.pms.handler.FamilyDeleteHandler;
+import com.julie.pms.handler.FamilyDetailHandler;
+import com.julie.pms.handler.FamilyListHandler;
+import com.julie.pms.handler.FamilyUpdateHandler;
+import com.julie.pms.handler.SchoolAddHandler;
+import com.julie.pms.handler.SchoolDeleteHandler;
+import com.julie.pms.handler.SchoolDetailHandler;
+import com.julie.pms.handler.SchoolListHandler;
+import com.julie.pms.handler.SchoolUpdateHandler;
+import com.julie.pms.listener.AppListener;
 import com.julie.util.CsvObject;
 import com.julie.util.Prompt;
 
 public class Contacts {
 
+  // 옵저버 객체 (ApplicationContextListener 구현체) 목록을 저장할 컬렉션 준비
+  List<ApplicationContextListener> listeners = new ArrayList<>();
+
   // 사용자가 입력한 명령을 저장할 컬렉션 객체 준비
-  static ArrayDeque<String> commandStack = new ArrayDeque<>();
-  static LinkedList<String> commandQueue = new LinkedList<>();
+  ArrayDeque<String> commandStack = new ArrayDeque<>();
+  LinkedList<String> commandQueue = new LinkedList<>();
 
   // VO 를 저장할 컬렉션 객체
-  static ArrayList<Family> familyList = new ArrayList<>();
-  static ArrayList<School> schoolList = new ArrayList<>();
-  static ArrayList<Company> companyList = new ArrayList<>();
+  ArrayList<Family> familyList = new ArrayList<>();
+  ArrayList<School> schoolList = new ArrayList<>();
+  ArrayList<Company> companyList = new ArrayList<>();
 
   // 데이터 파일 정보
-  static File familyFile = new File("family.json");
-  static File schoolFile = new File("school.json");
-  static File companyFile = new File("company.json");
+  File familyFile = new File("family.json");
+  File schoolFile = new File("school.json");
+  File companyFile = new File("company.json");
 
   public static void main(String[] args) {
+
+    Contacts contacts = new Contacts();
+    contacts.addApplicationContextListener(new AppListener());
+    contacts.service();
+  }
+
+  public void addApplicationContextListener(ApplicationContextListener listener) {
+    listeners.add(listener);
+  }
+
+  public void removeApplicationContextListener(ApplicationContextListener listener) {
+    listeners.remove(listener);
+  }
+
+  public void service() {
+
+    // 애플리케이션 실행 전후에 리스너에게 보고하는 기능
+    notifyOnServiceStarted();
 
     // 파일에서 데이터를 읽어온다. (데이터 로딩)
     loadObjects(familyFile, familyList, Family.class);
@@ -128,9 +151,26 @@ public class Contacts {
     saveObjects(companyFile, companyList);
 
     Prompt.close();
+
+    // 애플리케이션 실행 전후에 리스너에게 보고하는 기능
+    notifyOnServiceStopped();
   }
 
-  static void printCommandHistory(Iterator<String> iterator) {
+  private void notifyOnServiceStarted() {
+    // 애플리케이션의 서비스가 시작되면 이 이벤트를 통지 받을 리스너에게 메서드를 호출하여 알린다.
+    for (ApplicationContextListener listener : listeners) {
+      listener.contextInitialized();
+    }
+  }
+
+  private void notifyOnServiceStopped() {
+    // 애플리케이션의 서비스가 종료되면 이 이벤트를 통지 받을 리스너에게 메서드를 호출하여 알린다.
+    for (ApplicationContextListener listener : listeners) {
+      listener.contextDestroyed();
+    }
+  }
+
+  private void printCommandHistory(Iterator<String> iterator) {
     int count = 0;
     while (iterator.hasNext()) {
       System.out.println(iterator.next());
@@ -143,7 +183,7 @@ public class Contacts {
     }
   }
 
-  static <T> void loadObjects(File file, List<T> list, Class<T> elementType) {
+  private <T> void loadObjects(File file, List<T> list, Class<T> elementType) {
     try (BufferedReader in = new BufferedReader(new FileReader(file))) {
 
       // 1) 파일의 모든 데이터를 읽어서 StringBuilder 객체에 보관한다.
@@ -174,7 +214,7 @@ public class Contacts {
   }
 
 
-  static <T extends CsvObject> void saveObjects(File file, List<T> list) {
+  private <T extends CsvObject> void saveObjects(File file, List<T> list) {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
 
       out.write(new Gson().toJson(list));

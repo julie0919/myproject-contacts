@@ -1,7 +1,7 @@
-package com.julie.handler;
+package com.julie.pms.handler;
 
 import java.util.List;
-import com.julie.domain.School;
+import com.julie.pms.domain.School;
 import com.julie.util.Prompt;
 
 public class SchoolAddHandler extends AbstractSchoolHandler {
